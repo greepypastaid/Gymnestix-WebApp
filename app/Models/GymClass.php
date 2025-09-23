@@ -10,7 +10,7 @@ class GymClass extends Model
     /** @use HasFactory<\Database\Factories\GymClassFactory> */
     use HasFactory;
 
-    protected $table = 'classes'; // Specify table name
+    protected $table = 'classes';
     protected $primaryKey = 'class_id';
     
     protected $fillable = [

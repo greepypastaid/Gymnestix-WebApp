@@ -24,8 +24,11 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
+            'nama' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
+            'alamat' => fake()->address(),
+            'nomor_telepon' => fake()->phoneNumber(),
+            'tanggal_lahir' => fake()->date('Y-m-d', '2000-01-01'),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
@@ -39,6 +42,26 @@ class UserFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
+        ]);
+    }
+
+    /**
+     * State untuk membuat user dengan password custom
+     */
+    public function withPassword(string $password): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'password' => Hash::make($password),
+        ]);
+    }
+
+    /**
+     * State untuk membuat user dewasa
+     */
+    public function adult(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'tanggal_lahir' => fake()->date('Y-m-d', '1990-01-01'),
         ]);
     }
 }

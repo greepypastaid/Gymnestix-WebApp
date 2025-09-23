@@ -18,7 +18,8 @@ class TrainerFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'user_id' => User::all()->random()->user_id,
+            'spesialisasi' => fake()->word(),
         ];
     }
 }
