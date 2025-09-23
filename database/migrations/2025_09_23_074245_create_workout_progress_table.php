@@ -1,0 +1,27 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('workout_progresses', function (Blueprint $table) {
+            $table->id('progress_id');
+            $table->foreignId('member_id')->constrained('members', 'member_id')->onDelete('cascade');
+            $table->date('tanggal');
+            $table->string('jenis_latihan');
+            $table->integer('catatan_repetisi');
+            $table->integer('catatan_durasi');
+            $table->decimal('catatan_berat', 8, 2);
+            $table->timestamps();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('workout_progresses');
+    }
+};

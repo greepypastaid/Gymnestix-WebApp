@@ -12,15 +12,20 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
+    protected $primaryKey = 'user_id'; // Set primary key to match ERD
+
     /**
      * The attributes that are mass assignable.
      *
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'nama',
         'email',
         'password',
+        'alamat',
+        'nomor_telepon',
+        'tanggal_lahir',
     ];
 
     /**
@@ -43,6 +48,23 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'tanggal_lahir' => 'date',
         ];
+    }
+
+    /**
+     * Relationship to Trainer
+     */
+    public function trainer()
+    {
+        return $this->hasOne(Trainer::class, 'user_id', 'user_id');
+    }
+
+    /**
+     * Relationship to Member
+     */
+    public function member()
+    {
+        return $this->hasOne(Member::class, 'user_id', 'user_id');
     }
 }
