@@ -12,7 +12,8 @@ class EquipmentsController extends Controller
      */
     public function index()
     {
-        //
+        $equipments = Equipments::paginate(20);
+        return view('trainer.equipments.index', compact('equipments'));
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Member;
 use App\Models\WorkoutProgress;
 use Illuminate\Http\Request;
 
@@ -61,5 +62,12 @@ class WorkoutProgressController extends Controller
     public function destroy(WorkoutProgress $workoutProgress)
     {
         //
+    }
+    
+    public function indexForMember(Member $member)
+    {
+        // middleware permission: workout.view_member (routes sudah pakai)
+        $progresses = WorkoutProgress::where('member_id', $member->member_id)->orderByDesc('tanggal')->get();
+        return view('trainer.members.workouts.index', compact('member','progresses'));
     }
 }
