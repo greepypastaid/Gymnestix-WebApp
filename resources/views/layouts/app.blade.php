@@ -32,5 +32,7 @@
                 {{ $slot }}
             </main>
         </div>
+        {{-- sebelum tag penutup body --}}
+        <script defer src="https://unpkg.com/alpinejs@3.12.0/dist/cdn.min.js"></script>
     </body>
 </html>

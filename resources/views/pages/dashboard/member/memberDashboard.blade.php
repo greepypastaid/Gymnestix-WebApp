@@ -1,19 +1,17 @@
-<!doctype html>
-<html>
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Member') }}
+        </h2>
+    </x-slot>
 
-<head>
-    <meta charset="utf-8">
-    <title>Member Dashboard</title>
-</head>
-
-<body>
-    <h1>Halo Member</h1>
-    <p>Ini halaman dashboard untuk Member.</p>
-    <a href="{{ route('profile.edit') }}">Profile</a> |
-    <form method="POST" action="{{ route('logout') }}" style="display:inline;">
-        @csrf
-        <button type="submit">Logout</button>
-    </form>
-</body>
-
-</html>
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900">
+                    {{ __("You're logged in!") }}
+                </div>
+            </div>
+        </div>
+    </div>
+</x-app-layout>
