@@ -39,6 +39,31 @@
                         </a>
                     @endif
 
+                    @if(auth()->user()->hasPermission('attendance.track') || auth()->user()->hasPermission('attendance.view_all'))
+                        <a href="{{ route('trainer.attendance.select-class') }}" class="block p-4 border rounded hover:bg-gray-50">
+                            <div class="flex items-center">
+                                <svg class="w-6 h-6 mr-3 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
+                                </svg>
+                                <div>
+                                    <div class="font-medium">Attendance</div>
+                                    <div class="text-sm text-gray-500">Track member attendance</div>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="{{ route('trainer.attendance.view_all') }}" class="block p-4 border rounded hover:bg-gray-50">
+                            <div class="flex items-center">
+                                <svg class="w-6 h-6 mr-3 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                                </svg>
+                                <div>
+                                    <div class="font-medium">View Attendance</div>
+                                    <div class="text-sm text-gray-500">View all attendance records</div>
+                                </div>
+                            </div>
+                        </a>
+                    @endif
+
                     @if(auth()->user()->hasPermission('workout.view_member'))
                         <a href="#" onclick="showMemberSelector()" class="block p-4 border rounded hover:bg-gray-50 cursor-pointer">
                             <div class="flex items-center">

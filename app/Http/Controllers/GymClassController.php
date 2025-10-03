@@ -9,6 +9,51 @@ use App\Models\Trainer;
 class GymClassController extends Controller
 {
     /**
+     * Display the members of a specific class
+     */
+    public function viewMembers(GymClass $gymClass)
+    {
+        $user = request()->user();
+        $trainer = $user->trainer;
+
+        // Ensure the user is a trainer
+        if (!$user->isTrainer()) {
+            abort(403, 'Only trainers can view class members.');
+        }
+
+        // Check if user has permission to view all schedules or is the class owner
+        if (!$user->hasPermission('schedule.view_all') && (!$trainer || $gymClass->trainer_id !== $trainer->trainer_id)) {
+            abort(403, 'You are not authorized to view members of this class.');
+        }
+
+        $members = $gymClass->bookings()
+            ->with(['member' => function($query) {
+                $query->with('user'); // Include user details
+            }])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('pages.dashboard.trainer.class.members', [
+            'class' => $gymClass,
+            'members' => $members
+        ]);
+
+        // Get class members with their details and booking information
+        $members = $gymClass->bookings()
+            ->with(['member' => function($query) {
+                $query->with('user'); // Include user details
+            }])
+            ->where('status', 'confirmed')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('pages.dashboard.trainer.class.members', [
+            'class' => $gymClass,
+            'members' => $members
+        ]);
+    }
+
+    /**
      * Display a listing of the resource.
      */
     public function index()

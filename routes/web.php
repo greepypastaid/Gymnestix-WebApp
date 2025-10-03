@@ -45,6 +45,7 @@ Route::prefix('trainer')->name('trainer.')->middleware(['auth','verified'])->gro
     Route::get('/classes/{gymClass}/edit', [GymClassController::class,'edit'])->name('classes.edit')->middleware('permission:schedule.create_limited');
     Route::put('/classes/{gymClass}', [GymClassController::class,'update'])->name('classes.update')->middleware('permission:schedule.create_limited');
     Route::delete('/classes/{gymClass}', [GymClassController::class,'destroy'])->name('classes.destroy')->middleware('permission:schedule.create_limited');
+    Route::get('/classes/{gymClass}/members', [GymClassController::class,'viewMembers'])->name('classes.members')->middleware('auth');
 
     // Equipments (Trainer view only)
     Route::get('/equipments', [EquipmentsController::class,'index'])->name('equipments.index')->middleware('permission:equipment.view_all');
@@ -54,6 +55,20 @@ Route::prefix('trainer')->name('trainer.')->middleware(['auth','verified'])->gro
     Route::get('/members/{member}/workouts', [WorkoutProgressController::class,'indexForMember'])
         ->name('members.workouts.index')
         ->middleware('permission:workout.view_member');
+
+    // Attendance (Trainer)
+    Route::get('/attendance/select-class', [\App\Http\Controllers\AttendanceController::class, 'selectClass'])
+        ->name('attendance.select-class')
+        ->middleware('permission:attendance.track');
+    Route::get('/attendance/{class}/track', [\App\Http\Controllers\AttendanceController::class, 'track'])
+        ->name('attendance.track')
+        ->middleware('permission:attendance.track');
+    Route::post('/attendance/{class}', [\App\Http\Controllers\AttendanceController::class, 'store'])
+        ->name('attendance.store')
+        ->middleware('permission:attendance.track');
+    Route::get('/attendance/view-all', [\App\Http\Controllers\AttendanceController::class, 'viewAll'])
+        ->name('attendance.view_all')
+        ->middleware('permission:attendance.view_all');
 });
 
 // Admin routes (for future admin dashboard)
