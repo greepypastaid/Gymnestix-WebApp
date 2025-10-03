@@ -12,8 +12,8 @@ class EquipmentsController extends Controller
      */
     public function index()
     {
-        $equipments = Equipments::paginate(20);
-        return view('trainer.equipments.index', compact('equipments'));
+    $equipments = Equipments::paginate(20);
+    return view('pages.dashboard.trainer.equipments.trainerEquipment', compact('equipments'));
     }
 
     /**
@@ -21,7 +21,7 @@ class EquipmentsController extends Controller
      */
     public function create()
     {
-        //
+    return view('pages.dashboard.trainer.equipments.trainerCreateEquipment');
     }
 
     /**
@@ -29,7 +29,16 @@ class EquipmentsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'nama_alat' => 'required|string|max:255',
+            'kondisi' => 'required|in:Baik,Perlu Perbaikan',
+            'tanggal_pembelian' => 'required|date',
+            'jadwal_perawatan' => 'required|date',
+        ]);
+
+        Equipments::create($data);
+
+        return redirect()->route('pages.dashboard.trainer.equipments.trainerEquipment')->with('success', 'Equipment created.');
     }
 
     /**
@@ -45,7 +54,7 @@ class EquipmentsController extends Controller
      */
     public function edit(Equipments $equipments)
     {
-        //
+    return view('pages.dashboard.trainer.equipments.trainerEditEquipment', compact('equipments'));
     }
 
     /**
@@ -53,7 +62,16 @@ class EquipmentsController extends Controller
      */
     public function update(Request $request, Equipments $equipments)
     {
-        //
+        $data = $request->validate([
+            'nama_alat' => 'required|string|max:255',
+            'kondisi' => 'required|in:Baik,Perlu Perbaikan',
+            'tanggal_pembelian' => 'required|date',
+            'jadwal_perawatan' => 'required|date',
+        ]);
+
+        $equipments->update($data);
+
+        return redirect()->route('pages.dashboard.trainer.equipments.trainerEquipment')->with('success', 'Equipment updated.');
     }
 
     /**
@@ -61,6 +79,7 @@ class EquipmentsController extends Controller
      */
     public function destroy(Equipments $equipments)
     {
-        //
+        $equipments->delete();
+        return redirect()->route('pages.dashboard.trainer.equipments.trainerEquipment')->with('success', 'Equipment deleted.');
     }
 }

@@ -68,6 +68,8 @@ class WorkoutProgressController extends Controller
     {
         // middleware permission: workout.view_member (routes sudah pakai)
         $progresses = WorkoutProgress::where('member_id', $member->member_id)->orderByDesc('tanggal')->get();
-        return view('trainer.members.workouts.index', compact('member','progresses'));
+
+        // sesuaikan view path ke file yang kamu buat
+        return view('pages.dashboard.trainer.workout.trainerViewWorkout', compact('member','progresses'));
     }
 }

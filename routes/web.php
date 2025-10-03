@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\GymClassController;
+use App\Http\Controllers\EquipmentsController;
+use App\Http\Controllers\WorkoutProgressController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -33,33 +36,28 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// Route buat trainer 
-Route::middleware(['auth', 'permission:schedule.view_all'])->prefix('trainer')->name('trainer.')->group(function () {
-    // Schedule (GymClass) - view all
-    Route::get('/classes', [App\Http\Controllers\GymClassController::class, 'index'])->name('classes.index');
+// Buat Trainer Le
+Route::prefix('trainer')->name('trainer.')->middleware(['auth','verified'])->group(function () {
+    // Classes
+    Route::get('/classes', [GymClassController::class,'index'])->name('classes.index')->middleware('permission:schedule.view_all');
+    Route::get('/classes/create', [GymClassController::class,'create'])->name('classes.create')->middleware('permission:schedule.create_limited');
+    Route::post('/classes', [GymClassController::class,'store'])->name('classes.store')->middleware('permission:schedule.create_limited');
+    Route::get('/classes/{gymClass}/edit', [GymClassController::class,'edit'])->name('classes.edit')->middleware('permission:schedule.create_limited');
+    Route::put('/classes/{gymClass}', [GymClassController::class,'update'])->name('classes.update')->middleware('permission:schedule.create_limited');
+    Route::delete('/classes/{gymClass}', [GymClassController::class,'destroy'])->name('classes.destroy')->middleware('permission:schedule.create_limited');
 
-    // Create limited (only trainer can create own class)
-    Route::get('/classes/create', [App\Http\Controllers\GymClassController::class, 'create'])
-        ->middleware('permission:schedule.create_limited')->name('classes.create');
-    Route::post('/classes', [App\Http\Controllers\GymClassController::class, 'store'])
-        ->middleware('permission:schedule.create_limited')->name('classes.store');
+    // Equipments
+    Route::get('/equipments', [EquipmentsController::class,'index'])->name('equipments.index')->middleware('permission:equipment.view_all');
+    Route::get('/equipments/create', [EquipmentsController::class,'create'])->name('equipments.create')->middleware('permission:equipment.manage');
+    Route::post('/equipments', [EquipmentsController::class,'store'])->name('equipments.store')->middleware('permission:equipment.manage');
+    Route::get('/equipments/{equipments}/edit', [EquipmentsController::class,'edit'])->name('equipments.edit')->middleware('permission:equipment.manage');
+    Route::put('/equipments/{equipments}', [EquipmentsController::class,'update'])->name('equipments.update')->middleware('permission:equipment.manage');
+    Route::delete('/equipments/{equipments}', [EquipmentsController::class,'destroy'])->name('equipments.destroy')->middleware('permission:equipment.manage');
 
-    // Edit / delete (only if trainer owns the class)
-    Route::get('/classes/{gymClass}/edit', [App\Http\Controllers\GymClassController::class, 'edit'])
-        ->name('classes.edit');
-    Route::put('/classes/{gymClass}', [App\Http\Controllers\GymClassController::class, 'update'])
-        ->name('classes.update');
-    Route::delete('/classes/{gymClass}', [App\Http\Controllers\GymClassController::class, 'destroy'])
-        ->name('classes.destroy');
-
-    // View member workout (trainer permission)
-    Route::get('/members/{member}/workouts', [App\Http\Controllers\WorkoutProgressController::class, 'indexForMember'])
-        ->middleware('permission:workout.view_member')
-        ->name('members.workouts');
-
-    // Equipment (view all)
-    Route::get('/equipments', [App\Http\Controllers\EquipmentsController::class, 'index'])
-        ->middleware('permission:equipment.view_all')->name('equipments.index');
+    // View member workouts
+    Route::get('/members/{member}/workouts', [WorkoutProgressController::class,'indexForMember'])
+        ->name('members.workouts.index')
+        ->middleware('permission:workout.view_member');
 });
 
 require __DIR__ . '/auth.php';

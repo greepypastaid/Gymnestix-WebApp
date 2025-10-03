@@ -14,8 +14,8 @@ class GymClassController extends Controller
     public function index()
     {
         // trainer dapat melihat semua kelas (schedule.view_all)
-        $classes = GymClass::with('trainer')->paginate(15);
-        return view('trainer.classes.index', compact('classes'));
+    $classes = GymClass::with('trainer')->paginate(15);
+    return view('pages.dashboard.trainer.class.trainerClass', compact('classes'));
     }
 
     /**
@@ -24,7 +24,7 @@ class GymClassController extends Controller
     public function create()
     {
         // form buat kelas (trainer hanya membuat untuk dirinya sendiri)
-        return view('trainer.classes.create');
+    return view('pages.dashboard.trainer.class.createTrainerClass');
     }
 
     /**
@@ -48,7 +48,7 @@ class GymClassController extends Controller
         }
 
         $data = $request->only(['nama_kelas','deskripsi','waktu_mulai','waktu_selesai','durasi','kapasitas']);
-        $data['trainer_id'] = $trainer->trainer_id; // penting: enforce ownership
+        $data['trainer_id'] = $trainer->trainer_id;
 
         GymClass::create($data);
 
@@ -69,7 +69,7 @@ class GymClassController extends Controller
     public function edit(GymClass $gymClass, Request $request)
     {
         $this->authorizeOwnership($gymClass, $request);
-        return view('trainer.classes.edit', compact('gymClass'));
+    return view('pages.dashboard.trainer.class.editTrainerClass', compact('gymClass'));
     }
 
     /**
@@ -89,7 +89,7 @@ class GymClassController extends Controller
         ]);
 
         $gymClass->update($request->only(['nama_kelas','deskripsi','waktu_mulai','waktu_selesai','durasi','kapasitas']));
-        return redirect()->route('trainer.classes.index')->with('success','Kelas diperbarui.');
+        return redirect()->route('trainer.class.trainerClass')->with('success','Kelas diperbarui.');
     }
 
     /**
@@ -99,6 +99,6 @@ class GymClassController extends Controller
     {
         $this->authorizeOwnership($gymClass, $request);
         $gymClass->delete();
-        return redirect()->route('trainer.classes.index')->with('success','Kelas dihapus.');
+        return redirect()->route('trainer.class.trainerClass')->with('success','Kelas dihapus.');
     }
 }
