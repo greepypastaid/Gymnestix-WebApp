@@ -46,7 +46,7 @@ Route::prefix('trainer')->name('trainer.')->middleware(['auth','verified'])->gro
     Route::put('/classes/{gymClass}', [GymClassController::class,'update'])->name('classes.update')->middleware('permission:schedule.create_limited');
     Route::delete('/classes/{gymClass}', [GymClassController::class,'destroy'])->name('classes.destroy')->middleware('permission:schedule.create_limited');
 
-    // Equipments
+    // Equipments (Trainer view only)
     Route::get('/equipments', [EquipmentsController::class,'index'])->name('equipments.index')->middleware('permission:equipment.view_all');
     Route::patch('/equipments/{equipments}/report', [EquipmentsController::class,'reportIssue'])->name('equipments.report')->middleware('permission:equipment.view_all');
 
@@ -54,6 +54,18 @@ Route::prefix('trainer')->name('trainer.')->middleware(['auth','verified'])->gro
     Route::get('/members/{member}/workouts', [WorkoutProgressController::class,'indexForMember'])
         ->name('members.workouts.index')
         ->middleware('permission:workout.view_member');
+});
+
+// Admin routes (for future admin dashboard)
+Route::prefix('admin')->name('admin.')->middleware(['auth','verified'])->group(function () {
+    // Equipment management (full CRUD for admin)
+    Route::get('/equipments', [EquipmentsController::class,'index'])->name('equipments.index')->middleware('permission:equipment.manage');
+    Route::get('/equipments/create', [EquipmentsController::class,'create'])->name('equipments.create')->middleware('permission:equipment.manage');
+    Route::post('/equipments', [EquipmentsController::class,'store'])->name('equipments.store')->middleware('permission:equipment.manage');
+    Route::get('/equipments/{equipments}', [EquipmentsController::class,'show'])->name('equipments.show')->middleware('permission:equipment.manage');
+    Route::get('/equipments/{equipments}/edit', [EquipmentsController::class,'edit'])->name('equipments.edit')->middleware('permission:equipment.manage');
+    Route::put('/equipments/{equipments}', [EquipmentsController::class,'update'])->name('equipments.update')->middleware('permission:equipment.manage');
+    Route::delete('/equipments/{equipments}', [EquipmentsController::class,'destroy'])->name('equipments.destroy')->middleware('permission:equipment.manage');
 });
 
 require __DIR__ . '/auth.php';
