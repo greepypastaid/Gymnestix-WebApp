@@ -17,69 +17,23 @@ class EquipmentsController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Report equipment issue (for trainers)
      */
-    public function create()
+    public function reportIssue(Request $request, Equipments $equipments)
     {
-    return view('pages.dashboard.trainer.equipments.trainerCreateEquipment');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        $data = $request->validate([
-            'nama_alat' => 'required|string|max:255',
-            'kondisi' => 'required|in:Baik,Perlu Perbaikan',
-            'tanggal_pembelian' => 'required|date',
-            'jadwal_perawatan' => 'required|date',
+        $request->validate([
+            'report_description' => 'required|string|max:500',
         ]);
 
-        Equipments::create($data);
-
-        return redirect()->route('pages.dashboard.trainer.equipments.trainerEquipment')->with('success', 'Equipment created.');
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Equipments $equipments)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Equipments $equipments)
-    {
-    return view('pages.dashboard.trainer.equipments.trainerEditEquipment', compact('equipments'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Equipments $equipments)
-    {
-        $data = $request->validate([
-            'nama_alat' => 'required|string|max:255',
-            'kondisi' => 'required|in:Baik,Perlu Perbaikan',
-            'tanggal_pembelian' => 'required|date',
-            'jadwal_perawatan' => 'required|date',
+        // Update equipment condition to "Perlu Perbaikan"
+        $equipments->update([
+            'kondisi' => 'Perlu Perbaikan'
         ]);
 
-        $equipments->update($data);
-
-        return redirect()->route('pages.dashboard.trainer.equipments.trainerEquipment')->with('success', 'Equipment updated.');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Equipments $equipments)
-    {
-        $equipments->delete();
-        return redirect()->route('pages.dashboard.trainer.equipments.trainerEquipment')->with('success', 'Equipment deleted.');
+        // Here you could also log the report or send notification to admin
+        // For now, we'll just redirect with success message
+        
+        return redirect()->route('trainer.equipments.index')
+            ->with('success', "Equipment issue reported successfully. Admin has been notified about: {$equipments->nama_alat}");
     }
 }

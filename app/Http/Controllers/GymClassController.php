@@ -89,7 +89,7 @@ class GymClassController extends Controller
         ]);
 
         $gymClass->update($request->only(['nama_kelas','deskripsi','waktu_mulai','waktu_selesai','durasi','kapasitas']));
-        return redirect()->route('trainer.class.trainerClass')->with('success','Kelas diperbarui.');
+        return redirect()->route('trainer.classes.index')->with('success','Kelas diperbarui.');
     }
 
     /**
@@ -99,6 +99,6 @@ class GymClassController extends Controller
     {
         $this->authorizeOwnership($gymClass, $request);
         $gymClass->delete();
-        return redirect()->route('trainer.class.trainerClass')->with('success','Kelas dihapus.');
+        return redirect()->route('trainer.classes.index')->with('success','Kelas dihapus.');
     }
 }

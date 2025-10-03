@@ -14,9 +14,25 @@ class TrainerSeeder extends Seeder
      */
     public function run(): void
     {
-        $availableUsers = User::whereDoesntHave('member')->get();
+        // First, create trainers for users with trainer role
+        $trainerUsers = User::whereHas('role', function($query) {
+            $query->where('name', 'trainer');
+        })->get();
 
-        foreach ($availableUsers->take(3) as $user) {
+        foreach ($trainerUsers as $user) {
+            Trainer::firstOrCreate(
+                ['user_id' => $user->user_id],
+                ['spesialisasi' => fake()->word()]
+            );
+        }
+
+        // Then create additional trainers for other users if needed
+        $availableUsers = User::whereDoesntHave('member')
+            ->whereDoesntHave('trainer')
+            ->take(3)
+            ->get();
+
+        foreach ($availableUsers as $user) {
             Trainer::create([
                 'user_id' => $user->user_id,
                 'spesialisasi' => fake()->word(),

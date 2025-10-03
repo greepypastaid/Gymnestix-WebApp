@@ -48,11 +48,7 @@ Route::prefix('trainer')->name('trainer.')->middleware(['auth','verified'])->gro
 
     // Equipments
     Route::get('/equipments', [EquipmentsController::class,'index'])->name('equipments.index')->middleware('permission:equipment.view_all');
-    Route::get('/equipments/create', [EquipmentsController::class,'create'])->name('equipments.create')->middleware('permission:equipment.manage');
-    Route::post('/equipments', [EquipmentsController::class,'store'])->name('equipments.store')->middleware('permission:equipment.manage');
-    Route::get('/equipments/{equipments}/edit', [EquipmentsController::class,'edit'])->name('equipments.edit')->middleware('permission:equipment.manage');
-    Route::put('/equipments/{equipments}', [EquipmentsController::class,'update'])->name('equipments.update')->middleware('permission:equipment.manage');
-    Route::delete('/equipments/{equipments}', [EquipmentsController::class,'destroy'])->name('equipments.destroy')->middleware('permission:equipment.manage');
+    Route::patch('/equipments/{equipments}/report', [EquipmentsController::class,'reportIssue'])->name('equipments.report')->middleware('permission:equipment.view_all');
 
     // View member workouts
     Route::get('/members/{member}/workouts', [WorkoutProgressController::class,'indexForMember'])
