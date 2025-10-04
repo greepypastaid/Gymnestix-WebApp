@@ -39,7 +39,8 @@ Route::middleware('auth')->group(function () {
 // Buat Trainer Le
 Route::prefix('trainer')->name('trainer.')->middleware(['auth','verified'])->group(function () {
     // Classes
-    Route::get('/classes', [GymClassController::class,'index'])->name('classes.index')->middleware('permission:schedule.view_all');
+    // Index: trainers should be able to see their own classes; controller will restrict results when needed.
+    Route::get('/classes', [GymClassController::class,'index'])->name('classes.index');
     Route::get('/classes/create', [GymClassController::class,'create'])->name('classes.create')->middleware('permission:schedule.create_limited');
     Route::post('/classes', [GymClassController::class,'store'])->name('classes.store')->middleware('permission:schedule.create_limited');
     Route::get('/classes/{gymClass}/edit', [GymClassController::class,'edit'])->name('classes.edit')->middleware('permission:schedule.create_limited');

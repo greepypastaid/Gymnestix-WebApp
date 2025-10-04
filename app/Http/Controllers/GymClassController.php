@@ -56,11 +56,22 @@ class GymClassController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(\Illuminate\Http\Request $request)
     {
-        // trainer dapat melihat semua kelas (schedule.view_all)
-    $classes = GymClass::with('trainer')->paginate(15);
-    return view('pages.dashboard.trainer.class.trainerClass', compact('classes'));
+        $user = $request->user();
+
+        // Only show classes owned by the authenticated trainer
+        $trainer = $user->trainer;
+        if (!$trainer) {
+            // not a trainer
+            abort(403, 'Anda bukan trainer.');
+        }
+
+        $classes = GymClass::with('trainer')
+            ->where('trainer_id', $trainer->trainer_id)
+            ->paginate(15);
+
+        return view('pages.dashboard.trainer.class.trainerClass', compact('classes'));
     }
 
     /**
