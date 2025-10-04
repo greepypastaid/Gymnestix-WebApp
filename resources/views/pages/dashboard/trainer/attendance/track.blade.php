@@ -30,41 +30,29 @@
                                     <div class="flex items-center justify-between p-4 border rounded-lg bg-gray-50">
                                         <div class="flex items-center space-x-4">
                                             <div>
-                                                <h4 class="font-medium text-gray-800">{{ $member->user->name }}</h4>
-                                                <p class="text-sm text-gray-500">Member ID: {{ $member->member_id }}</p>
+                                                <h4 class="font-medium text-gray-800">{{ optional($member->user)->nama ?? 'Member' }}</h4>
                                             </div>
                                         </div>
                                         <div class="flex items-center space-x-4">
                                             <div class="space-x-2">
-                                                <label class="inline-flex items-center">
-                                                    <input type="radio" 
-                                                           name="attendance[{{ $member->member_id }}]" 
-                                                           value="hadir"
-                                                           class="form-radio text-blue-600"
-                                                           checked>
-                                                    <span class="ml-2">Present</span>
-                                                </label>
-                                                <label class="inline-flex items-center">
-                                                    <input type="radio" 
-                                                           name="attendance[{{ $member->member_id }}]" 
-                                                           value="izin"
-                                                           class="form-radio text-yellow-600">
-                                                    <span class="ml-2">Excused</span>
-                                                </label>
-                                                <label class="inline-flex items-center">
-                                                    <input type="radio" 
-                                                           name="attendance[{{ $member->member_id }}]" 
-                                                           value="sakit"
-                                                           class="form-radio text-orange-600">
-                                                    <span class="ml-2">Sick</span>
-                                                </label>
-                                                <label class="inline-flex items-center">
-                                                    <input type="radio" 
-                                                           name="attendance[{{ $member->member_id }}]" 
-                                                           value="alpa"
-                                                           class="form-radio text-red-600">
-                                                    <span class="ml-2">Absent</span>
-                                                </label>
+                                                <div class="inline-flex rounded-md shadow-sm" role="group" aria-label="Attendance options">
+                                                    <label class="relative">
+                                                        <input type="radio" name="attendance[{{ $member->member_id }}]" value="hadir" class="sr-only peer" checked>
+                                                        <span class="px-3 py-1 text-sm border border-gray-300 rounded-l-md bg-white text-gray-700 peer-checked:bg-blue-600 peer-checked:text-white">Present</span>
+                                                    </label>
+                                                    <label class="relative">
+                                                        <input type="radio" name="attendance[{{ $member->member_id }}]" value="izin" class="sr-only peer">
+                                                        <span class="-ml-px px-3 py-1 text-sm border border-gray-300 bg-white text-gray-700 peer-checked:bg-yellow-500 peer-checked:text-white">Excused</span>
+                                                    </label>
+                                                    <label class="relative">
+                                                        <input type="radio" name="attendance[{{ $member->member_id }}]" value="sakit" class="sr-only peer">
+                                                        <span class="-ml-px px-3 py-1 text-sm border border-gray-300 bg-white text-gray-700 peer-checked:bg-orange-500 peer-checked:text-white">Sick</span>
+                                                    </label>
+                                                    <label class="relative">
+                                                        <input type="radio" name="attendance[{{ $member->member_id }}]" value="alpa" class="sr-only peer">
+                                                        <span class="-ml-px px-3 py-1 text-sm border border-gray-300 rounded-r-md bg-white text-gray-700 peer-checked:bg-red-600 peer-checked:text-white">Absent</span>
+                                                    </label>
+                                                </div>
                                             </div>
                                             <input type="text" 
                                                    name="notes[{{ $member->member_id }}]" 

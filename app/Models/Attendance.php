@@ -32,11 +32,11 @@ class Attendance extends Model
     ];
 
     /**
-     * Relationship to Member (User)
+     * Relationship to Member
      */
     public function member(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'member_id', 'user_id');
+        return $this->belongsTo(Member::class, 'member_id', 'user_id');
     }
 
     /**

@@ -63,17 +63,17 @@
                                             <tr>
                                                 <td class="px-6 py-4 whitespace-nowrap">
                                                     <div class="text-sm font-medium text-gray-900">
-                                                        {{ $booking->member->nama }}
+                                                        {{ optional($booking->member->user)->nama ?? 'Member' }}
                                                     </div>
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap">
                                                     <div class="text-sm text-gray-500">
-                                                        {{ $booking->member->email }}
+                                                        {{ optional($booking->member->user)->email ?? '' }}
                                                     </div>
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap">
                                                     <div class="text-sm text-gray-500">
-                                                        {{ $booking->member->nomor_telepon }}
+                                                        {{ optional($booking->member->user)->nomor_telepon ?? '' }}
                                                     </div>
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap">
