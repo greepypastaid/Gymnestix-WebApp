@@ -43,7 +43,7 @@ class DashboardController extends Controller
             abort(403, 'You do not have permission to access admin dashboard.');
         }
 
-        return view('pages.dashboard.admin.adminDashboard');
+    return view('admin.dashboard');
     }
 
     /**

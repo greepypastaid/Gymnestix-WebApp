@@ -12,7 +12,8 @@ class GymClassController extends Controller
      */
     public function index()
     {
-        //
+        $classes = \App\Models\GymClass::with(['trainer.user'])->get();
+        return view('gym_class.index', compact('classes'));
     }
 
     /**
@@ -20,7 +21,7 @@ class GymClassController extends Controller
      */
     public function create()
     {
-        //
+        return view('gym_class.create');
     }
 
     /**
@@ -28,7 +29,17 @@ class GymClassController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'trainer_id' => 'required|exists:trainers,trainer_id',
+            'nama_kelas' => 'required|string|max:255',
+            'deskripsi' => 'required|string',
+            'waktu_mulai' => 'required',
+            'waktu_selesai' => 'required',
+            'durasi' => 'required|integer',
+            'kapasitas' => 'required|integer',
+        ]);
+        \App\Models\GymClass::create($validated);
+        return redirect()->route('gym_class.index')->with('success', 'Jadwal kelas berhasil ditambahkan!');
     }
 
     /**
@@ -36,7 +47,7 @@ class GymClassController extends Controller
      */
     public function show(GymClass $gymClass)
     {
-        //
+        return view('gym_class.show', compact('gymClass'));
     }
 
     /**
@@ -44,7 +55,7 @@ class GymClassController extends Controller
      */
     public function edit(GymClass $gymClass)
     {
-        //
+        return view('gym_class.edit', compact('gymClass'));
     }
 
     /**
@@ -52,7 +63,17 @@ class GymClassController extends Controller
      */
     public function update(Request $request, GymClass $gymClass)
     {
-        //
+        $validated = $request->validate([
+            'trainer_id' => 'required|exists:trainers,trainer_id',
+            'nama_kelas' => 'required|string|max:255',
+            'deskripsi' => 'required|string',
+            'waktu_mulai' => 'required',
+            'waktu_selesai' => 'required',
+            'durasi' => 'required|integer',
+            'kapasitas' => 'required|integer',
+        ]);
+        $gymClass->update($validated);
+        return redirect()->route('gym_class.index')->with('success', 'Jadwal kelas berhasil diupdate!');
     }
 
     /**
@@ -60,6 +81,7 @@ class GymClassController extends Controller
      */
     public function destroy(GymClass $gymClass)
     {
-        //
+        $gymClass->delete();
+        return redirect()->route('gym_class.index')->with('success', 'Jadwal kelas berhasil dihapus!');
     }
 }
