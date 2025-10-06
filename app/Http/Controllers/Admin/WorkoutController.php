@@ -11,7 +11,12 @@ class WorkoutController extends Controller
 {
     public function index(Request $request)
     {
-        $this->authorize('workout.manage');
+        // Gunakan abort_if jika permission tidak ada (fallback aman)
+        abort_if(
+            !optional(Auth::user())->hasPermission('workout.manage'),
+            403,
+            'Unauthorized to manage workouts.'
+        );
 
         $q     = trim($request->get('q', ''));
         $level = $request->get('level', '');
@@ -34,14 +39,14 @@ class WorkoutController extends Controller
 
     public function create()
     {
-        $this->authorize('workout.manage');
+        abort_if(!optional(Auth::user())->hasPermission('workout.manage'), 403);
         $row = new Workout();
         return view('admin.workouts.create', compact('row'));
     }
 
     public function store(Request $request)
     {
-        $this->authorize('workout.manage');
+        abort_if(!optional(Auth::user())->hasPermission('workout.manage'), 403);
 
         $data = $request->validate([
             'title'              => ['required','string','max:255'],
@@ -51,8 +56,8 @@ class WorkoutController extends Controller
             'description'        => ['nullable','string'],
         ]);
 
-        // created_by mengikuti PK users = user_id
-        $data['created_by'] = Auth::id() ?? optional(Auth::user())->user_id;
+        // Auth::id() sudah otomatis return user_id jika primary key user adalah user_id
+        $data['created_by'] = optional(Auth::user())->user_id;
 
         Workout::create($data);
 
@@ -63,14 +68,14 @@ class WorkoutController extends Controller
 
     public function edit(Workout $workout)
     {
-        $this->authorize('workout.manage');
+        abort_if(!optional(Auth::user())->hasPermission('workout.manage'), 403);
         $row = $workout;
         return view('admin.workouts.edit', compact('row'));
     }
 
     public function update(Request $request, Workout $workout)
     {
-        $this->authorize('workout.manage');
+        abort_if(!optional(Auth::user())->hasPermission('workout.manage'), 403);
 
         $data = $request->validate([
             'title'              => ['required','string','max:255'],
@@ -89,7 +94,7 @@ class WorkoutController extends Controller
 
     public function destroy(Workout $workout)
     {
-        $this->authorize('workout.manage');
+        abort_if(!optional(Auth::user())->hasPermission('workout.manage'), 403);
         $workout->delete();
 
         return redirect()

@@ -7,7 +7,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\MembershipPlanController;
 use App\Http\Controllers\BillingController;
-use App\Http\Controllers\GymClassController;;
+use App\Http\Controllers\GymClassController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\ScheduleAssignmentController;
 use App\Http\Controllers\Admin\AttendanceController;
@@ -68,18 +68,9 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
             'destroy' => 'permission:equipment.manage',
         ]);
 
-    // Workout manager (resource routes -> creates admin.workout.index etc.)
-    Route::resource('workout', WorkoutProgressController::class)
-        ->only(['index','create','store','show','edit','update','destroy'])
-        ->middleware([
-            'index'   => 'can:workout.manage',
-            'show'    => 'can:workout.manage',
-            'create'  => 'can:workout.manage',
-            'store'   => 'can:workout.manage',
-            'edit'    => 'can:workout.manage',
-            'update'  => 'can:workout.manage',
-            'destroy' => 'can:workout.manage',
-        ]);
+    // Workout manager (resource routes -> creates admin.workouts.index etc.)
+    Route::resource('workouts', \App\Http\Controllers\Admin\WorkoutController::class)
+        ->only(['index','create','store','edit','update','destroy']);
 });
     
 Route::middleware('auth')->group(function () {
@@ -102,8 +93,8 @@ Route::middleware('auth')->group(function () {
     // CRUD Billing (Pembayaran)
     Route::resource('billing', BillingController::class)->middleware(['auth', 'verified']);
 
-    // CRUD Jadwal Kelas/Gym (Schedule)
-    Route::resource('gym_class', GymClassController::class)->middleware(['auth', 'verified']);
+    // CRUD Jadwal Kelas/Gym (Schedule) - Admin uses Admin controller
+    Route::resource('gym_class', \App\Http\Controllers\Admin\GymClassController::class)->middleware(['auth', 'verified']);
 
 });
 
