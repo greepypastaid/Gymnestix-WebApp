@@ -11,6 +11,8 @@ use App\Http\Controllers\GymClassController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\ScheduleAssignmentController;
 use App\Http\Controllers\Admin\AttendanceController;
+use App\Http\Controllers\EquipmentsController;
+use App\Http\Controllers\WorkoutProgressController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -52,6 +54,12 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
         Route::put('/attendance/{attendance}', [\App\Http\Controllers\Admin\AttendanceController::class, 'update'])->name('attendance.update');
         Route::delete('/attendance/{attendance}', [\App\Http\Controllers\Admin\AttendanceController::class, 'destroy'])->name('attendance.destroy');
     });
+
+    // Equipment (resource routes -> will create named routes like admin.equipment.index)
+    Route::resource('equipment', EquipmentsController::class)->only(['index','create','store','show','edit','update','destroy']);
+
+    // Workout manager (resource routes -> creates admin.workout.index etc.)
+    Route::resource('workout', WorkoutProgressController::class)->only(['index','create','store','show','edit','update','destroy']);
 });
     
 Route::middleware('auth')->group(function () {

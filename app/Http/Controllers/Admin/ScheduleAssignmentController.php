@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Http\Request;
 use App\Models\ClassSchedule;
 use App\Models\TrainerAssignment;
 use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
 
 class ScheduleAssignmentController extends Controller
 {
