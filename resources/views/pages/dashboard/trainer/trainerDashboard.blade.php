@@ -8,10 +8,10 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <div class="bg-white p-6 shadow sm:rounded-lg">
-                <h3 class="font-medium mb-4">Trainer Tools</h3>
+                <h3 class="text-center text-3xl font-bold mb-4">Trainer Menus</h3>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    @if(auth()->user()->hasPermission('schedule.view_all'))
+                    @if(auth()->user()->hasPermission('schedule.view_all') || auth()->user()->isTrainer())
                         <a href="{{ route('trainer.classes.index') }}" class="block p-4 border rounded hover:bg-gray-50">
                             <div class="flex items-center">
                                 <svg class="w-6 h-6 mr-3 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -25,7 +25,7 @@
                         </a>
                     @endif
 
-                    @if(auth()->user()->hasPermission('equipment.view_all'))
+                    @if(auth()->user()->hasPermission('equipment.view_all') || auth()->user()->isTrainer())
                         <a href="{{ route('trainer.equipments.index') }}" class="block p-4 border rounded hover:bg-gray-50">
                             <div class="flex items-center">
                                 <svg class="w-6 h-6 mr-3 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -39,7 +39,7 @@
                         </a>
                     @endif
 
-                    @if(auth()->user()->hasPermission('attendance.track') || auth()->user()->hasPermission('attendance.view_all'))
+                    @if(auth()->user()->hasPermission('attendance.track') || auth()->user()->hasPermission('attendance.view_all') || auth()->user()->isTrainer())
                         <a href="{{ route('trainer.attendance.select-class') }}" class="block p-4 border rounded hover:bg-gray-50">
                             <div class="flex items-center">
                                 <svg class="w-6 h-6 mr-3 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -64,7 +64,7 @@
                         </a>
                     @endif
 
-                    @if(auth()->user()->hasPermission('workout.view_member'))
+                    @if(auth()->user()->hasPermission('workout.view_member') || auth()->user()->isTrainer())
                         <a href="#" onclick="showMemberSelector()" class="block p-4 border rounded hover:bg-gray-50 cursor-pointer">
                             <div class="flex items-center">
                                 <svg class="w-6 h-6 mr-3 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">

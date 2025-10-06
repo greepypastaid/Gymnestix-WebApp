@@ -32,6 +32,7 @@ class PermissionSeeder extends Seeder
 
             ['name' => 'attendance.track', 'display_name' => 'Track Attendance', 'group' => 'attendance'],
             ['name' => 'attendance.view_all', 'display_name' => 'View All Attendance', 'group' => 'attendance'],
+            ['name' => 'attendance.view_own', 'display_name' => 'View Own Attendance', 'group' => 'attendance'],
 
             ['name' => 'profile.update_own', 'display_name' => 'Update Own Profile', 'group' => 'profile'],
 
@@ -48,7 +49,10 @@ class PermissionSeeder extends Seeder
         ];
 
         foreach ($permissions as $permission) {
-            Permission::create($permission);
+            Permission::updateOrCreate(
+                ['name' => $permission['name']],
+                $permission
+            );
         }
     }
 }

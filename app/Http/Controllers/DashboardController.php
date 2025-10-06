@@ -45,15 +45,17 @@ class DashboardController extends Controller
     }
 
     /**
-     * Trainer Dashboard → resources/views/trainer/dashboard.blade.php
+     * Trainer Dashboard
      */
     public function trainer(): View
     {
         /** @var User|null $user */
         $user = Auth::user();
-        abort_unless($user && $user->isTrainer(), 403, 'You do not have permission to access trainer dashboard.');
+        // Allow access if the user has the trainer role OR has a linked trainer record
+        $hasTrainerRecord = method_exists($user, 'trainer') ? (bool) $user->trainer : false;
+        abort_unless($user && ($user->isTrainer() || $hasTrainerRecord), 403, 'You do not have permission to access trainer dashboard.');
 
-        return view('trainer.dashboard');
+        return view('pages.dashboard.trainer.trainerDashboard');
     }
 
     /**

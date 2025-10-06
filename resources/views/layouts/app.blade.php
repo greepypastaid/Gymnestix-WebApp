@@ -23,6 +23,10 @@
         <div class="min-h-screen bg-gray-100">
             @include('layouts.navigation')
             <main>
+                @isset($slot)
+                    {{ $slot }}
+                @endisset
+
                 @yield('content')
             </main>
         </div>

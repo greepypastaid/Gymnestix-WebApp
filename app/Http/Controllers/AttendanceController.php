@@ -95,29 +95,81 @@ class AttendanceController extends Controller
             }
         }
 
-        $data = $request->validate([
-            'member_id' => 'required|integer',
-            'tanggal' => 'required|date',
-            'status' => 'required|string',
-            'waktu_masuk' => 'nullable|date_format:H:i:s',
-            'waktu_keluar' => 'nullable|date_format:H:i:s',
-            'durasi_latihan' => 'nullable|integer',
-            'catatan' => 'nullable|string',
-        ]);
+        // Handle bulk attendance submission
+        $attendanceData = $request->input('attendance', []);
+        
+        foreach ($attendanceData as $memberId => $status) {
+            Attendance::updateOrCreate(
+                [
+                    'member_id' => $memberId,
+                    'class_id' => $class->class_id,
+                    'tanggal' => now()->toDateString(),
+                ],
+                [
+                    'trainer_id' => $class->trainer_id,
+                    'status' => $status,
+                    'waktu_masuk' => now()->format('H:i:s'),
+                    'waktu_keluar' => now()->addHours(1)->format('H:i:s'),
+                ]
+            );
+        }
 
-        $data['class_id'] = $class->class_id;
-        $data['trainer_id'] = $class->trainer_id;
+        return redirect()->route('trainer.attendance.view_all')->with('success', 'Attendance saved successfully.');
+    }
 
-        // create or update today's attendance for that member+class
-        Attendance::updateOrCreate(
-            [
-                'member_id' => $data['member_id'],
-                'class_id' => $data['class_id'],
-                'tanggal' => $data['tanggal'],
-            ],
-            $data
-        );
+    /**
+     * Select class page for trainers to choose which class to track attendance for.
+     * Trainers can only see their own classes.
+     */
+    public function selectClass(Request $request)
+    {
+        $user = $request->user();
 
-        return redirect()->back()->with('success', 'Attendance saved.');
+        // Admin can see all classes
+        if (Gate::allows('schedule.view_all')) {
+            $classes = GymClass::with('trainer')->orderBy('nama_kelas')->get();
+        } else {
+            // Trainers only see their own classes
+            $trainer = $user->trainer;
+            if (!$trainer) {
+                abort(403, 'Anda tidak memiliki akses untuk tracking attendance.');
+            }
+            $classes = GymClass::where('trainer_id', $trainer->trainer_id)
+                ->orderBy('nama_kelas')
+                ->get();
+        }
+
+        return view('pages.dashboard.trainer.attendance.select_class', compact('classes'));
+    }
+
+    /**
+     * View all attendance records.
+     * Admin sees all, trainers see only their classes' attendance.
+     */
+    public function viewAll(Request $request)
+    {
+        $user = $request->user();
+
+        // Admin/manager can see all attendance records
+        if (Gate::allows('attendance.view_all') || Gate::allows('schedule.view_all')) {
+            $attendances = Attendance::with(['member.user', 'trainer', 'class'])
+                ->orderByDesc('tanggal')
+                ->paginate(25);
+        } else {
+            // Trainers only see attendance for their own classes
+            $trainer = $user->trainer;
+            if (!$trainer) {
+                abort(403, 'Anda tidak memiliki akses melihat attendance.');
+            }
+
+            $classIds = GymClass::where('trainer_id', $trainer->trainer_id)->pluck('class_id');
+
+            $attendances = Attendance::with(['member.user', 'trainer', 'class'])
+                ->whereIn('class_id', $classIds->toArray())
+                ->orderByDesc('tanggal')
+                ->paginate(25);
+        }
+
+        return view('pages.dashboard.trainer.attendance.view_all', compact('attendances'));
     }
 }
