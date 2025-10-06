@@ -25,7 +25,7 @@
             <select name="trainer_id" class="form-select">
               <option value="">— Not Assigned —</option>
               @foreach($trainers as $t)
-                <option value="{{ $t->id }}" @selected(optional($assignment)->trainer_id === $t->id)>{{ $t->name }}</option>
+                <option value="{{ $t->user_id }}" @selected(optional($assignment)->trainer_id == $t->user_id)>{{ $t->nama }}</option>
               @endforeach
             </select>
           </div>

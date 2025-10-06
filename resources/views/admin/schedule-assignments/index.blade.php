@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-  <div class="d-flex justify-content-between align-items-center mb-3">
+  <div class="max-7xl d-flex justify-content-between align-items-center mb-3">
     <h5 class="mb-0">Assign Trainer — Schedules</h5>
     <a href="{{ route('admin.assignments.create') }}" class="btn btn-primary">Create Schedule</a>
   </div>
@@ -30,7 +30,7 @@
                 <td>{{ $s->class_date->format('d M Y') }}</td>
                 <td>{{ $s->start_time->format('H:i') }}–{{ $s->end_time->format('H:i') }}</td>
                 <td>{{ $s->room ?? '-' }}</td>
-                <td>{{ optional($s->assignments->first()?->trainer)->name ?? '— not assigned —' }}</td>
+                <td>{{ optional($s->assignments->first()?->trainer)->nama ?? '— not assigned —' }}</td>
                 <td class="text-end">
                   <a class="btn btn-sm btn-outline-primary" href="{{ route('admin.assignments.edit', $s) }}">Assign / Edit</a>
                   <form action="{{ route('admin.assignments.destroy', $s) }}" method="post" class="d-inline" onsubmit="return confirm('Delete schedule?')">
