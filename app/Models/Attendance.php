@@ -2,41 +2,59 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Attendance extends Model
 {
+    use HasFactory;
+
+    protected $table = 'attendances';
+    protected $primaryKey = 'attendance_id';
+    public $timestamps = true;
+
     protected $fillable = [
-        'user_id',
-        'class_schedule_id',
-        'attendance_date',
-        'check_in_at',
-        'check_out_at',
+        'member_id',
+        'trainer_id',
+        'class_id',
+        'tanggal',
+        'waktu_masuk',
+        'waktu_keluar',
+        'durasi_latihan',
+        'catatan',
         'status',
-        'recorded_by',
-        'notes',
     ];
 
     protected $casts = [
-        'attendance_date' => 'date',
-        'check_in_at'     => 'datetime',
-        'check_out_at'    => 'datetime',
+        'tanggal' => 'date',
+        'waktu_masuk' => 'datetime',
+        'waktu_keluar' => 'datetime',
+        'durasi_latihan' => 'integer',
     ];
 
-    public function user(): BelongsTo
+    /**
+     * Relationship to Member model
+     */
+    public function member(): BelongsTo
     {
-        // relasi ke Users.user_id
-        return $this->belongsTo(User::class, 'user_id', 'user_id');
+        // assume members table PK is member_id
+        return $this->belongsTo(Member::class, 'member_id', 'member_id');
     }
 
-    public function recorder(): BelongsTo
+    /**
+     * Relationship to Trainer (User)
+     */
+    public function trainer(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'recorded_by', 'user_id');
+        return $this->belongsTo(User::class, 'trainer_id', 'user_id');
     }
 
-    public function schedule(): BelongsTo
+    /**
+     * Relationship to GymClass
+     */
+    public function class(): BelongsTo
     {
-        return $this->belongsTo(ClassSchedule::class, 'class_schedule_id');
+        return $this->belongsTo(GymClass::class, 'class_id', 'class_id');
     }
 }

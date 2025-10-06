@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class User extends Authenticatable
 {
@@ -59,8 +61,18 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
     }
 
-    /** PERMISSIONS HELPERS */
+    public function attendancesAsMember(): HasMany
+    {
+        return $this->hasMany(Attendance::class, 'member_id', 'user_id');
+    }
 
+    public function attendancesAsTrainer(): HasMany
+    {
+        return $this->hasMany(Attendance::class, 'trainer_id', 'user_id');
+    }
+
+
+    // Check if user has specific permission
     public function hasPermission(string $permission): bool
     {
         return $this->role?->hasPermission($permission) ?? false;
@@ -106,5 +118,22 @@ class User extends Authenticatable
     public function isMember(): bool
     {
         return $this->getRoleName() === 'member';
+    }
+
+    public function scopeByRole($query, $roleName)
+    {
+        return $query->whereHas('role', function($q) use ($roleName) {
+            $q->where('name', $roleName);
+        });
+    }
+
+    public function scopeMembers($query)
+    {
+        return $this->byRole('member');
+    }
+
+    public function scopeTrainers($query)
+    {
+        return $this->byRole('trainer');
     }
 }

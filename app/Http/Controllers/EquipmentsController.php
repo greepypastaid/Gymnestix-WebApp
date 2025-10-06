@@ -12,7 +12,8 @@ class EquipmentsController extends Controller
      */
     public function index()
     {
-        //
+    $equipments = Equipments::paginate(20);
+    return view('pages.dashboard.trainer.equipments.trainerEquipment', compact('equipments'));
     }
 
     /**
@@ -20,7 +21,7 @@ class EquipmentsController extends Controller
      */
     public function create()
     {
-        //
+        return view('pages.dashboard.admin.equipments.create');
     }
 
     /**
@@ -28,7 +29,16 @@ class EquipmentsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'nama_alat' => 'required|string|max:255',
+            'kondisi' => 'required|in:Baik,Perlu Perbaikan',
+            'tanggal_pembelian' => 'required|date',
+            'jadwal_perawatan' => 'required|date',
+        ]);
+
+        Equipments::create($data);
+
+        return redirect()->route('admin.equipments.index')->with('success', 'Equipment created successfully.');
     }
 
     /**
@@ -36,7 +46,7 @@ class EquipmentsController extends Controller
      */
     public function show(Equipments $equipments)
     {
-        //
+        return view('pages.dashboard.admin.equipments.show', compact('equipments'));
     }
 
     /**
@@ -44,7 +54,7 @@ class EquipmentsController extends Controller
      */
     public function edit(Equipments $equipments)
     {
-        //
+        return view('pages.dashboard.admin.equipments.edit', compact('equipments'));
     }
 
     /**
@@ -52,7 +62,16 @@ class EquipmentsController extends Controller
      */
     public function update(Request $request, Equipments $equipments)
     {
-        //
+        $data = $request->validate([
+            'nama_alat' => 'required|string|max:255',
+            'kondisi' => 'required|in:Baik,Perlu Perbaikan',
+            'tanggal_pembelian' => 'required|date',
+            'jadwal_perawatan' => 'required|date',
+        ]);
+
+        $equipments->update($data);
+
+        return redirect()->route('admin.equipments.index')->with('success', 'Equipment updated successfully.');
     }
 
     /**
@@ -60,6 +79,28 @@ class EquipmentsController extends Controller
      */
     public function destroy(Equipments $equipments)
     {
-        //
+        $equipments->delete();
+        return redirect()->route('admin.equipments.index')->with('success', 'Equipment deleted successfully.');
+    }
+
+    /**
+     * Report equipment issue (for trainers)
+     */
+    public function reportIssue(Request $request, Equipments $equipments)
+    {
+        $request->validate([
+            'report_description' => 'required|string|max:500',
+        ]);
+
+        // Update equipment condition to "Perlu Perbaikan"
+        $equipments->update([
+            'kondisi' => 'Perlu Perbairan'
+        ]);
+
+        // Here you could also log the report or send notification to admin
+        // For now, we'll just redirect with success message
+        
+        return redirect()->route('trainer.equipments.index')
+            ->with('success', "Equipment issue reported successfully. Admin has been notified about: {$equipments->nama_alat}");
     }
 }

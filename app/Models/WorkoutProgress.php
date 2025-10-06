@@ -10,6 +10,7 @@ class WorkoutProgress extends Model
     /** @use HasFactory<\Database\Factories\WorkoutProgressFactory> */
     use HasFactory;
 
+    protected $table = 'workout_progresses';
     protected $primaryKey = 'progress_id';
     
     protected $fillable = [
