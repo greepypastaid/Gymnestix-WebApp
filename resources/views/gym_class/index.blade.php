@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container py-4">
+<div class="max-w-7xl mx-auto sm:px-6 lg:px-8 py-4">
     <h2 class="fw-bold mb-4">Daftar Jadwal Kelas/Gym</h2>
     <a href="{{ route('gym_class.create') }}" class="btn btn-success mb-3">Tambah Jadwal Kelas</a>
     @if(session('success'))

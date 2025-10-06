@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+<div class="max-w-7xl mx-auto sm:px-6 lg:px-8 py-4">
   <h5 class="mb-3">Edit Schedule & Assign Trainer</h5>
 
   @if(session('ok'))<div class="alert alert-success">{{ session('ok') }}</div>@endif

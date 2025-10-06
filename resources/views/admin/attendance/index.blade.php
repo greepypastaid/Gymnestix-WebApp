@@ -10,7 +10,7 @@
   .header-card{border:1px solid rgba(0,0,0,.08); border-radius:.9rem; background:#fff}
 </style>
 
-<div class="container py-4">
+<div class="max-w-7xl mx-auto sm:px-6 lg:px-8 py-4">
 
   {{-- Header boxed --}}
 <div class="header-card p-3 mb-3">

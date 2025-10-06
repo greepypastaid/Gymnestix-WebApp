@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-7xl container py-4">
+<div class="max-w-7xl mx-auto sm:px-6 lg:px-8 py-4">
     <h2 class="fw-bold mb-4 text-center">Admin Dashboard</h2>
 
     <div class="row justify-content-center mb-4">
@@ -45,8 +45,6 @@
             </div>
         </div>
     </div>
-
-    <h5 class="text-center fw-semibold mb-4">Admin Tools</h5>
 
     <div class="tools-grid">
         @can('schedule.assign_trainer')

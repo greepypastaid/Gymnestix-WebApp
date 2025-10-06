@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container py-4">
+<div class="max-w-7xl mx-auto sm:px-6 lg:px-8 py-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="fw-bold">Role & Permission Management</h2>
         <a href="{{ route('permissions.index') }}" class="btn btn-primary">

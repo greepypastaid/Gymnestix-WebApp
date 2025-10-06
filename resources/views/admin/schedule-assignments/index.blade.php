@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+<div class="max-w-7xl mx-auto sm:px-6 lg:px-8 py-4">
   <div class="max-7xl d-flex justify-content-between align-items-center mb-3">
     <h5 class="mb-0">Assign Trainer — Schedules</h5>
     <a href="{{ route('admin.assignments.create') }}" class="btn btn-primary">Create Schedule</a>
