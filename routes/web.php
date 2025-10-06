@@ -11,7 +11,7 @@ use App\Http\Controllers\GymClassController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\ScheduleAssignmentController;
 use App\Http\Controllers\Admin\AttendanceController;
-use App\Http\Controllers\EquipmentsController;
+use App\Http\Controllers\Admin\EquipmentsController;
 use App\Http\Controllers\WorkoutProgressController;
 
 Route::get('/', function () {
@@ -56,10 +56,30 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     });
 
     // Equipment (resource routes -> will create named routes like admin.equipment.index)
-    Route::resource('equipment', EquipmentsController::class)->only(['index','create','store','show','edit','update','destroy']);
+    Route::resource('equipment', EquipmentsController::class)
+        ->only(['index','create','store','show','edit','update','destroy'])
+        ->middleware([
+            'index'   => 'can:equipment.view_all',
+            'show'    => 'can:equipment.view_all',
+            'create'  => 'can:equipment.manage',
+            'store'   => 'can:equipment.manage',
+            'edit'    => 'can:equipment.manage',
+            'update'  => 'can:equipment.manage',
+            'destroy' => 'can:equipment.manage',
+        ]);
 
     // Workout manager (resource routes -> creates admin.workout.index etc.)
-    Route::resource('workout', WorkoutProgressController::class)->only(['index','create','store','show','edit','update','destroy']);
+    Route::resource('workout', WorkoutProgressController::class)
+        ->only(['index','create','store','show','edit','update','destroy'])
+        ->middleware([
+            'index'   => 'can:workout.manage',
+            'show'    => 'can:workout.manage',
+            'create'  => 'can:workout.manage',
+            'store'   => 'can:workout.manage',
+            'edit'    => 'can:workout.manage',
+            'update'  => 'can:workout.manage',
+            'destroy' => 'can:workout.manage',
+        ]);
 });
     
 Route::middleware('auth')->group(function () {
