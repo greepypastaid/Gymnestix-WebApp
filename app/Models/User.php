@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+// Jika kamu benar-benar pakai Spatie Permission, aktifkan baris ini dan tambahkan ke `use` di bawah
+// use Spatie\Permission\Traits\HasRoles;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -10,16 +12,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
+    // Kalau kamu memang pakai Spatie Permission, aktifkan baris berikut:
+    // use HasRoles;
 
-    protected $primaryKey = 'user_id';
+    protected $primaryKey = 'user_id'; // ✅ Penting untuk primary key non-standar
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
     protected $fillable = [
         'nama',
         'email',
@@ -30,21 +28,11 @@ class User extends Authenticatable
         'role_id',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
@@ -54,34 +42,30 @@ class User extends Authenticatable
         ];
     }
 
-    /**
-     * Relationship to Trainer
-     */
+    /** RELATIONSHIPS */
+
     public function trainer()
     {
         return $this->hasOne(Trainer::class, 'user_id', 'user_id');
     }
 
-    /**
-     * Relationship to Member
-     */
     public function member()
     {
         return $this->hasOne(Member::class, 'user_id', 'user_id');
     }
 
-    // User belongs to one role
     public function role(): BelongsTo
     {
         return $this->belongsTo(Role::class);
     }
 
-    // Check if user has specific permission
+    /** PERMISSIONS HELPERS */
+
     public function hasPermission(string $permission): bool
     {
         return $this->role?->hasPermission($permission) ?? false;
     }
-    // Check if user has any of the given permissions
+
     public function hasAnyPermission(array $permissions): bool
     {
         foreach ($permissions as $permission) {
@@ -91,7 +75,7 @@ class User extends Authenticatable
         }
         return false;
     }
-    // Check if user has all given permissions
+
     public function hasAllPermissions(array $permissions): bool
     {
         foreach ($permissions as $permission) {
@@ -102,20 +86,23 @@ class User extends Authenticatable
         return true;
     }
 
-    // Get user's role name
+    /** ROLE HELPERS */
+
     public function getRoleName(): string
     {
         return $this->role?->name ?? 'No Role';
     }
-    // Helper methods for role checking
+
     public function isAdmin(): bool
     {
         return $this->getRoleName() === 'admin';
     }
+
     public function isTrainer(): bool
     {
         return $this->getRoleName() === 'trainer';
     }
+
     public function isMember(): bool
     {
         return $this->getRoleName() === 'member';

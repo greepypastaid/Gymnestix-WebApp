@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
@@ -10,16 +12,21 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-<body class="bg-light">
-    @include('layouts.navigation')
-
-    <main>
-        @yield('content')
-    </main>
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+        <!-- Scripts -->
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <style>
+        .table td, .table th { vertical-align: middle; }
+        .table thead th { font-weight: 600; letter-spacing:.2px; }
+    </style>
+    </head>
+    <body class="font-sans antialiased">
+        <div class="min-h-screen bg-gray-100">
+            @include('layouts.navigation')
+            <main>
+                @yield('content')
+            </main>
+        </div>
+        {{-- sebelum tag penutup body --}}
+        <script defer src="https://unpkg.com/alpinejs@3.12.0/dist/cdn.min.js"></script>
+    </body>
 </html>
