@@ -10,6 +10,7 @@ class Peminjaman extends Model
     /** @use HasFactory<\Database\Factories\PeminjamanFactory> */
     use HasFactory;
 
+    protected $table = 'peminjamans'; // Specify table name explicitly
     protected $primaryKey = 'peminjaman_id';
     
     protected $fillable = [

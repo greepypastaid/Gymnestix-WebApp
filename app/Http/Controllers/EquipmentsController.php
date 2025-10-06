@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Equipments;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class EquipmentsController extends Controller
 {
@@ -12,8 +13,43 @@ class EquipmentsController extends Controller
      */
     public function index()
     {
-    $equipments = Equipments::paginate(20);
-    return view('pages.dashboard.trainer.equipments.trainerEquipment', compact('equipments'));
+        // Check if user is admin or trainer to show different views
+        $user = Auth::user();
+        
+        // Get filter parameters for admin view
+        $q = request('q');
+        $kondisi = request('kondisi');
+        
+        // Build query
+        $query = Equipments::query();
+        
+        if ($q) {
+            $query->where('nama_alat', 'like', "%{$q}%");
+        }
+        
+        if ($kondisi) {
+            $query->where('kondisi', 'like', "%{$kondisi}%");
+        }
+        
+        $equipments = $query->orderBy('nama_alat')->paginate(20);
+        
+        $routeName = optional(request()->route())->getName();
+        if ($routeName && str_starts_with($routeName, 'trainer.')) {
+            return view('pages.dashboard.trainer.equipments.trainerEquipment', compact('equipments'));
+        }
+
+        // Otherwise fallback to admin permission check (admin UI)
+        $hasViewAllPermission = false;
+        if ($user->role) {
+            $hasViewAllPermission = $user->role->permissions()->where('name', 'equipment.view_all')->exists();
+        }
+        
+        if ($hasViewAllPermission) {
+            return view('pages.dashboard.trainer.equipments.trainerEquipment', compact('equipments'));
+        }
+        
+        // Default: admin view
+        return view('admin.equipment.index', compact('equipments', 'q', 'kondisi'));
     }
 
     /**
@@ -21,7 +57,7 @@ class EquipmentsController extends Controller
      */
     public function create()
     {
-        return view('pages.dashboard.admin.equipments.create');
+        return view('admin.equipment.create');
     }
 
     /**
@@ -38,7 +74,7 @@ class EquipmentsController extends Controller
 
         Equipments::create($data);
 
-        return redirect()->route('admin.equipments.index')->with('success', 'Equipment created successfully.');
+        return redirect()->route('admin.equipment.index')->with('success', 'Equipment created successfully.');
     }
 
     /**
@@ -46,7 +82,7 @@ class EquipmentsController extends Controller
      */
     public function show(Equipments $equipments)
     {
-        return view('pages.dashboard.admin.equipments.show', compact('equipments'));
+        return view('admin.equipment.show', compact('equipments'));
     }
 
     /**
@@ -54,7 +90,7 @@ class EquipmentsController extends Controller
      */
     public function edit(Equipments $equipments)
     {
-        return view('pages.dashboard.admin.equipments.edit', compact('equipments'));
+        return view('admin.equipment.edit', compact('equipments'));
     }
 
     /**
@@ -71,7 +107,7 @@ class EquipmentsController extends Controller
 
         $equipments->update($data);
 
-        return redirect()->route('admin.equipments.index')->with('success', 'Equipment updated successfully.');
+        return redirect()->route('admin.equipment.index')->with('success', 'Equipment updated successfully.');
     }
 
     /**
@@ -80,7 +116,7 @@ class EquipmentsController extends Controller
     public function destroy(Equipments $equipments)
     {
         $equipments->delete();
-        return redirect()->route('admin.equipments.index')->with('success', 'Equipment deleted successfully.');
+        return redirect()->route('admin.equipment.index')->with('success', 'Equipment deleted successfully.');
     }
 
     /**
@@ -94,7 +130,7 @@ class EquipmentsController extends Controller
 
         // Update equipment condition to "Perlu Perbaikan"
         $equipments->update([
-            'kondisi' => 'Perlu Perbairan'
+            'kondisi' => 'Perlu Perbaikan'
         ]);
 
         // Here you could also log the report or send notification to admin
