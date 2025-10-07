@@ -122,7 +122,7 @@ class User extends Authenticatable
 
     public function scopeByRole($query, $roleName)
     {
-        return $query->whereHas('role', function($q) use ($roleName) {
+        return $query->whereHas('role', function ($q) use ($roleName) {
             $q->where('name', $roleName);
         });
     }
@@ -135,5 +135,16 @@ class User extends Authenticatable
     public function scopeTrainers($query)
     {
         return $this->byRole('trainer');
+    }
+
+    public function classes()
+    {
+        return $this->belongsToMany(
+            \App\Models\ClassModel::class,
+            'class_user',  // nama tabel pivot
+            'user_id',     // foreign key di tabel pivot untuk user
+            'class_id'     // foreign key di tabel pivot untuk class
+        )->withPivot(['membership_plan_id', 'joined_at', 'expired_at', 'status'])
+            ->withTimestamps();
     }
 }

@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\ScheduleAssignmentController;
 use App\Http\Controllers\Admin\AttendanceController;
 use App\Http\Controllers\Admin\EquipmentsController;
 use App\Http\Controllers\WorkoutProgressController;
+use App\Http\Controllers\Member\ClassController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -72,7 +73,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::resource('workouts', \App\Http\Controllers\Admin\WorkoutController::class)
         ->only(['index','create','store','edit','update','destroy']);
 });
-    
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -144,5 +145,12 @@ Route::prefix('admin')->name('admin.')->middleware(['auth','verified'])->group(f
     Route::put('/equipments/{equipments}', [\App\Http\Controllers\Admin\EquipmentsController::class,'update'])->name('equipments.update')->middleware('permission:equipment.manage');
     Route::delete('/equipments/{equipments}', [\App\Http\Controllers\Admin\EquipmentsController::class,'destroy'])->name('equipments.destroy')->middleware('permission:equipment.manage');
 });
+
+Route::middleware(['auth'])->prefix('member')->name('member.')->group(function () {
+    Route::get('/classes', [ClassController::class, 'index'])->name('classes.index');
+    Route::post('/classes/join/{class}', [ClassController::class, 'join'])->name('classes.join');
+});
+
+Route::get('/kelas', [ClassController::class, 'index'])->name('classes.index');
 
 require __DIR__ . '/auth.php';
