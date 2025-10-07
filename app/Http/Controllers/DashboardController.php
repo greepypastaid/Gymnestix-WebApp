@@ -2,48 +2,46 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 use App\Models\User;
 
 class DashboardController extends Controller
 {
     /**
-     * Handle dashboard redirection based on user role
+     * Redirect ke dashboard sesuai role.
      */
     public function index(): RedirectResponse
     {
-        /** @var User $user */
+        /** @var User|null $user */
         $user = Auth::user();
-
-        // Redirect to role-specific route (routes/web.php defines these names)
-        if ($user->isAdmin()) {
-            return redirect()->route('admin.dashboard');
-        } elseif ($user->isTrainer()) {
-            return redirect()->route('trainer.dashboard');
-        } elseif ($user->isMember()) {
-            return redirect()->route('member.dashboard');
+        if (!$user) {
+            return redirect()->route('login');
         }
 
-        // Default fallback
+        if ($user->isAdmin())   return redirect()->route('admin.dashboard');
+        if ($user->isTrainer()) return redirect()->route('trainer.dashboard');
+        if ($user->isMember())  return redirect()->route('member.dashboard');
+
+        // Fallback jika role tidak dikenali
         return redirect('/');
     }
 
     /**
-     * Admin Dashboard
+     * Admin Dashboard → resources/views/admin/dashboard.blade.php
      */
     public function admin(): View
     {
-        /** @var User $user */
+        /** @var User|null $user */
         $user = Auth::user();
+        abort_unless($user && $user->isAdmin(), 403, 'You do not have permission to access admin dashboard.');
 
         if (!$user->isAdmin()) {
             abort(403, 'You do not have permission to access admin dashboard.');
         }
 
-        return view('pages.dashboard.admin.adminDashboard');
+    return view('admin.dashboard');
     }
 
     /**
@@ -51,28 +49,24 @@ class DashboardController extends Controller
      */
     public function trainer(): View
     {
-        /** @var User $user */
+        /** @var User|null $user */
         $user = Auth::user();
-
-        if (!$user->isTrainer()) {
-            abort(403, 'You do not have permission to access trainer dashboard.');
-        }
+        // Allow access if the user has the trainer role OR has a linked trainer record
+        $hasTrainerRecord = method_exists($user, 'trainer') ? (bool) $user->trainer : false;
+        abort_unless($user && ($user->isTrainer() || $hasTrainerRecord), 403, 'You do not have permission to access trainer dashboard.');
 
         return view('pages.dashboard.trainer.trainerDashboard');
     }
 
     /**
-     * Member Dashboard
+     * Member Dashboard → resources/views/member/dashboard.blade.php
      */
     public function member(): View
     {
-        /** @var User $user */
+        /** @var User|null $user */
         $user = Auth::user();
+        abort_unless($user && $user->isMember(), 403, 'You do not have permission to access member dashboard.');
 
-        if (!$user->isMember()) {
-            abort(403, 'You do not have permission to access member dashboard.');
-        }
-
-        return view('pages.dashboard.member.memberDashboard');
+        return view('member.dashboard');
     }
 }

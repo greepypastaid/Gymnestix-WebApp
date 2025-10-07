@@ -1,0 +1,197 @@
+<nav class="bg-white border-b shadow-sm sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16 items-center">
+            {{-- Logo --}}
+            {{-- 🌿 Navbar (Tema Hijau Modern) --}}
+            <div class="flex-shrink-0">
+                <a href="{{ url('/') }}" class="flex items-center gap-2 group">
+                    <div
+                        class="w-8 h-8 bg-gradient-to-br from-green-600 to-emerald-500 rounded-md flex items-center justify-center shadow-md">
+                        <i class="bi bi-dumbbell text-white text-lg"></i>
+                    </div>
+                    <span
+                        class="font-bold text-lg text-gray-800 group-hover:text-green-600 transition-colors duration-300">
+                        Gymnestix
+                    </span>
+                </a>
+            </div>
+
+            {{-- 🌱 Menu Desktop --}}
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#fitur" class="relative text-gray-700 hover:text-green-600 font-medium transition">
+                    Fitur
+                    <span
+                        class="absolute left-0 bottom-[-4px] w-0 h-[2px] bg-green-600 transition-all duration-300 hover:w-full"></span>
+                </a>
+                <a href="#kelas" class="relative text-gray-700 hover:text-green-600 font-medium transition">
+                    Kelas
+                    <span
+                        class="absolute left-0 bottom-[-4px] w-0 h-[2px] bg-green-600 transition-all duration-300 hover:w-full"></span>
+                </a>
+                <a href="#pelatih" class="relative text-gray-700 hover:text-green-600 font-medium transition">
+                    Pelatih
+                    <span
+                        class="absolute left-0 bottom-[-4px] w-0 h-[2px] bg-green-600 transition-all duration-300 hover:w-full"></span>
+                </a>
+                <a href="#harga" class="relative text-gray-700 hover:text-green-600 font-medium transition">
+                    Harga
+                    <span
+                        class="absolute left-0 bottom-[-4px] w-0 h-[2px] bg-green-600 transition-all duration-300 hover:w-full"></span>
+                </a>
+            </div>
+
+
+            {{-- Auth Buttons / Profile --}}
+            {{-- 🌿 Bagian Kanan Navbar (Auth Buttons / Profil) --}}
+            <div class="hidden md:flex items-center gap-4">
+                @auth
+                    {{-- Dropdown Profil --}}
+                    <div class="relative group">
+                        <button
+                            class="flex items-center gap-2 text-gray-700 hover:text-green-600 focus:outline-none transition font-medium">
+                            <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}" alt="Avatar"
+                                class="w-9 h-9 rounded-full border-2 border-green-500 shadow-sm transition group-hover:scale-105" />
+                            <span>{{ Auth::user()->name }}</span>
+                            <i class="bi bi-chevron-down text-gray-500 group-hover:text-green-600 text-sm"></i>
+                        </button>
+
+                        {{-- Dropdown Menu --}}
+                        <div
+                            class="absolute right-0 mt-3 w-52 bg-white border border-gray-100 rounded-xl shadow-lg opacity-0 group-hover:opacity-100 group-hover:translate-y-1 transform transition-all duration-200 ease-out pointer-events-none group-hover:pointer-events-auto z-50">
+                            <div class="px-4 py-3 border-b border-gray-100">
+                                <p class="text-sm font-semibold text-gray-800">{{ Auth::user()->name }}</p>
+                                <p class="text-xs text-gray-500">{{ Auth::user()->role->name ?? 'guest' }} Gymnestix</p>
+                            </div>
+
+                            <a href="{{ route('profile.edit') }}"
+                                class="block px-4 py-2.5 text-gray-700 hover:bg-green-50 hover:text-green-700 transition">
+                                <i class="bi bi-person-circle mr-2 text-green-500"></i> Profil
+                            </a>
+                            @if (Auth::user()->isAdmin() || Auth::user()->isTrainer())
+                                <a href="{{ route('dashboard') }}"
+                                    class="block px-4 py-2.5 text-gray-700 hover:bg-green-50 hover:text-green-700 transition">
+                                    <i class="bi bi-speedometer2 mr-2 text-green-500"></i> Dashboard
+                                </a>
+                            @endif
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button type="submit"
+                                    class="w-full text-left px-4 py-2.5 text-gray-700 hover:bg-red-50 hover:text-red-600 transition">
+                                    <i class="bi bi-box-arrow-right mr-2 text-red-500"></i> Keluar
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                @else
+                    {{-- Tombol Auth --}}
+                    <a href="{{ route('login') }}"
+                        class="text-gray-700 hover:text-green-600 font-medium transition">Masuk</a>
+                    <a href="{{ route('register') }}"
+                        class="bg-gradient-to-r from-green-600 to-emerald-500 text-white px-4 py-2 rounded-md font-medium shadow hover:shadow-lg hover:from-green-700 hover:to-emerald-600 transition-all">
+                        Daftar
+                    </a>
+                @endauth
+            </div>
+
+
+            {{-- Mobile Toggle --}}
+            <div class="md:hidden">
+                <button id="mobile-menu-button" class="text-gray-700 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16m-7 6h7" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        {{-- 🌿 Mobile Menu (Hijau, Modern & Fresh) --}}
+        <div id="mobile-menu"
+            class="md:hidden hidden border-t bg-white shadow-lg transition-all duration-300 ease-in-out overflow-hidden rounded-b-2xl">
+            <div class="px-5 py-5 space-y-4">
+
+                {{-- 🔗 Navigasi Utama --}}
+                <div class="flex flex-col gap-3">
+                    <a href="#fitur"
+                        class="flex items-center gap-2 text-gray-700 hover:text-green-600 font-medium transition-colors">
+                        <i class="bi bi-lightning-charge-fill text-green-500"></i>
+                        Fitur
+                    </a>
+                    <a href="#kelas"
+                        class="flex items-center gap-2 text-gray-700 hover:text-green-600 font-medium transition-colors">
+                        <i class="bi bi-collection-play-fill text-green-500"></i>
+                        Kelas
+                    </a>
+                    <a href="#pelatih"
+                        class="flex items-center gap-2 text-gray-700 hover:text-green-600 font-medium transition-colors">
+                        <i class="bi bi-person-badge-fill text-green-500"></i>
+                        Pelatih
+                    </a>
+                    <a href="#harga"
+                        class="flex items-center gap-2 text-gray-700 hover:text-green-600 font-medium transition-colors">
+                        <i class="bi bi-cash-stack text-green-500"></i>
+                        Harga
+                    </a>
+                </div>
+
+                <hr class="border-gray-200 my-4">
+
+                {{-- 👤 Bagian Auth --}}
+                @auth
+                    <div class="flex items-center gap-3 border-b pb-3">
+                        <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}" alt="Avatar"
+                            class="w-10 h-10 rounded-full border border-green-400" />
+                        <div>
+                            <p class="text-gray-800 font-semibold">{{ Auth::user()->name }}</p>
+                            <p class="text-sm text-gray-500">Member</p>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-2 mt-3">
+                        <a href="{{ route('profile.edit') }}"
+                            class="flex items-center gap-2 text-gray-700 hover:text-green-600 transition-colors">
+                            <i class="bi bi-person-circle text-green-500"></i> Profil
+                        </a>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit"
+                                class="flex items-center gap-2 text-gray-700 hover:text-red-600 transition-colors">
+                                <i class="bi bi-box-arrow-right text-red-500"></i> Keluar
+                            </button>
+                        </form>
+                    </div>
+                @else
+                    <div class="flex flex-col gap-2">
+                        <a href="{{ route('login') }}"
+                            class="flex items-center justify-center gap-2 border border-green-600 text-green-600 rounded-md py-2 font-medium hover:bg-green-50 transition">
+                            <i class="bi bi-box-arrow-in-right"></i> Masuk
+                        </a>
+                        <a href="{{ route('register') }}"
+                            class="flex items-center justify-center gap-2 bg-gradient-to-r from-green-600 to-emerald-500 text-white rounded-md py-2 font-medium hover:from-green-700 hover:to-emerald-600 transition">
+                            <i class="bi bi-person-plus"></i> Daftar
+                        </a>
+                    </div>
+                @endauth
+            </div>
+        </div>
+
+    </div>
+</nav>
+
+{{-- Script toggle mobile menu (pasti jalan) --}}
+@push('scripts')
+    <script defer>
+        document.addEventListener('DOMContentLoaded', function() {
+            const btn = document.getElementById('mobile-menu-button');
+            const menu = document.getElementById('mobile-menu');
+
+            if (btn && menu) {
+                btn.addEventListener('click', () => {
+                    menu.classList.toggle('hidden');
+                    menu.classList.toggle('max-h-0');
+                    menu.classList.toggle('max-h-[500px]');
+                });
+            }
+        });
+    </script>
+@endpush

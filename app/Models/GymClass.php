@@ -37,4 +37,17 @@ class GymClass extends Model
     {
         return $this->hasMany(Booking::class, 'class_id', 'class_id');
     }
+
+    /**
+     * Convenience many-to-many relation to members through bookings
+     */
+    public function members()
+    {
+        return $this->belongsToMany(
+            \App\Models\Member::class,
+            'bookings',
+            'class_id',
+            'member_id'
+        )->withPivot('tanggal_booking')->withTimestamps();
+    }
 }

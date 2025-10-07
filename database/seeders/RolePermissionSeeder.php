@@ -20,11 +20,12 @@ class RolePermissionSeeder extends Seeder
             'schedule.assign_trainer',
             'attendance.view_all',
             'attendance.track',
+            'attendance.view_own',
             'equipment.manage',
             'equipment.view_all',
             'workout.manage',
         ])->get();
-        $adminRole->permissions()->attach($adminPermissions);
+    $adminRole->permissions()->syncWithoutDetaching($adminPermissions->pluck('id')->toArray());
 
         // ===== Trainer =====
         $trainerRole = Role::where('name', 'trainer')->first();
@@ -38,7 +39,7 @@ class RolePermissionSeeder extends Seeder
             'workout.view_member',
             'equipment.view_all',
         ])->get();
-        $trainerRole->permissions()->attach($trainerPermissions);
+    $trainerRole->permissions()->syncWithoutDetaching($trainerPermissions->pluck('id')->toArray());
 
         // ===== Member =====
         $memberRole = Role::where('name', 'member')->first();
@@ -53,6 +54,6 @@ class RolePermissionSeeder extends Seeder
             'workout.track_own',
             'attendance.view_own',
         ])->get();
-        $memberRole->permissions()->attach($memberPermissions);
+    $memberRole->permissions()->syncWithoutDetaching($memberPermissions->pluck('id')->toArray());
     }
 }

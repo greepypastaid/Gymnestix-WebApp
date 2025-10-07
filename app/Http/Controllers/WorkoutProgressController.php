@@ -2,64 +2,60 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Member;
 use App\Models\WorkoutProgress;
 use Illuminate\Http\Request;
 
 class WorkoutProgressController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of workout progress (Admin).
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        // sesuaikan data jika perlu, untuk sekarang tampilkan view placeholder
+        return view('admin.workout.index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('admin.workout.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        // implementasi sesuai kebutuhan
+        return redirect()->route('admin.workout.index')->with('success', 'Workout saved (placeholder).');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(WorkoutProgress $workoutProgress)
+    public function show($id)
     {
-        //
+        return view('admin.workout.show', compact('id'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(WorkoutProgress $workoutProgress)
+    public function edit($id)
     {
-        //
+        return view('admin.workout.edit', compact('id'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, WorkoutProgress $workoutProgress)
+    public function update(Request $request, $id)
     {
-        //
+        // implementasi
+        return redirect()->route('admin.workout.index')->with('success', 'Workout updated (placeholder).');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(WorkoutProgress $workoutProgress)
+    public function destroy($id)
     {
-        //
+        // implementasi
+        return redirect()->route('admin.workout.index')->with('success', 'Workout deleted (placeholder).');
+    }
+    
+    public function indexForMember(Member $member)
+    {
+        // middleware permission: workout.view_member (routes sudah pakai)
+        $progresses = WorkoutProgress::where('member_id', $member->member_id)->orderByDesc('tanggal')->get();
+
+        // sesuaikan view path ke file yang kamu buat
+        return view('pages.dashboard.trainer.workout.trainerViewWorkout', compact('member','progresses'));
     }
 }

@@ -12,13 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id('user_id'); // Changed to match ERD
+            $table->bigIncrements('user_id'); // Changed to match ERD
             $table->string('nama'); // Changed from 'name' to 'nama'
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->text('alamat'); // Required field from ERD
-            $table->string('nomor_telepon'); // Required field from ERD  
+            $table->string('nomor_telepon')->nullable(); // Required field from ERD  
             $table->date('tanggal_lahir'); // Required field from ERD
             $table->rememberToken();
             $table->timestamps();
