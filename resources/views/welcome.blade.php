@@ -1,4 +1,4 @@
-@extends('layouts_member.app')
+@extends('landing_page.layouts.app')
 
 @section('title', 'Gymnestix - Bangun Versi Terkuatmu')
 @section('meta_description', 'Gym modern dengan fasilitas lengkap, kelas beragam, dan pelatih bersertifikat. Coba kelas
