@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\ScheduleAssignmentController;
 use App\Http\Controllers\Admin\AttendanceController;
 use App\Http\Controllers\Admin\EquipmentsController;
+use App\Http\Controllers\Admin\WorkoutController;
 use App\Http\Controllers\WorkoutProgressController;
 
 Route::get('/', function () {
@@ -69,8 +70,10 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
         ]);
 
     // Workout manager (resource routes -> creates admin.workouts.index etc.)
-    Route::resource('workouts', \App\Http\Controllers\Admin\WorkoutController::class)
-        ->only(['index','create','store','edit','update','destroy']);
+    Route::middleware('can:workout.manage')->group(function () {
+        Route::resource('workouts', WorkoutController::class)
+            ->only(['index','create','store','edit','update','destroy']);
+    });
 });
     
 Route::middleware('auth')->group(function () {

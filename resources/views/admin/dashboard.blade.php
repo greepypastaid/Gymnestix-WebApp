@@ -97,13 +97,14 @@
             <div class="tool-title">Workout Manager</div>
             <div class="tool-desc">Template latihan & progress tracking.</div>
             <div class="mt-3">
-                <a href="{{ Route::has('admin.workout.index') ? route('admin.workout.index') : '#' }}"
-                   class="btn btn-outline-secondary btn-sm btn-outline">
-                  Kelola Workout
+                <a href="{{ route('admin.workouts.index') }}"
+                    class="btn btn-outline-secondary btn-sm btn-outline">
+                    Kelola Workout
                 </a>
             </div>
         </div>
         @endcan
+
     </div>
 </div>
 

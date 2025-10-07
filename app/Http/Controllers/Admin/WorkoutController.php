@@ -3,102 +3,105 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Workout;
+use App\Models\WorkoutProgress;
+use App\Models\Member;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class WorkoutController extends Controller
 {
     public function index(Request $request)
     {
-        // Gunakan abort_if jika permission tidak ada (fallback aman)
-        abort_if(
-            !optional(Auth::user())->hasPermission('workout.manage'),
-            403,
-            'Unauthorized to manage workouts.'
-        );
+        $this->authorize('workout.manage');
 
-        $q     = trim($request->get('q', ''));
-        $level = $request->get('level', '');
+        $q    = trim($request->get('q', ''));
+        $from = $request->get('from');
+        $to   = $request->get('to');
 
-        $rows = Workout::query()
-            ->when($q, fn($qq) =>
-                $qq->where(function($w) use ($q) {
-                    $w->where('title','like',"%{$q}%")
-                      ->orWhere('description','like',"%{$q}%")
-                      ->orWhere('equipment_required','like',"%{$q}%");
-                })
-            )
-            ->when($level, fn($qq) => $qq->where('level', $level))
-            ->orderBy('title')
+        $rows = WorkoutProgress::query()
+            ->with(['member.user']) // member->user kalau ada
+            ->when($q !== '', function ($qq) use ($q) {
+                $qq->where('jenis_latihan', 'like', "%{$q}%")
+                   ->orWhereHas('member', function ($m) use ($q) {
+                       // Cari di nama member, atau nama/email user (jika relasi ada)
+                       $m->where('nama', 'like', "%{$q}%")
+                         ->orWhereHas('user', function ($u) use ($q) {
+                             $u->where('nama', 'like', "%{$q}%")
+                               ->orWhere('email', 'like', "%{$q}%");
+                         });
+                   });
+            })
+            ->when($from, fn($qq) => $qq->whereDate('tanggal', '>=', $from))
+            ->when($to,   fn($qq) => $qq->whereDate('tanggal', '<=', $to))
+            ->orderByDesc('tanggal')
             ->paginate(10)
-            ->withQueryString();
+            ->appends($request->query());
 
-        return view('admin.workouts.index', compact('rows','q','level'));
+        return view('admin.workout.index', compact('rows','q','from','to'));
     }
 
     public function create()
     {
-        abort_if(!optional(Auth::user())->hasPermission('workout.manage'), 403);
-        $row = new Workout();
-        return view('admin.workouts.create', compact('row'));
+        $this->authorize('workout.manage');
+
+        $row = new WorkoutProgress();
+        $members = Member::with('user')->orderBy('member_id')->get();
+        return view('admin.workout.create', compact('row','members'));
     }
 
     public function store(Request $request)
     {
-        abort_if(!optional(Auth::user())->hasPermission('workout.manage'), 403);
+        $this->authorize('workout.manage');
 
         $data = $request->validate([
-            'title'              => ['required','string','max:255'],
-            'level'              => ['required','in:beginner,intermediate,advanced'],
-            'duration_minutes'   => ['nullable','integer','min:0'],
-            'equipment_required' => ['nullable','string','max:255'],
-            'description'        => ['nullable','string'],
+            'member_id'         => ['required','exists:members,member_id'],
+            'tanggal'           => ['required','date'],
+            'jenis_latihan'     => ['required','string','max:255'],
+            'catatan_repetisi'  => ['nullable','integer','min:0'],
+            'catatan_durasi'    => ['nullable','integer','min:0'],
+            'catatan_berat'     => ['nullable','numeric','min:0'],
         ]);
 
-        // Auth::id() sudah otomatis return user_id jika primary key user adalah user_id
-        $data['created_by'] = optional(Auth::user())->user_id;
+        WorkoutProgress::create($data);
 
-        Workout::create($data);
-
-        return redirect()
-            ->route('admin.workouts.index')
-            ->with('ok', 'Workout created.');
+        return redirect()->route('admin.workouts.index')->with('ok','Workout progress created.');
     }
 
-    public function edit(Workout $workout)
+    public function edit($id)
     {
-        abort_if(!optional(Auth::user())->hasPermission('workout.manage'), 403);
-        $row = $workout;
-        return view('admin.workouts.edit', compact('row'));
+        $this->authorize('workout.manage');
+
+        $row = WorkoutProgress::where('progress_id', $id)->firstOrFail();
+        $members = Member::with('user')->orderBy('member_id')->get();
+        return view('admin.workout.edit', compact('row','members'));
     }
 
-    public function update(Request $request, Workout $workout)
+    public function update(Request $request, $id)
     {
-        abort_if(!optional(Auth::user())->hasPermission('workout.manage'), 403);
+        $this->authorize('workout.manage');
+
+        $row = WorkoutProgress::where('progress_id', $id)->firstOrFail();
 
         $data = $request->validate([
-            'title'              => ['required','string','max:255'],
-            'level'              => ['required','in:beginner,intermediate,advanced'],
-            'duration_minutes'   => ['nullable','integer','min:0'],
-            'equipment_required' => ['nullable','string','max:255'],
-            'description'        => ['nullable','string'],
+            'member_id'         => ['required','exists:members,member_id'],
+            'tanggal'           => ['required','date'],
+            'jenis_latihan'     => ['required','string','max:255'],
+            'catatan_repetisi'  => ['nullable','integer','min:0'],
+            'catatan_durasi'    => ['nullable','integer','min:0'],
+            'catatan_berat'     => ['nullable','numeric','min:0'],
         ]);
 
-        $workout->update($data);
+        $row->update($data);
 
-        return redirect()
-            ->route('admin.workouts.index')
-            ->with('ok', 'Workout updated.');
+        return redirect()->route('admin.workouts.index')->with('ok','Workout progress updated.');
     }
 
-    public function destroy(Workout $workout)
+    public function destroy($id)
     {
-        abort_if(!optional(Auth::user())->hasPermission('workout.manage'), 403);
-        $workout->delete();
+        $this->authorize('workout.manage');
 
-        return redirect()
-            ->route('admin.workouts.index')
-            ->with('ok', 'Workout deleted.');
+        $row = WorkoutProgress::where('progress_id', $id)->firstOrFail();
+        $row->delete();
+
+        return redirect()->route('admin.workouts.index')->with('ok','Workout progress deleted.');
     }
 }
