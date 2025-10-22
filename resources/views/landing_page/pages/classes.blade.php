@@ -15,7 +15,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             @forelse($classes as $class)
                 @php
-                    $joined = $userClasses->contains('class_id', $class->class_id);
+                    $joined = $userClasses ? $userClasses->contains('class_id', $class->class_id) : false;
                     $membership = $joined ? $userClasses->firstWhere('class_id', $class->class_id) : null;
                 @endphp
 

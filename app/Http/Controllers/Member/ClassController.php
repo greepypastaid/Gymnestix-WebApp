@@ -12,7 +12,7 @@ class ClassController extends Controller
     public function index()
     {
         $classes = ClassModel::all();
-        $userClasses = Auth::user()->classes()->get();
+        $userClasses = Auth::user() ? Auth::user()->classes : null;
 
         return view('landing_page.pages.classes', compact('classes', 'userClasses'));
     }

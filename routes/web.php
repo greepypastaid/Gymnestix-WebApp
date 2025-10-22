@@ -1,22 +1,24 @@
 <?php
 
-use App\Http\Controllers\PermissionController;
-use App\Http\Controllers\RolePermissionController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\MembershipPlanController;
-use App\Http\Controllers\BillingController;
-use App\Http\Controllers\GymClassController;
+use App\Models\MembershipPlan;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\ScheduleAssignmentController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\BillingController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\GymClassController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\Member\ClassController;
+use App\Http\Controllers\MembershipPlanController;
+use App\Http\Controllers\RolePermissionController;
+use App\Http\Controllers\WorkoutProgressController;
 use App\Http\Controllers\Admin\AttendanceController;
 use App\Http\Controllers\Admin\EquipmentsController;
-use App\Http\Controllers\WorkoutProgressController;
-use App\Http\Controllers\Member\ClassController;
+use App\Http\Controllers\Admin\ScheduleAssignmentController;
 
 Route::get('/', function () {
-    return view('welcome');
+    $membershipPlans = MembershipPlan::all();
+    return view('welcome', compact('membershipPlans'));
 });
 
 // Main dashboard - redirects based on role
@@ -46,7 +48,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::put('/schedules/{schedule}', [ScheduleAssignmentController::class, 'update'])->name('assignments.update');
     Route::delete('/schedules/{schedule}', [ScheduleAssignmentController::class, 'destroy'])->name('assignments.destroy');
 
-// Attendance (track)
+    // Attendance (track)
     Route::middleware('can:attendance.track')->group(function () {
         Route::get('/attendance', [\App\Http\Controllers\Admin\AttendanceController::class, 'index'])->name('attendance.index');
         Route::get('/attendance/create', [\App\Http\Controllers\Admin\AttendanceController::class, 'create'])->name('attendance.create');
@@ -58,7 +60,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
     // Equipment (resource routes -> will create named routes like admin.equipment.index)
     Route::resource('equipment', EquipmentsController::class)
-        ->only(['index','create','store','show','edit','update','destroy'])
+        ->only(['index', 'create', 'store', 'show', 'edit', 'update', 'destroy'])
         ->middleware([
             'index'   => 'permission:equipment.manage',
             'show'    => 'permission:equipment.manage',
@@ -71,7 +73,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
     // Workout manager (resource routes -> creates admin.workouts.index etc.)
     Route::resource('workouts', \App\Http\Controllers\Admin\WorkoutController::class)
-        ->only(['index','create','store','edit','update','destroy']);
+        ->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
 });
 
 Route::middleware('auth')->group(function () {
@@ -96,26 +98,25 @@ Route::middleware('auth')->group(function () {
 
     // CRUD Jadwal Kelas/Gym (Schedule) - Admin uses Admin controller
     Route::resource('gym_class', \App\Http\Controllers\Admin\GymClassController::class)->middleware(['auth', 'verified']);
-
 });
 
 // Buat Trainer Le
-Route::prefix('trainer')->name('trainer.')->middleware(['auth','verified'])->group(function () {
+Route::prefix('trainer')->name('trainer.')->middleware(['auth', 'verified'])->group(function () {
     // Classes
-    Route::get('/classes', [GymClassController::class,'index'])->name('classes.index');
-    Route::get('/classes/create', [GymClassController::class,'create'])->name('classes.create')->middleware('permission:schedule.create_limited');
-    Route::post('/classes', [GymClassController::class,'store'])->name('classes.store')->middleware('permission:schedule.create_limited');
-    Route::get('/classes/{gymClass}/edit', [GymClassController::class,'edit'])->name('classes.edit')->middleware('permission:schedule.create_limited');
-    Route::put('/classes/{gymClass}', [GymClassController::class,'update'])->name('classes.update')->middleware('permission:schedule.create_limited');
-    Route::delete('/classes/{gymClass}', [GymClassController::class,'destroy'])->name('classes.destroy')->middleware('permission:schedule.create_limited');
-    Route::get('/classes/{gymClass}/members', [GymClassController::class,'viewMembers'])->name('classes.members')->middleware('auth');
+    Route::get('/classes', [GymClassController::class, 'index'])->name('classes.index');
+    Route::get('/classes/create', [GymClassController::class, 'create'])->name('classes.create')->middleware('permission:schedule.create_limited');
+    Route::post('/classes', [GymClassController::class, 'store'])->name('classes.store')->middleware('permission:schedule.create_limited');
+    Route::get('/classes/{gymClass}/edit', [GymClassController::class, 'edit'])->name('classes.edit')->middleware('permission:schedule.create_limited');
+    Route::put('/classes/{gymClass}', [GymClassController::class, 'update'])->name('classes.update')->middleware('permission:schedule.create_limited');
+    Route::delete('/classes/{gymClass}', [GymClassController::class, 'destroy'])->name('classes.destroy')->middleware('permission:schedule.create_limited');
+    Route::get('/classes/{gymClass}/members', [GymClassController::class, 'viewMembers'])->name('classes.members')->middleware('auth');
 
     // Equipments (Trainer view only)
-    Route::get('/equipments', [\App\Http\Controllers\EquipmentsController::class,'index'])->name('equipments.index')->middleware('permission:equipment.view_all');
-    Route::patch('/equipments/{equipments}/report', [\App\Http\Controllers\EquipmentsController::class,'reportIssue'])->name('equipments.report')->middleware('permission:equipment.view_all');
+    Route::get('/equipments', [\App\Http\Controllers\EquipmentsController::class, 'index'])->name('equipments.index')->middleware('permission:equipment.view_all');
+    Route::patch('/equipments/{equipments}/report', [\App\Http\Controllers\EquipmentsController::class, 'reportIssue'])->name('equipments.report')->middleware('permission:equipment.view_all');
 
     // View member workouts
-    Route::get('/members/{member}/workouts', [WorkoutProgressController::class,'indexForMember'])
+    Route::get('/members/{member}/workouts', [WorkoutProgressController::class, 'indexForMember'])
         ->name('members.workouts.index')
         ->middleware('permission:workout.view_member');
 
@@ -135,15 +136,15 @@ Route::prefix('trainer')->name('trainer.')->middleware(['auth','verified'])->gro
 });
 
 // Admin routes (for future admin dashboard)
-Route::prefix('admin')->name('admin.')->middleware(['auth','verified'])->group(function () {
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified'])->group(function () {
     // Equipment management (full CRUD for admin)
-    Route::get('/equipments', [\App\Http\Controllers\Admin\EquipmentsController::class,'index'])->name('equipments.index')->middleware('permission:equipment.manage');
-    Route::get('/equipments/create', [\App\Http\Controllers\Admin\EquipmentsController::class,'create'])->name('equipments.create')->middleware('permission:equipment.manage');
-    Route::post('/equipments', [\App\Http\Controllers\Admin\EquipmentsController::class,'store'])->name('equipments.store')->middleware('permission:equipment.manage');
-    Route::get('/equipments/{equipments}', [\App\Http\Controllers\Admin\EquipmentsController::class,'show'])->name('equipments.show')->middleware('permission:equipment.manage');
-    Route::get('/equipments/{equipments}/edit', [\App\Http\Controllers\Admin\EquipmentsController::class,'edit'])->name('equipments.edit')->middleware('permission:equipment.manage');
-    Route::put('/equipments/{equipments}', [\App\Http\Controllers\Admin\EquipmentsController::class,'update'])->name('equipments.update')->middleware('permission:equipment.manage');
-    Route::delete('/equipments/{equipments}', [\App\Http\Controllers\Admin\EquipmentsController::class,'destroy'])->name('equipments.destroy')->middleware('permission:equipment.manage');
+    Route::get('/equipments', [\App\Http\Controllers\Admin\EquipmentsController::class, 'index'])->name('equipments.index')->middleware('permission:equipment.manage');
+    Route::get('/equipments/create', [\App\Http\Controllers\Admin\EquipmentsController::class, 'create'])->name('equipments.create')->middleware('permission:equipment.manage');
+    Route::post('/equipments', [\App\Http\Controllers\Admin\EquipmentsController::class, 'store'])->name('equipments.store')->middleware('permission:equipment.manage');
+    Route::get('/equipments/{equipments}', [\App\Http\Controllers\Admin\EquipmentsController::class, 'show'])->name('equipments.show')->middleware('permission:equipment.manage');
+    Route::get('/equipments/{equipments}/edit', [\App\Http\Controllers\Admin\EquipmentsController::class, 'edit'])->name('equipments.edit')->middleware('permission:equipment.manage');
+    Route::put('/equipments/{equipments}', [\App\Http\Controllers\Admin\EquipmentsController::class, 'update'])->name('equipments.update')->middleware('permission:equipment.manage');
+    Route::delete('/equipments/{equipments}', [\App\Http\Controllers\Admin\EquipmentsController::class, 'destroy'])->name('equipments.destroy')->middleware('permission:equipment.manage');
 });
 
 Route::middleware(['auth'])->prefix('member')->name('member.')->group(function () {
