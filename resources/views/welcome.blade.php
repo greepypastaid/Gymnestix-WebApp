@@ -177,7 +177,7 @@
                             {{ $p->deskripsi }}
                         </p>
 
-                        <a href="#daftar"
+                        <a href="{{ route('membership.checkout', $p->plan_id) }}"
                             class="block w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition">
                             Pilih Paket
                         </a>

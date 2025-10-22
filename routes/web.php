@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BillingController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\WebhookController;
 use App\Http\Controllers\GymClassController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PermissionController;
@@ -14,6 +15,7 @@ use App\Http\Controllers\RolePermissionController;
 use App\Http\Controllers\WorkoutProgressController;
 use App\Http\Controllers\Admin\AttendanceController;
 use App\Http\Controllers\Admin\EquipmentsController;
+use App\Http\Controllers\MembershipPaymentController;
 use App\Http\Controllers\Admin\ScheduleAssignmentController;
 
 Route::get('/', function () {
@@ -153,5 +155,14 @@ Route::middleware(['auth'])->prefix('member')->name('member.')->group(function (
 });
 
 Route::get('/kelas', [ClassController::class, 'index'])->name('classes.index');
+
+// checkout
+Route::middleware('auth')->group(function () {
+    Route::get('/membership/checkout/{plan_id}', [MembershipPaymentController::class, 'checkout'])
+        ->name('membership.checkout');
+});
+
+Route::post('/webhook/payment', [WebhookController::class, 'handlePayment'])->name('webhook.payment');
+
 
 require __DIR__ . '/auth.php';
