@@ -11,49 +11,61 @@ class WebhookController extends Controller
 {
     public function handlePayment(Request $request)
     {
-        // Log payload mentah
-        $payload = file_get_contents('php://input');
-        Log::info('Webhook received raw', ['payload' => $payload]);
+        try {
+            Log::info('Webhook received', $request->all());
 
-        // Verifikasi tanda tangan
-        $signature = $request->header('X-Webhook-Signature');
-        $secret = config('services.payment.webhook_secret');
-        $expectedSignature = hash_hmac('sha256', $payload, $secret);
+            // --- Verify webhook signature ---
+            $signature = $request->header('X-Webhook-Signature');
+            $webhookSecret = config('services.payment.webhook_secret');
 
-        if (!hash_equals($expectedSignature, $signature)) {
-            Log::warning('Invalid webhook signature', [
-                'expected' => $expectedSignature,
-                'received' => $signature,
+            if (empty($signature) || empty($webhookSecret)) {
+                Log::warning('Missing signature or secret');
+                return response()->json(['error' => 'Missing signature or secret'], 400);
+            }
+
+            $payload = $request->getContent();
+            $expectedSignature = hash_hmac('sha256', $payload, $webhookSecret);
+
+            if (!hash_equals($expectedSignature, $signature)) {
+                Log::warning('Invalid webhook signature', [
+                    'expected' => $expectedSignature,
+                    'received' => $signature,
+                ]);
+                return response()->json(['error' => 'Invalid signature'], 401);
+            }
+
+            // --- Process webhook ---
+            $event = $request->input('event');
+            $data = $request->input('data', []);
+            $externalId = $data['external_id'] ?? null;
+
+            if (!$externalId) {
+                Log::warning('Missing external_id', ['data' => $data]);
+                return response()->json(['error' => 'Missing external_id'], 422);
+            }
+
+            $payment = Payment::where('external_id', $externalId)->first();
+
+            if (!$payment) {
+                Log::warning('Payment not found', ['external_id' => $externalId]);
+                return response()->json(['error' => 'Payment not found'], 404);
+            }
+
+            match ($event) {
+                'payment.success' => $this->handleSuccess($payment),
+                'payment.expired' => $payment->update(['status' => 'expired']),
+                'payment.cancelled' => $payment->update(['status' => 'cancelled']),
+                default => Log::warning('Unknown webhook event', ['event' => $event]),
+            };
+
+            return response()->json(['message' => 'Webhook processed successfully'], 200);
+        } catch (\Throwable $e) {
+            Log::error('Webhook error', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
             ]);
-            return response()->json(['error' => 'Invalid signature'], 401);
+            return response()->json(['error' => 'Server error'], 500);
         }
-
-        //  Decode JSON
-        $data = json_decode($payload, true);
-        $event = $data['event'] ?? null;
-        $content = $data['data'] ?? [];
-        $externalId = $content['external_id'] ?? null;
-
-        if (!$externalId) {
-            return response()->json(['error' => 'Missing external_id'], 422);
-        }
-
-        $payment = Payment::where('external_id', $externalId)->first();
-
-        if (!$payment) {
-            Log::warning('Payment not found', ['external_id' => $externalId]);
-            return response()->json(['error' => 'Payment not found'], 404);
-        }
-
-        //  Proses event
-        match ($event) {
-            'payment.success' => $this->handleSuccess($payment),
-            'payment.expired' => $payment->update(['status' => 'expired']),
-            'payment.cancelled' => $payment->update(['status' => 'cancelled']),
-            default => Log::warning('Unknown webhook event', ['event' => $event]),
-        };
-
-        return response()->json(['message' => 'Webhook processed successfully'], 200);
     }
 
     protected function handleSuccess($payment)
@@ -63,6 +75,7 @@ class WebhookController extends Controller
             'paid_at' => now(),
         ]);
 
+        // Update atau buat data member
         Member::updateOrCreate(
             ['user_id' => $payment->user_id],
             [
@@ -71,10 +84,17 @@ class WebhookController extends Controller
             ]
         );
 
+
+        $user = \App\Models\User::find($payment->user_id);
+        if ($user) {
+            $user->update(['role_id' => 3]);
+        }
+
         Log::info('Payment success processed', [
             'payment_id' => $payment->id,
             'user_id' => $payment->user_id,
             'plan_id' => $payment->membership_plan_id,
+            'role_updated' => $user ? $user->role_id : 'user not found',
         ]);
     }
 }

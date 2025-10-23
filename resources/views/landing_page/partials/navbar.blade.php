@@ -68,7 +68,10 @@
                                 class="block px-4 py-2.5 text-gray-700 hover:bg-green-50 hover:text-green-700 transition">
                                 <i class="bi bi-person-circle mr-2 text-green-500"></i> Profil
                             </a>
-
+                            <a href="#"
+                                class="block px-4 py-2.5 text-gray-700 hover:bg-green-50 hover:text-green-700 transition">
+                                <i class="bi bi-cash mr-2 text-green-500"></i> Pembayaran
+                            </a>
                             @if (Auth::user()->isAdmin() || Auth::user()->isTrainer())
                                 <a href="{{ route('dashboard') }}"
                                     class="block px-4 py-2.5 text-gray-700 hover:bg-green-50 hover:text-green-700 transition">
@@ -84,10 +87,7 @@
                                     class="block px-4 py-2.5 text-gray-700 hover:bg-green-50 hover:text-green-700 transition">
                                     <i class="bi bi-calendar mr-2 text-green-500"></i> Jadwal
                                 </a>
-                                <a href="#"
-                                    class="block px-4 py-2.5 text-gray-700 hover:bg-green-50 hover:text-green-700 transition">
-                                    <i class="bi bi-cash mr-2 text-green-500"></i> Pembayaran
-                                </a>
+
                                 <a href="#"
                                     class="block px-4 py-2.5 text-gray-700 hover:bg-green-50 hover:text-green-700 transition">
                                     <i class="bi bi-bell mr-2 text-green-500"></i> absensi

@@ -3,8 +3,8 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
-use App\Http\Middleware\CheckPermission; 
-use App\Providers\AuthServiceProvider; 
+use App\Http\Middleware\CheckPermission;
+use App\Providers\AuthServiceProvider;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -17,12 +17,15 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'permission' => CheckPermission::class,
         ]);
+        $middleware->validateCsrfTokens(except: [
+            'webhook/payment',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
     })
     ->withProviders([
         App\Providers\AppServiceProvider::class,
-        AuthServiceProvider::class, 
+        AuthServiceProvider::class,
     ])
     ->create();
