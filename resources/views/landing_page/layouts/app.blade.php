@@ -6,7 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>@yield('title', 'Gymnestix - Bangun Versi Terkuatmu')</title>
     <meta name="description" content="@yield('meta_description', 'Gym modern dengan fasilitas lengkap, kelas bervariasi, dan pelatih bersertifikat untuk membantu Anda mencapai tujuan kebugaran.')" />
-
+    
+    {{-- Favicon --}}
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('favicon.png') }}">
+    
     {{-- Fonts & Icons --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,7 +23,12 @@
         }
 
         /* Headings should prefer Poppins for a modern, geometric look */
-        h1, h2, h3, h4, .heading, .hero-title {
+        h1,
+        h2,
+        h3,
+        h4,
+        .heading,
+        .hero-title {
             font-family: 'Poppins', 'Nunito', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
         }
     </style>
