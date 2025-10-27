@@ -8,46 +8,12 @@
 @section('content')
     {{-- Hero --}}
     @include('landing_page.hero') 
+
+    {{-- Fitur --}}
     @include('landing_page.fitur') 
 
-    {{-- Kelas --}}
-    <section id="kelas" class="py-20 bg-gray-50">
-        <div class="max-w-6xl mx-auto px-6">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-8">
-                <div>
-                    <h2 class="text-3xl font-bold">Kelas Populer</h2>
-                    <p class="text-gray-500">Pilih kelas yang sesuai dengan tujuan Anda.</p>
-                </div>
-                <a href="#daftar"
-                    class="hidden md:inline-block px-5 py-2 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition">
-                    Lihat Jadwal
-                </a>
-            </div>
-
-            @php
-                $classes = [
-                    ['name' => 'HIIT Burn', 'desc' => 'Latihan intensitas tinggi untuk membakar kalori cepat.'],
-                    [
-                        'name' => 'Power Lifting',
-                        'desc' => 'Fokus kekuatan: squat, bench, deadlift dengan teknik benar.',
-                    ],
-                    ['name' => 'Mobility Flow', 'desc' => 'Perbaiki mobilitas dan kurangi risiko cedera.'],
-                ];
-            @endphp
-
-            <div class="grid md:grid-cols-3 sm:grid-cols-2 gap-6">
-                @foreach ($classes as $c)
-                    <div class="bg-white rounded-xl shadow p-6 hover:shadow-lg transition">
-                        <h3 class="text-lg font-semibold mb-2">{{ $c['name'] }}</h3>
-                        <p class="text-gray-500 text-sm mb-3">{{ $c['desc'] }}</p>
-                        <a href="#daftar" class="text-green-600 text-sm font-medium hover:underline">
-                            Booking kelas &rarr;
-                        </a>
-                    </div>
-                @endforeach
-            </div>
-        </div>
-    </section>
+    {{-- Class --}}
+    @include('landing_page.class_option')
 
     {{-- Pelatih --}}
     <section id="pelatih" class="py-20">

@@ -1,4 +1,4 @@
-<nav id="site-navbar" class="fixed w-full top-0 z-50 bg-transparent backdrop-blur-sm transition-colors duration-300 ease-in-out">
+<nav id="site-navbar" class="fixed w-full top-0 z-50 bg-transparent transition-colors duration-300 ease-in-out">
     <div class="max-w-7xl mx-auto">
         <div class="flex justify-between h-16 items-center">
             {{-- Logo --}}

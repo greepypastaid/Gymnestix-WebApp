@@ -7,10 +7,11 @@
     <title>@yield('title', 'Gymnestix - Bangun Versi Terkuatmu')</title>
     <meta name="description" content="@yield('meta_description', 'Gym modern dengan fasilitas lengkap, kelas bervariasi, dan pelatih bersertifikat untuk membantu Anda mencapai tujuan kebugaran.')" />
 
-    {{-- Fonts --}}
+    {{-- Fonts & Icons --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&family=Inter:wght@400;500;600&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
     <style>
         /* Default body font for landing pages */
         body {
