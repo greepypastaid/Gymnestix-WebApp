@@ -35,7 +35,6 @@
         <div class="grid lg:grid-cols-4 md:grid-cols-2 gap-6">
             @foreach ($classes as $c)
             <div class="group relative h-[420px] rounded-2xl overflow-hidden cursor-pointer bg-neutral-800">
-                <!-- Background Image -->
                 <div class="absolute inset-0">
                     <img src="{{ $c['image'] }}" 
                          alt="{{ $c['name'] }}" 

@@ -18,7 +18,7 @@
 
             {{-- 🌱 Menu Desktop --}}
             <div class="hidden md:flex items-center space-x-8">
-                <a href="#fitur" class="relative text-white hover:text-[#ADFF2F] font-medium transition">
+                <a href="{{ route('features') }}" class="relative text-white hover:text-[#ADFF2F] font-medium transition">
                     Fitur
                     <span
                         class="absolute left-0 bottom-[-4px] w-0 h-[2px] bg-[#ADFF2F] transition-all duration-300 hover:w-full"></span>
@@ -29,12 +29,12 @@
                     <span
                         class="absolute left-0 bottom-[-4px] w-0 h-[2px] bg-[#ADFF2F] transition-all duration-300 hover:w-full"></span>
                 </a>
-                <a href="#pelatih" class="relative text-white hover:text-[#ADFF2F] font-medium transition">
+                <a href="{{ route('trainers.index') }}" class="relative text-white hover:text-[#ADFF2F] font-medium transition">
                     Pelatih
                     <span
                         class="absolute left-0 bottom-[-4px] w-0 h-[2px] bg-[#ADFF2F] transition-all duration-300 hover:w-full"></span>
                 </a>
-                <a href="#harga" class="relative text-white hover:text-[#ADFF2F] font-medium transition">
+                <a href="{{ route('pricing') }}" class="relative text-white hover:text-[#ADFF2F] font-medium transition">
                     Harga
                     <span
                         class="absolute left-0 bottom-[-4px] w-0 h-[2px] bg-[#ADFF2F] transition-all duration-300 hover:w-full"></span>
@@ -105,10 +105,10 @@
                     </div>
                 @else
                     {{-- Tombol Auth --}}
-                    <a href="{{ route('login') }}"
-                        class="text-white hover:text-[#ADFF2F] font-medium transition">Masuk</a>
+                        <a href="{{ route('login') }}"
+                            class="text-white hover:text-[#ADFF2F] font-medium transition">Masuk</a>
                     <a href="{{ route('register') }}"
-                        class="bg-[#ADFF2F] text-black px-4 py-2 rounded-tl-md rounded-br-md font-medium shadow hover:shadow-lg hover:bg-[#9DE626] transition-all">
+                        class="bg-[#ADFF2F] text-black px-4 py-2 rounded-lg font-medium shadow hover:shadow-lg hover:bg-[#9DE626] transition-all">
                         Daftar
                     </a>
                 @endauth
@@ -132,22 +132,22 @@
             <div class="px-5 py-5 space-y-4">
                 {{-- 🔗 Navigasi Utama --}}
                 <div class="flex flex-col gap-3">
-                    <a href="#fitur"
+                    <a href="{{ route('features') }}"
                         class="flex items-center gap-2 text-white hover:text-[#ADFF2F] font-medium transition-colors">
                         <i class="bi bi-lightning-charge-fill text-green-500"></i>
                         Fitur
                     </a>
-                    <a href="#kelas"
+                    <a href="{{ route('classes.index') }}"
                         class="flex items-center gap-2 text-white hover:text-[#ADFF2F] font-medium transition-colors">
                         <i class="bi bi-collection-play-fill text-green-500"></i>
                         Kelas
                     </a>
-                    <a href="#pelatih"
+                    <a href="{{ route('trainers.index') }}"
                         class="flex items-center gap-2 text-white hover:text-[#ADFF2F] font-medium transition-colors">
                         <i class="bi bi-person-badge-fill text-green-500"></i>
                         Pelatih
                     </a>
-                    <a href="#harga"
+                    <a href="{{ route('pricing') }}"
                         class="flex items-center gap-2 text-white hover:text-[#ADFF2F] font-medium transition-colors">
                         <i class="bi bi-cash-stack text-green-500"></i>
                         Harga

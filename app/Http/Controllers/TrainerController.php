@@ -12,7 +12,10 @@ class TrainerController extends Controller
      */
     public function index()
     {
-        //
+        // Fetch trainers with their user relationship, paginate 6 per page
+        $trainers = Trainer::with('user')->paginate(6);
+        
+        return view('landing_page.pages.trainers', compact('trainers'));
     }
 
     /**

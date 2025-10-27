@@ -9,7 +9,7 @@
             <!-- Hero Section -->
             <div class="max-w-3xl">
                 <h1 class="text-7xl font-nunito text-white leading-tight">
-                    Bangun Dirimu di Gymnestix
+                    Kembangkan Dirimu di Gymnestix
                 </h1>
                 <p class="mt-6 text-neutral-300 font-poppins text-lg">
                     Fasilitas premium, kelas bervariasi, dan pelatih bersertifikat siap membantu Anda mencapai tujuan
