@@ -51,11 +51,10 @@ class DashboardController extends Controller
     {
         /** @var User|null $user */
         $user = Auth::user();
-        // Allow access if the user has the trainer role OR has a linked trainer record
         $hasTrainerRecord = method_exists($user, 'trainer') ? (bool) $user->trainer : false;
         abort_unless($user && ($user->isTrainer() || $hasTrainerRecord), 403, 'You do not have permission to access trainer dashboard.');
 
-        return view('pages.dashboard.trainer.trainerDashboard');
+        return view('trainer.trainerDashboard');
     }
 
     /**

@@ -72,7 +72,7 @@ class AttendanceController extends Controller
             ->get()
             ->keyBy('member_id'); // easy lookup in view
 
-        return view('pages.dashboard.trainer.attendance.track', [
+        return view('trainer.attendance.track', [
             'class' => $class,
             'members' => $members,
             'attendancesToday' => $attendancesToday,
@@ -139,7 +139,7 @@ class AttendanceController extends Controller
                 ->get();
         }
 
-        return view('pages.dashboard.trainer.attendance.select_class', compact('classes'));
+        return view('trainer.attendance.select_class', compact('classes'));
     }
 
     /**
@@ -170,6 +170,6 @@ class AttendanceController extends Controller
                 ->paginate(25);
         }
 
-        return view('pages.dashboard.trainer.attendance.view_all', compact('attendances'));
+        return view('trainer.attendance.view_all', compact('attendances'));
     }
 }
