@@ -12,7 +12,12 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                sans: ['Inter', 'Figtree', ...defaultTheme.fontFamily.sans],
+                heading: ['Poppins', 'Inter', ...defaultTheme.fontFamily.sans],
+                sora: ['Sora', 'Inter', ...defaultTheme.fontFamily.sans],
+                poppins: ['Poppins', 'Inter', ...defaultTheme.fontFamily.sans],
+                nunito: ['Nunito', 'Inter', ...defaultTheme.fontFamily.sans],
+                display: ['Poppins', 'Sora', ...defaultTheme.fontFamily.sans],
             },
         },
     },

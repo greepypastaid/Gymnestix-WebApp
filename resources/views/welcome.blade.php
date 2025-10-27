@@ -7,85 +7,8 @@
 
 @section('content')
     {{-- Hero --}}
-    <section class="py-16 bg-gray-50">
-        <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 items-center gap-10">
-            <div>
-                <h1 class="text-4xl font-extrabold text-gray-900 leading-tight">
-                    Bangun <span class="text-green-600">Versi Terkuatmu</span> di Gymnestix
-                </h1>
-                <p class="mt-4 text-gray-600 text-lg">
-                    Fasilitas premium, kelas bervariasi, dan pelatih bersertifikat siap membantu Anda mencapai tujuan
-                    kebugaran — dari pemula hingga atlet.
-                </p>
-                <div class="flex flex-col sm:flex-row gap-3 mt-6">
-                    <a href="#daftar"
-                        class="px-6 py-3 bg-green-600 text-white rounded-lg text-lg font-semibold hover:bg-green-700 transition">
-                        Coba Kelas Gratis
-                    </a>
-                    <a href="#fitur"
-                        class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg text-lg font-semibold hover:border-green-600 hover:text-green-600 transition">
-                        Lihat Fitur
-                    </a>
-                </div>
-                <div class="grid grid-cols-2 gap-3 mt-6 text-gray-600 text-sm">
-                    <div class="flex items-center gap-2"><i class="bi bi-clock text-yellow-500"></i> 24/7 Akses</div>
-                    <div class="flex items-center gap-2"><i class="bi bi-person-check text-yellow-500"></i> Pelatih
-                        Bersertifikat</div>
-                    <div class="flex items-center gap-2"><i class="bi bi-calendar-check text-yellow-500"></i> Kelas Harian
-                    </div>
-                    <div class="flex items-center gap-2"><i class="bi bi-trophy text-yellow-500"></i> Peralatan Premium
-                    </div>
-                </div>
-            </div>
-
-            <div class="rounded-3xl overflow-hidden shadow-lg border border-gray-200">
-                <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=1600&auto=format&fit=crop"
-                    alt="Member latihan angkat beban di gym"
-                    class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
-            </div>
-        </div>
-    </section>
-
-    {{-- Fitur --}}
-    <section id="fitur" class="py-20">
-        <div class="max-w-6xl mx-auto px-6 text-center">
-            <h2 class="text-3xl font-bold">Fitur Unggulan</h2>
-            <p class="text-gray-500 mt-2">Semua yang Anda butuhkan untuk progres yang konsisten.</p>
-
-            @php
-                $features = [
-                    [
-                        'title' => 'Area Functional & Strength',
-                        'desc' => 'Ruang luas untuk beban bebas, rack, dan latihan fungsional.',
-                    ],
-                    [
-                        'title' => 'Cardio Theater',
-                        'desc' => 'Treadmill, bike, dan rower modern untuk sesi kardio bervariasi.',
-                    ],
-                    ['title' => 'Kelas Harian', 'desc' => 'HIIT, Yoga, Strength, Mobility—pilih sesuai preferensi.'],
-                    [
-                        'title' => 'Aplikasi Booking',
-                        'desc' => 'Booking kelas & konsultasi pelatih langsung dari ponsel.',
-                    ],
-                    ['title' => 'Loker & Shower', 'desc' => 'Kenyamanan penuh setelah sesi latihan intens.'],
-                    ['title' => 'Community Event', 'desc' => 'Komunitas suportif dengan event bulanan.'],
-                ];
-            @endphp
-
-            <div class="grid md:grid-cols-3 sm:grid-cols-2 gap-6 mt-10">
-                @foreach ($features as $f)
-                    <div class="bg-white p-6 rounded-xl shadow hover:-translate-y-1 hover:shadow-lg transition">
-                        <div
-                            class="w-12 h-12 flex items-center justify-center rounded-full bg-green-100 text-green-600 mb-3">
-                            <i class="bi bi-star-fill"></i>
-                        </div>
-                        <h3 class="text-lg font-semibold mb-1">{{ $f['title'] }}</h3>
-                        <p class="text-gray-500 text-sm">{{ $f['desc'] }}</p>
-                    </div>
-                @endforeach
-            </div>
-        </div>
-    </section>
+    @include('landing_page.hero') 
+    @include('landing_page.fitur') 
 
     {{-- Kelas --}}
     <section id="kelas" class="py-20 bg-gray-50">

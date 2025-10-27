@@ -10,9 +10,18 @@
     {{-- Fonts --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&family=Inter:wght@400;500;600&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Default body font for landing pages */
+        body {
+            font-family: 'Nunito', 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+        }
+
+        /* Headings should prefer Poppins for a modern, geometric look */
+        h1, h2, h3, h4, .heading, .hero-title {
+            font-family: 'Poppins', 'Nunito', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+        }
+    </style>
 
     {{-- ✅ Tailwind via CDN --}}
     <script src="https://cdn.tailwindcss.com"></script>
@@ -35,7 +44,7 @@
     </script>
 </head>
 
-<body class="bg-white text-gray-900 font-sans">
+<body class="bg-gray-950 text-gray-900 font-sans">
     {{-- Skip to content --}}
     <a href="#utama"
         class="absolute left-[-999px] focus:left-4 focus:top-4 bg-white text-gray-800 px-4 py-2 rounded shadow z-50">
@@ -46,7 +55,7 @@
     @include('landing_page.partials.navbar')
 
     {{-- Main Content --}}
-    <main id="utama" class="pt-20 min-h-screen">
+    <main id="utama" class="min-h-screen">
         @yield('content')
     </main>
 
