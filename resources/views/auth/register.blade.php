@@ -1,73 +1,102 @@
 <x-guest-layout>
-    <form method="POST" action="{{ route('register') }}">
-        @csrf
+    <div class="h-screen flex items-center justify-center bg-neutral-900">
+        <div class="w-full max-w-7xl mx-4 rounded-3xl overflow-hidden shadow-xl grid grid-cols-1 lg:grid-cols-2">
+            <div class="relative h-72 lg:h-auto">
+                <img
+                    src="{{ asset('storage/formRegister.jpg') }}"
+                    alt="Ilustrasi latihan dan komunitas Gymnestix"
+                    class="w-full h-full object-cover"
+                    loading="lazy"
+                    decoding="async"
+                />
+            </div>
 
-        <!-- Name -->
-        <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required
-                autofocus autocomplete="name" />
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
+            <!-- Register Form -->
+            <div class="bg-neutral-800 lg:rounded-none rounded-b-3xl lg:rounded-r-3xl p-8 md:p-10">
+                <div class="max-w-md mx-auto">
+                    <h1 class="text-3xl font-semibold text-white mb-2">Buat Akun Baru</h1>
+                    <p class="text-sm text-neutral-200 mb-6">Daftar untuk mengakses jadwal, booking kelas, dan memantau progress Anda.</p>
+
+                    <x-auth-session-status class="mb-4" :status="session('status')" />
+
+                    <form method="POST" action="{{ route('register') }}" novalidate>
+                        @csrf
+
+                        <!-- Name -->
+                        <div class="mb-4">
+                            <label for="name" class="block text-sm text-neutral-200">Nama</label>
+                            <input id="name" name="name" type="text" value="{{ old('name') }}" required autofocus
+                                   autocomplete="name"
+                                   class="mt-2 w-full px-4 py-3 rounded-lg border border-neutral-500 bg-neutral-800 text-neutral-200 focus:outline-none focus:ring-2 focus:ring-green-400" />
+                            <x-input-error :messages="$errors->get('name')" class="mt-2" />
+                        </div>
+
+                        <!-- Email -->
+                        <div class="mb-4">
+                            <label for="email" class="block text-sm text-neutral-200">Email</label>
+                            <input id="email" name="email" type="email" value="{{ old('email') }}" required
+                                   autocomplete="username"
+                                   class="mt-2 w-full px-4 py-3 rounded-lg border border-neutral-500 bg-neutral-800 text-neutral-200 focus:outline-none focus:ring-2 focus:ring-green-400" />
+                            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+                        </div>
+
+                        <!-- Alamat -->
+                        <div class="mb-4">
+                            <label for="alamat" class="block text-sm text-neutral-200">Alamat</label>
+                            <input id="alamat" name="alamat" type="text" value="{{ old('alamat') }}" required
+                                   class="mt-2 w-full px-4 py-3 rounded-lg border border-neutral-500 bg-neutral-800 text-neutral-200 focus:outline-none focus:ring-2 focus:ring-green-400" />
+                            <x-input-error :messages="$errors->get('alamat')" class="mt-2" />
+                        </div>
+
+                        <!-- Nomor Telepon -->
+                        <div class="mb-4">
+                            <label for="nomor_telepon" class="block text-sm text-neutral-200">Nomor Telepon</label>
+                            <input id="nomor_telepon" name="nomor_telepon" type="text" value="{{ old('nomor_telepon') }}" required
+                                   class="mt-2 w-full px-4 py-3 rounded-lg border border-neutral-500 bg-neutral-800 text-neutral-200 focus:outline-none focus:ring-2 focus:ring-green-400" />
+                            <x-input-error :messages="$errors->get('nomor_telepon')" class="mt-2" />
+                        </div>
+
+                        <!-- Tanggal Lahir -->
+                        <div class="mb-4">
+                            <label for="tanggal_lahir" class="block text-sm text-neutral-200">Tanggal Lahir</label>
+                            <input id="tanggal_lahir" name="tanggal_lahir" type="date" value="{{ old('tanggal_lahir') }}" required
+                                   class="mt-2 w-full px-4 py-3 rounded-lg border border-neutral-500 bg-neutral-800 text-neutral-200 focus:outline-none focus:ring-2 focus:ring-green-400" />
+                            <x-input-error :messages="$errors->get('tanggal_lahir')" class="mt-2" />
+                        </div>
+
+                        <!-- Password -->
+                        <div class="mb-4">
+                            <label for="password" class="block text-sm text-neutral-200">Password</label>
+                            <input id="password" name="password" type="password" required
+                                   autocomplete="new-password"
+                                   class="mt-2 w-full px-4 py-3 rounded-lg border border-neutral-500 bg-neutral-800 text-neutral-200 focus:outline-none focus:ring-2 focus:ring-green-400" />
+                            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+                        </div>
+
+                        <!-- Confirm Password -->
+                        <div class="mb-4">
+                            <label for="password_confirmation" class="block text-sm text-neutral-200">Konfirmasi Password</label>
+                            <input id="password_confirmation" name="password_confirmation" type="password" required
+                                   autocomplete="new-password"
+                                   class="mt-2 w-full px-4 py-3 rounded-lg border border-neutral-500 bg-neutral-800 text-neutral-200 focus:outline-none focus:ring-2 focus:ring-green-400" />
+                            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+                        </div>
+
+                        <div class="mt-4">
+                            <button type="submit" class="w-full py-3 rounded-lg bg-green-500 text-white font-semibold hover:bg-green-600 transition">
+                                {{ __('Register') }}
+                            </button>
+
+                            <div class="text-center mt-4">
+                                <a class="underline text-sm text-neutral-200 hover:text-neutral-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-400"
+                                    href="{{ route('login') }}">
+                                    {{ __('Already registered?') }}
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-
-        <!-- Email Address -->
-        <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')"
-                required autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
-
-        <!-- Alamat -->
-        <div class="mt-4">
-            <x-input-label for="alamat" :value="__('Alamat')" />
-            <x-text-input id="alamat" class="block mt-1 w-full" type="text" name="alamat" :value="old('alamat')"
-                required />
-            <x-input-error :messages="$errors->get('alamat')" class="mt-2" />
-        </div>
-
-        <!-- Nomor Telepon -->
-        <div class="mt-4">
-            <x-input-label for="nomor_telepon" :value="__('Nomor Telepon')" />
-            <x-text-input id="nomor_telepon" class="block mt-1 w-full" type="text" name="nomor_telepon"
-                :value="old('nomor_telepon')" required />
-            <x-input-error :messages="$errors->get('nomor_telepon')" class="mt-2" />
-        </div>
-
-        <!-- Tanggal Lahir -->
-        <div class="mt-4">
-            <x-input-label for="tanggal_lahir" :value="__('Tanggal Lahir')" />
-            <x-text-input id="tanggal_lahir" class="block mt-1 w-full" type="date" name="tanggal_lahir"
-                :value="old('tanggal_lahir')" required />
-            <x-input-error :messages="$errors->get('tanggal_lahir')" class="mt-2" />
-        </div>
-
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-            <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" required
-                autocomplete="new-password" />
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
-
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
-            <x-text-input id="password_confirmation" class="block mt-1 w-full" type="password"
-                name="password_confirmation" required autocomplete="new-password" />
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md
-                focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                href="{{ route('login') }}">
-                {{ __('Already registered?') }}
-            </a>
-
-            <x-primary-button class="ms-4">
-                {{ __('Register') }}
-            </x-primary-button>
-        </div>
-    </form>
+    </div>
 </x-guest-layout>
