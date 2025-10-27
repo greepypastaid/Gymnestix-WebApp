@@ -1,7 +1,8 @@
-@extends('layouts_member.app')
+@extends('landing_page.layouts.app')
 
 @section('title', 'Gymnestix - Bangun Versi Terkuatmu')
-@section('meta_description', 'Gym modern dengan fasilitas lengkap, kelas beragam, dan pelatih bersertifikat. Coba kelas
+@section('meta_description',
+    'Gym modern dengan fasilitas lengkap, kelas beragam, dan pelatih bersertifikat. Coba kelas
     gratis hari ini!')
 
 @section('content')
@@ -160,47 +161,34 @@
             <h2 class="text-3xl font-bold">Paket Harga</h2>
             <p class="text-gray-500 mt-2">Sederhana dan transparan—pilih sesuai kebutuhan.</p>
 
-            @php
-                $plans = [
-                    [
-                        'name' => 'Basic',
-                        'price' => '199K/bulan',
-                        'features' => ['Akses 12x/bulan', 'Kelas Reguler', 'Loker Umum'],
-                    ],
-                    [
-                        'name' => 'Pro',
-                        'price' => '349K/bulan',
-                        'features' => ['Akses 20x/bulan', 'Semua Kelas', 'Konsultasi Pelatih'],
-                    ],
-                    [
-                        'name' => 'Unlimited',
-                        'price' => '499K/bulan',
-                        'features' => ['Akses Tak Terbatas', 'Semua Kelas', 'Personal Program'],
-                    ],
-                ];
-            @endphp
-
             <div class="grid md:grid-cols-3 gap-6 mt-8">
-                @foreach ($plans as $p)
+                @forelse ($membershipPlans as $p)
                     <div class="bg-white rounded-xl shadow p-6 hover:shadow-lg transition">
-                        <h3 class="text-green-600 font-bold text-xl">{{ $p['name'] }}</h3>
-                        <p class="text-2xl font-bold mt-1 mb-3">{{ $p['price'] }}</p>
-                        <ul class="text-gray-500 text-sm space-y-1 mb-4">
-                            @foreach ($p['features'] as $feature)
-                                <li class="flex justify-center items-center gap-2">
-                                    <i class="bi bi-check2-circle text-green-600"></i> {{ $feature }}
-                                </li>
-                            @endforeach
-                        </ul>
-                        <a href="#daftar"
+                        {{-- Nama plan --}}
+                        <h3 class="text-green-600 font-bold text-xl">{{ $p->nama_plan }}</h3>
+
+                        {{-- Harga --}}
+                        <p class="text-2xl font-bold mt-1 mb-3">
+                            Rp {{ number_format($p->harga, 0, ',', '.') }} / {{ $p->periode_bulan }} bulan
+                        </p>
+
+                        {{-- Deskripsi --}}
+                        <p class="text-gray-500 text-sm mb-4">
+                            {{ $p->deskripsi }}
+                        </p>
+
+                        <a href="{{ route('membership.checkout', $p->plan_id) }}"
                             class="block w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition">
                             Pilih Paket
                         </a>
                     </div>
-                @endforeach
+                @empty
+                    <p class="col-span-3 text-gray-500">Belum ada paket tersedia</p>
+                @endforelse
             </div>
         </div>
     </section>
+
 
     {{-- CTA --}}
     <section id="daftar" class="py-20">

@@ -32,14 +32,14 @@ class AuthenticatedSessionController extends Controller
         // Get the authenticated user
         /** @var User $user */
         $user = Auth::user();
-        
+
         // Redirect based on user role
         if ($user->isAdmin()) {
             return redirect()->intended(route('admin.dashboard', absolute: false));
         } elseif ($user->isTrainer()) {
             return redirect()->intended(route('trainer.dashboard', absolute: false));
         } elseif ($user->isMember()) {
-            return redirect()->intended(route('member.dashboard', absolute: false));
+            return redirect()->intended(route('member.dashboard', absolute: true));
         }
 
         // Default fallback

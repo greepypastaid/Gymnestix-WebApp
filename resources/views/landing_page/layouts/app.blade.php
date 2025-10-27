@@ -43,7 +43,7 @@
     </a>
 
     {{-- ✅ Navbar Tailwind --}}
-    @include('partials_member.navbar')
+    @include('landing_page.partials.navbar')
 
     {{-- Main Content --}}
     <main id="utama" class="pt-20 min-h-screen">

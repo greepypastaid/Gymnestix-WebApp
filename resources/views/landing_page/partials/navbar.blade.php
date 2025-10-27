@@ -23,7 +23,8 @@
                     <span
                         class="absolute left-0 bottom-[-4px] w-0 h-[2px] bg-green-600 transition-all duration-300 hover:w-full"></span>
                 </a>
-                <a href="#kelas" class="relative text-gray-700 hover:text-green-600 font-medium transition">
+                <a href="{{ route('classes.index') }}"
+                    class="relative text-gray-700 hover:text-green-600 font-medium transition">
                     Kelas
                     <span
                         class="absolute left-0 bottom-[-4px] w-0 h-[2px] bg-green-600 transition-all duration-300 hover:w-full"></span>
@@ -45,19 +46,19 @@
             {{-- 🌿 Bagian Kanan Navbar (Auth Buttons / Profil) --}}
             <div class="hidden md:flex items-center gap-4">
                 @auth
-                    {{-- Dropdown Profil --}}
-                    <div class="relative group">
-                        <button
+                    {{-- Dropdown Profil (klik toggle) --}}
+                    <div class="relative">
+                        <button id="profile-dropdown-btn"
                             class="flex items-center gap-2 text-gray-700 hover:text-green-600 focus:outline-none transition font-medium">
                             <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}" alt="Avatar"
-                                class="w-9 h-9 rounded-full border-2 border-green-500 shadow-sm transition group-hover:scale-105" />
+                                class="w-9 h-9 rounded-full border-2 border-green-500 shadow-sm transition hover:scale-105" />
                             <span>{{ Auth::user()->name }}</span>
-                            <i class="bi bi-chevron-down text-gray-500 group-hover:text-green-600 text-sm"></i>
+                            <i class="bi bi-chevron-down text-gray-500 hover:text-green-600 text-sm"></i>
                         </button>
 
                         {{-- Dropdown Menu --}}
-                        <div
-                            class="absolute right-0 mt-3 w-52 bg-white border border-gray-100 rounded-xl shadow-lg opacity-0 group-hover:opacity-100 group-hover:translate-y-1 transform transition-all duration-200 ease-out pointer-events-none group-hover:pointer-events-auto z-50">
+                        <div id="profile-dropdown-menu"
+                            class="absolute right-0 mt-3 w-52 bg-white border border-gray-100 rounded-xl shadow-lg hidden z-50">
                             <div class="px-4 py-3 border-b border-gray-100">
                                 <p class="text-sm font-semibold text-gray-800">{{ Auth::user()->name }}</p>
                                 <p class="text-xs text-gray-500">{{ Auth::user()->role->name ?? 'guest' }} Gymnestix</p>
@@ -67,12 +68,32 @@
                                 class="block px-4 py-2.5 text-gray-700 hover:bg-green-50 hover:text-green-700 transition">
                                 <i class="bi bi-person-circle mr-2 text-green-500"></i> Profil
                             </a>
+                            <a href="#"
+                                class="block px-4 py-2.5 text-gray-700 hover:bg-green-50 hover:text-green-700 transition">
+                                <i class="bi bi-cash mr-2 text-green-500"></i> Pembayaran
+                            </a>
                             @if (Auth::user()->isAdmin() || Auth::user()->isTrainer())
                                 <a href="{{ route('dashboard') }}"
                                     class="block px-4 py-2.5 text-gray-700 hover:bg-green-50 hover:text-green-700 transition">
                                     <i class="bi bi-speedometer2 mr-2 text-green-500"></i> Dashboard
                                 </a>
                             @endif
+                            @if (Auth::user()->isMember())
+                                <a href="{{ route('member.classes.index') }}"
+                                    class="block px-4 py-2.5 text-gray-700 hover:bg-green-50 hover:text-green-700 transition">
+                                    <i class="bi bi-clipboard mr-2 text-green-500"></i> Daftar Kelas
+                                </a>
+                                <a href="#"
+                                    class="block px-4 py-2.5 text-gray-700 hover:bg-green-50 hover:text-green-700 transition">
+                                    <i class="bi bi-calendar mr-2 text-green-500"></i> Jadwal
+                                </a>
+
+                                <a href="#"
+                                    class="block px-4 py-2.5 text-gray-700 hover:bg-green-50 hover:text-green-700 transition">
+                                    <i class="bi bi-bell mr-2 text-green-500"></i> absensi
+                                </a>
+                            @endif
+
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
                                 <button type="submit"
@@ -182,6 +203,21 @@
 @push('scripts')
     <script defer>
         document.addEventListener('DOMContentLoaded', function() {
+            const profileBtn = document.getElementById('profile-dropdown-btn');
+            const dropdownMenu = document.getElementById('profile-dropdown-menu');
+
+            profileBtn?.addEventListener('click', (e) => {
+                e.stopPropagation();
+                dropdownMenu.classList.toggle('hidden');
+            });
+
+            // Tutup menu kalau klik di luar
+            document.addEventListener('click', (e) => {
+                if (!profileBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                    dropdownMenu.classList.add('hidden');
+                }
+            });
+
             const btn = document.getElementById('mobile-menu-button');
             const menu = document.getElementById('mobile-menu');
 
@@ -192,6 +228,8 @@
                     menu.classList.toggle('max-h-[500px]');
                 });
             }
+
+
         });
     </script>
 @endpush
