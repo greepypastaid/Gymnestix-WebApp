@@ -11,7 +11,7 @@ class ClassController extends Controller
     // 🧾 Menampilkan semua kelas
     public function index()
     {
-        $classes = ClassModel::all();
+        $classes = ClassModel::paginate(6); // 6 kelas per halaman
         $userClasses = Auth::user() ? Auth::user()->classes : null;
 
         return view('landing_page.pages.classes', compact('classes', 'userClasses'));

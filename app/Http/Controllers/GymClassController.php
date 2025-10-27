@@ -15,9 +15,6 @@ class GymClassController extends Controller
      */
     public function viewMembers(GymClass $gymClass)
     {
-        $user = request()->user();
-
-        // authorize: admin/permission or owner trainer
         $this->authorizeOwnership($gymClass, request());
 
         $members = $gymClass->bookings()
@@ -25,7 +22,7 @@ class GymClassController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return view('pages.dashboard.trainer.class.members', [
+        return view('trainer.class.members', [
             'class' => $gymClass,
             'members' => $members
         ]);
@@ -49,7 +46,7 @@ class GymClassController extends Controller
             ->where('trainer_id', $trainer->trainer_id)
             ->paginate(15);
 
-        return view('pages.dashboard.trainer.class.trainerClass', compact('classes'));
+        return view('trainer.class.trainerClass', compact('classes'));
     }
 
     /**
@@ -58,14 +55,9 @@ class GymClassController extends Controller
     public function create(Request $request)
     {
         $user = $request->user();
+        if (!$user->isTrainer()) { abort(403, 'Anda bukan trainer.'); }
 
-        // Require trainer role
-        if (!$user->isTrainer()) {
-            abort(403, 'Anda bukan trainer.');
-        }
-
-        // Use trainer-specific create view
-        return view('pages.dashboard.trainer.class.createTrainerClass');
+        return view('trainer.class.createTrainerClass');
     }
 
     /**
@@ -119,8 +111,8 @@ class GymClassController extends Controller
     {
         $this->authorizeOwnership($gymClass, $request);
 
-        // Trainer-specific edit view
-        return view('pages.dashboard.trainer.class.editTrainerClass', compact('gymClass'));
+        // changed view path:
+        return view('trainer.class.editTrainerClass', compact('gymClass'));
     }
 
     /**

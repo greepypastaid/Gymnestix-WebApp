@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BillingController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TrainerController;
 use App\Http\Controllers\WebhookController;
 use App\Http\Controllers\GymClassController;
 use App\Http\Controllers\DashboardController;
@@ -21,7 +22,7 @@ use App\Http\Controllers\Admin\ScheduleAssignmentController;
 Route::get('/', function () {
     $membershipPlans = MembershipPlan::all();
     return view('welcome', compact('membershipPlans'));
-});
+})->name('home');
 
 // Main dashboard - redirects based on role
 Route::get('/dashboard', [DashboardController::class, 'index'])
@@ -155,6 +156,20 @@ Route::middleware(['auth'])->prefix('member')->name('member.')->group(function (
 });
 
 Route::get('/kelas', [ClassController::class, 'index'])->name('classes.index');
+
+// Trainers public page
+Route::get('/trainers', [TrainerController::class, 'index'])->name('trainers.index');
+
+// Features public page
+Route::get('/features', function () {
+    return view('landing_page.pages.features');
+})->name('features');
+
+// Pricing public page
+Route::get('/pricing', function () {
+    $membershipPlans = MembershipPlan::all();
+    return view('landing_page.pages.pricing', compact('membershipPlans'));
+})->name('pricing');
 
 // checkout
 Route::middleware('auth')->group(function () {

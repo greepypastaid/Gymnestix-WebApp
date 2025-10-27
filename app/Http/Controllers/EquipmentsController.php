@@ -35,7 +35,7 @@ class EquipmentsController extends Controller
         
         $routeName = optional(request()->route())->getName();
         if ($routeName && str_starts_with($routeName, 'trainer.')) {
-            return view('pages.dashboard.trainer.equipments.trainerEquipment', compact('equipments'));
+            return view('trainer.equipments.trainerEquipment', compact('equipments'));
         }
 
         // Otherwise fallback to admin permission check (admin UI)
@@ -45,7 +45,7 @@ class EquipmentsController extends Controller
         }
         
         if ($hasViewAllPermission) {
-            return view('pages.dashboard.trainer.equipments.trainerEquipment', compact('equipments'));
+            return view('trainer.equipments.trainerEquipment', compact('equipments'));
         }
         
         // Default: admin view
