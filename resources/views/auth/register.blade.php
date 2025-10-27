@@ -4,7 +4,7 @@
             <div class="relative h-72 lg:h-auto">
                 <img
                     src="{{ asset('storage/formRegister.jpg') }}"
-                    alt="Ilustrasi latihan dan komunitas Gymnestix"
+                    alt="KEKAR MEMBAHANA"
                     class="w-full h-full object-cover"
                     loading="lazy"
                     decoding="async"
@@ -38,30 +38,6 @@
                                    autocomplete="username"
                                    class="mt-2 w-full px-4 py-3 rounded-lg border border-neutral-500 bg-neutral-800 text-neutral-200 focus:outline-none focus:ring-2 focus:ring-green-400" />
                             <x-input-error :messages="$errors->get('email')" class="mt-2" />
-                        </div>
-
-                        <!-- Alamat -->
-                        <div class="mb-4">
-                            <label for="alamat" class="block text-sm text-neutral-200">Alamat</label>
-                            <input id="alamat" name="alamat" type="text" value="{{ old('alamat') }}" required
-                                   class="mt-2 w-full px-4 py-3 rounded-lg border border-neutral-500 bg-neutral-800 text-neutral-200 focus:outline-none focus:ring-2 focus:ring-green-400" />
-                            <x-input-error :messages="$errors->get('alamat')" class="mt-2" />
-                        </div>
-
-                        <!-- Nomor Telepon -->
-                        <div class="mb-4">
-                            <label for="nomor_telepon" class="block text-sm text-neutral-200">Nomor Telepon</label>
-                            <input id="nomor_telepon" name="nomor_telepon" type="text" value="{{ old('nomor_telepon') }}" required
-                                   class="mt-2 w-full px-4 py-3 rounded-lg border border-neutral-500 bg-neutral-800 text-neutral-200 focus:outline-none focus:ring-2 focus:ring-green-400" />
-                            <x-input-error :messages="$errors->get('nomor_telepon')" class="mt-2" />
-                        </div>
-
-                        <!-- Tanggal Lahir -->
-                        <div class="mb-4">
-                            <label for="tanggal_lahir" class="block text-sm text-neutral-200">Tanggal Lahir</label>
-                            <input id="tanggal_lahir" name="tanggal_lahir" type="date" value="{{ old('tanggal_lahir') }}" required
-                                   class="mt-2 w-full px-4 py-3 rounded-lg border border-neutral-500 bg-neutral-800 text-neutral-200 focus:outline-none focus:ring-2 focus:ring-green-400" />
-                            <x-input-error :messages="$errors->get('tanggal_lahir')" class="mt-2" />
                         </div>
 
                         <!-- Password -->
