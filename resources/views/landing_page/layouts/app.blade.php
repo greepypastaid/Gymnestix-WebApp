@@ -45,7 +45,7 @@
     </script>
 </head>
 
-<body class="bg-gray-950 text-gray-900 font-sans">
+<body class="bg-black text-gray-900 font-sans">
     {{-- Skip to content --}}
     <a href="#utama"
         class="absolute left-[-999px] focus:left-4 focus:top-4 bg-white text-gray-800 px-4 py-2 rounded shadow z-50">
@@ -61,9 +61,9 @@
     </main>
 
     {{-- Footer --}}
-    <footer class="bg-gray-50 border-t mt-10">
+    <footer class="bg-neutral-900">
         <div
-            class="max-w-7xl mx-auto px-4 py-6 flex flex-col md:flex-row justify-between items-center gap-3 text-sm text-gray-600">
+            class="max-w-7xl mx-auto px-4 py-6 flex flex-col md:flex-row justify-between items-center gap-3 text-sm text-white">
             <p>© {{ date('Y') }} <strong>Gymnestix</strong>. Semua hak dilindungi.</p>
             <nav class="flex gap-4">
                 <a href="#" class="hover:text-primary">Kebijakan Privasi</a>

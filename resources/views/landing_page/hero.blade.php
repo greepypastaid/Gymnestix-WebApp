@@ -1,8 +1,8 @@
 <div class="relative min-h-screen text-white overflow-hidden">
     <div class="absolute h-screen w-full">
-        <img src="{{ asset('storage/heroImage.jpg') }}" alt="Hero background" class="w-full h-screen object-cover">
+        <img src="{{ asset('storage/Hero.png') }}" alt="Hero background" class="w-full h-screen object-cover">
         {{-- subtle overlay so text is readable; adjust opacity as needed --}}
-        <div class="absolute inset-0 bg-black/40"></div>
+        <div class="absolute inset-0"></div>
     </div>
     <div class="relative z-10 min-h-screen flex items-center">
         <div class="max-w-7xl w-full mx-auto item-left">
@@ -35,6 +35,5 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>

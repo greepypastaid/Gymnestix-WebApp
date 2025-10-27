@@ -44,53 +44,53 @@
 
             {{-- Auth Buttons / Profile --}}
             {{-- 🌿 Bagian Kanan Navbar (Auth Buttons / Profil) --}}
-            <div class="hidden md:flex items-center gap-4">
+            <div class="hidden md:flex items-center gap-6">
                 @auth
                     {{-- Dropdown Profil (klik toggle) --}}
                     <div class="relative">
                         <button id="profile-dropdown-btn"
                             class="flex items-center gap-2 text-white hover:text-[#ADFF2F] focus:outline-none transition font-medium">
                             <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}" alt="Avatar"
-                                class="w-9 h-9 rounded-full border-2 border-green-500 shadow-sm transition hover:scale-105" />
+                                class="w-9 h-9 rounded-full shadow-sm transition hover:scale-105" />
                             <span>{{ Auth::user()->name }}</span>
                             <i class="bi bi-chevron-down text-gray-500 hover:text-[#ADFF2F] text-sm"></i>
                         </button>
 
                         {{-- Dropdown Menu --}}
                         <div id="profile-dropdown-menu"
-                            class="absolute right-0 mt-3 w-52 bg-white border border-gray-100 rounded-xl shadow-lg hidden z-50">
+                            class="absolute right-0 mt-3 w-52 bg-neutral-900 rounded-xl shadow-lg hidden z-50">
                             <div class="px-4 py-3 border-b border-gray-100">
                                 <p class="text-sm font-semibold text-gray-800">{{ Auth::user()->name }}</p>
                                 <p class="text-xs text-gray-500">{{ Auth::user()->role->name ?? 'guest' }} Gymnestix</p>
                             </div>
 
                             <a href="{{ route('profile.edit') }}"
-                                class="block px-4 py-2.5 text-white hover:bg-green-50 hover:text-green-700 transition">
-                                <i class="bi bi-person-circle mr-2 text-green-500"></i> Profil
+                                class="block px-4 py-2.5 text-white hover:bg-neutral-700 hover:text-[#ADFF2F] transition">
+                                <i class="bi bi-person-circle mr-2 text-[#ADFF2F]"></i> Profil
                             </a>
                             <a href="#"
-                                class="block px-4 py-2.5 text-white hover:bg-green-50 hover:text-green-700 transition">
-                                <i class="bi bi-cash mr-2 text-green-500"></i> Pembayaran
+                                class="block px-4 py-2.5 text-white hover:bg-neutral-700 hover:text-[#ADFF2F] transition">
+                                <i class="bi bi-cash mr-2 text-[#ADFF2F]"></i> Pembayaran
                             </a>
                             @if (Auth::user()->isAdmin() || Auth::user()->isTrainer())
                                 <a href="{{ route('dashboard') }}"
-                                    class="block px-4 py-2.5 text-white hover:bg-green-50 hover:text-green-700 transition">
-                                    <i class="bi bi-speedometer2 mr-2 text-green-500"></i> Dashboard
+                                    class="block px-4 py-2.5 text-white hover:bg-neutral-700 hover:text-[#ADFF2F] transition">
+                                    <i class="bi bi-speedometer2 mr-2 text-[#ADFF2F]"></i> Dashboard
                                 </a>
                             @endif
                             @if (Auth::user()->isMember())
                                 <a href="{{ route('member.classes.index') }}"
-                                    class="block px-4 py-2.5 text-white hover:bg-green-50 hover:text-green-700 transition">
-                                    <i class="bi bi-clipboard mr-2 text-green-500"></i> Daftar Kelas
+                                    class="block px-4 py-2.5 text-white hover:bg-neutral-700 hover:text-[#ADFF2F] transition">
+                                    <i class="bi bi-clipboard mr-2 text-[#ADFF2F]"></i> Daftar Kelas
                                 </a>
                                 <a href="#"
-                                    class="block px-4 py-2.5 text-white hover:bg-green-50 hover:text-green-700 transition">
-                                    <i class="bi bi-calendar mr-2 text-green-500"></i> Jadwal
+                                    class="block px-4 py-2.5 text-white hover:bg-neutral-700 hover:text-[#ADFF2F] transition">
+                                    <i class="bi bi-calendar mr-2 text-[#ADFF2F]"></i> Jadwal
                                 </a>
 
                                 <a href="#"
-                                    class="block px-4 py-2.5 text-white hover:bg-green-50 hover:text-green-700 transition">
-                                    <i class="bi bi-bell mr-2 text-green-500"></i> absensi
+                                    class="block px-4 py-2.5 text-white hover:bg-neutral-700 hover:text-[#ADFF2F] transition">
+                                    <i class="bi bi-bell mr-2 text-[#ADFF2F]"></i> absensi
                                 </a>
                             @endif
 
@@ -108,7 +108,7 @@
                     <a href="{{ route('login') }}"
                         class="text-white hover:text-[#ADFF2F] font-medium transition">Masuk</a>
                     <a href="{{ route('register') }}"
-                        class="bg-gradient-to-r from-[#ADFF2F] to-emerald-500 text-white px-4 py-2 rounded-md font-medium shadow hover:shadow-lg hover:from-green-700 hover:to-emerald-600 transition-all">
+                        class="bg-[#ADFF2F] text-black px-4 py-2 rounded-tl-md rounded-br-md font-medium shadow hover:shadow-lg hover:bg-[#9DE626] transition-all">
                         Daftar
                     </a>
                 @endauth
@@ -183,11 +183,11 @@
                 @else
                     <div class="flex flex-col gap-2">
                         <a href="{{ route('login') }}"
-                            class="flex items-center justify-center gap-2 border border-[#ADFF2F] text-[#ADFF2F] rounded-md py-2 font-medium hover:bg-green-50 transition">
+                            class="flex items-center justify-center gap-2 border border-[#ADFF2F] text-[#ADFF2F] rounded-md py-2 font-medium hover:bg-neutral-700 transition">
                             <i class="bi bi-box-arrow-in-right"></i> Masuk
                         </a>
                         <a href="{{ route('register') }}"
-                            class="flex items-center justify-center gap-2 bg-gradient-to-r from-[#ADFF2F] to-emerald-500 text-white rounded-md py-2 font-medium hover:from-green-700 hover:to-emerald-600 transition">
+                            class="flex items-center justify-center gap-2 bg-[#ADFF2F] text-black rounded-md py-2 font-medium hover:bg-[#9DE626] transition">
                             <i class="bi bi-person-plus"></i> Daftar
                         </a>
                     </div>

@@ -1,4 +1,7 @@
-<section id="fitur" class="py-20">
+<section id="fitur" class="py-20 relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-96 h-96 bg-[#ADFF2F]/10 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-0 right-0 w-96 h-96 bg-[#ADFF2F]/10 rounded-full blur-3xl"></div>
+
         <div class="max-w-7xl mx-auto justify-center">
             <div class="flex justify-between items-stretch gap-8">
                 <h2 class="w-1/2 text-left text-6xl font-poppins font-base">Temui Fitur Unggulan Kami!</h2>
