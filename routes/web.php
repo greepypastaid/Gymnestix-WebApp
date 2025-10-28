@@ -38,9 +38,9 @@ Route::get('/trainer/dashboard', [DashboardController::class, 'trainer'])
     ->middleware(['auth', 'verified'])
     ->name('trainer.dashboard');
 
-Route::get('/member/dashboard', [DashboardController::class, 'member'])
-    ->middleware(['auth', 'verified'])
-    ->name('member.dashboard');
+// Route::get('/member/dashboard', [DashboardController::class, 'member'])
+//     ->middleware(['auth', 'verified'])
+//     ->name('member.dashboard');
 
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     // Schedule + Assign Trainer (CRUD)
