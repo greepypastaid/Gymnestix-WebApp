@@ -52,7 +52,7 @@ class WebhookController extends Controller
             }
 
             match ($event) {
-                'payment.success' => $this->handleSuccess($payment),
+                'payment.success' => $this->handleSuccess($payment, $data),
                 'payment.expired' => $payment->update(['status' => 'expired']),
                 'payment.cancelled' => $payment->update(['status' => 'cancelled']),
                 default => Log::warning('Unknown webhook event', ['event' => $event]),
@@ -68,10 +68,11 @@ class WebhookController extends Controller
         }
     }
 
-    protected function handleSuccess($payment)
+    protected function handleSuccess($payment, $data)
     {
         $payment->update([
             'status' => 'paid',
+            'payment_method' => $data['payment_method'],
             'paid_at' => now(),
         ]);
 
