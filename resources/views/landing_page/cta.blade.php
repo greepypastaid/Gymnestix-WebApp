@@ -1,6 +1,6 @@
 <section id="daftar" class="relative h-96 overflow-hidden">
     <div class="absolute inset-0">
-        <img src="{{ asset('storage/CTA.png') }}" alt="CTA Background" class="w-full h-full object-cover">
+        <img src="{{ asset('images/CTA.png') }}" alt="CTA Background" class="w-full h-full object-cover">
         <div class="absolute inset-0"></div>
     </div>
 

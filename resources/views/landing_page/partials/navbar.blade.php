@@ -7,7 +7,7 @@
                 <a href="{{ url('/') }}" class="flex items-center gap-2 group">
                     <div
                         class="w-12 h-12 rounded-md flex items-center justify-center shadow-md">
-                        <img src="{{ asset('storage/GymnestixLogo.png') }}"
+                        <img src="{{ asset('images/GymnestixLogo.png') }}"
                              alt="Gymnestix"
                              class="object-cover w-10 h-10 filter saturate-0 brightness-200 group-hover:saturate-100 group-hover:brightness-100 group-hover:scale-105 transition-all duration-300 ease-in-out" />
                     </div>

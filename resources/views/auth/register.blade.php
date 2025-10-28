@@ -1,9 +1,9 @@
 <x-guest-layout>
     <div class="h-screen flex items-center justify-center bg-neutral-900">
-        <div class="w-full max-w-7xl mx-4 rounded-3xl overflow-hidden shadow-xl grid grid-cols-1 lg:grid-cols-2">
+        <div class="w-full max-w-6xl mx-4 rounded-3xl overflow-hidden shadow-xl grid grid-cols-1 lg:grid-cols-2">
             <div class="relative h-72 lg:h-auto">
                 <img
-                    src="{{ asset('storage/formRegister.jpg') }}"
+                    src="{{ asset('images/formRegister.jpg') }}"
                     alt="KEKAR MEMBAHANA"
                     class="w-full h-full object-cover"
                     loading="lazy"

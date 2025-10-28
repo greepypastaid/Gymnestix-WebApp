@@ -3,7 +3,7 @@
         <div class="w-full max-w-6xl mx-4 rounded-3xl overflow-hidden shadow-xl grid grid-cols-1 lg:grid-cols-2">
             <div class="relative h-72 lg:h-auto">
                 <img
-                    src="{{ asset('storage/formLogin.jpg') }}"
+                    src="{{ asset('images/formLogin.jpg') }}"
                     alt="Ilustrasi latihan dan komunitas Gymnestix"
                     class="w-full h-full object-cover"
                     loading="lazy"

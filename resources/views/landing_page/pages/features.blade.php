@@ -88,7 +88,7 @@
                     Bergabunglah dengan ribuan member yang sudah merasakan transformasi luar biasa bersama Gymnestix.
                 </p>
                 <div class="flex gap-4 justify-center">
-                    <a href="{{ route('home') }}#pricing" class="bg-[#ADFF2F] text-black px-8 py-3 rounded-full font-medium hover:bg-[#9DE625] transition-all duration-300 hover:scale-105">
+                    <a href="{{ route('pricing') }}#pricing" class="bg-[#ADFF2F] text-black px-8 py-3 rounded-full font-medium hover:bg-[#9DE625] transition-all duration-300 hover:scale-105">
                         Lihat Paket Membership
                     </a>
                     <a href="{{ route('trainers.index') }}" class="bg-neutral-800 text-white px-8 py-3 rounded-full font-medium hover:bg-neutral-700 transition-all duration-300 border border-neutral-700">

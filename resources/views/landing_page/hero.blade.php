@@ -1,6 +1,6 @@
 <div class="relative min-h-screen text-white overflow-hidden">
     <div class="absolute h-screen w-full">
-        <img src="{{ asset('storage/Hero.png') }}" alt="Hero background" class="w-full h-screen object-cover">
+        <img src="{{ asset('images/Hero.png') }}" alt="Hero background" class="w-full h-screen object-cover">
         {{-- subtle overlay so text is readable; adjust opacity as needed --}}
         <div class="absolute inset-0"></div>
     </div>
