@@ -54,6 +54,11 @@ class MembershipPaymentController extends Controller
             }
 
             // Simpan pembayaran ke database
+            // FIX BUAT SI ANJINGGG!!
+            $expiredAt = isset($data['expired_at']) 
+                ? \Carbon\Carbon::parse($data['expired_at'])->format('Y-m-d H:i:s')
+                : now()->addDay()->format('Y-m-d H:i:s');
+
             $payment = Payment::create([
                 'user_id' => $user->user_id,
                 'membership_plan_id' => $plan->plan_id,
@@ -62,7 +67,7 @@ class MembershipPaymentController extends Controller
                 'amount' => $data['amount'] ?? $plan->harga,
                 'status' => $data['status'] ?? 'PENDING',
                 'payment_url' => $data['payment_url'] ?? null,
-                'expired_at' => $data['expired_at'] ?? now()->addDay(),
+                'expired_at' => $expiredAt,
             ]);
 
             return view('landing_page.pages.membership.checkout', compact('plan', 'payment'));
@@ -75,7 +80,7 @@ class MembershipPaymentController extends Controller
     public function paymentHistory()
     {
         $payments = \App\Models\Payment::with('membershipPlan')
-            ->where('user_id', auth()->id())
+            ->where('user_id', Auth::id())
             ->latest()
             ->get();
 
@@ -87,7 +92,7 @@ class MembershipPaymentController extends Controller
 
         // setelah update, load ulang untuk memunculkan status baru
         $payments = \App\Models\Payment::with('membershipPlan')
-            ->where('user_id', auth()->id())
+            ->where('user_id', Auth::id())
             ->latest()
             ->paginate(10);
 
@@ -102,7 +107,7 @@ class MembershipPaymentController extends Controller
 
     public function success(Payment $payment)
     {
-        if ($payment->user_id !== auth()->id()) {
+        if ($payment->user_id !== Auth::id()) {
             abort(403, 'Unauthorized access to this payment.');
         }
 
@@ -117,7 +122,7 @@ class MembershipPaymentController extends Controller
     public function viewInvoice(Payment $payment)
     {
         // Pastikan hanya owner yang dapat melihat
-        if ($payment->user_id !== auth()->id()) {
+        if ($payment->user_id !== Auth::id()) {
             abort(403);
         }
 
@@ -132,7 +137,7 @@ class MembershipPaymentController extends Controller
     public function downloadInvoicePdf(Payment $payment)
     {
         // pastikan hanya owner yang dapat mengakses
-        if ($payment->user_id !== auth()->id()) {
+        if ($payment->user_id !== Auth::id()) {
             abort(403);
         }
 
@@ -146,7 +151,7 @@ class MembershipPaymentController extends Controller
             $pdf = PDF::loadView('member.payment.invoice_pdf', $data);
             return $pdf->stream($invoiceNumber . '.pdf');
         } catch (\Throwable $e) {
-            \Log::error('PDF error: ' . $e->getMessage());
+            Log::error('PDF error: ' . $e->getMessage());
             dd($e->getMessage());
         }
 
