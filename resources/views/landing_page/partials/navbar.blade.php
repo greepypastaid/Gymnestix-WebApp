@@ -5,11 +5,9 @@
             {{-- 🌿 Navbar (Tema Hijau Modern) --}}
             <div class="flex-shrink-0">
                 <a href="{{ url('/') }}" class="flex items-center gap-2 group">
-                    <div
-                        class="w-12 h-12 rounded-md flex items-center justify-center shadow-md">
-                        <img src="{{ asset('images/GymnestixLogo.png') }}"
-                             alt="Gymnestix"
-                             class="object-cover w-10 h-10 filter saturate-0 brightness-200 group-hover:saturate-100 group-hover:brightness-100 group-hover:scale-105 transition-all duration-300 ease-in-out" />
+                    <div class="w-12 h-12 rounded-md flex items-center justify-center shadow-md">
+                        <img src="{{ asset('images/GymnestixLogo.png') }}" alt="Gymnestix"
+                            class="object-cover w-10 h-10 filter saturate-0 brightness-200 group-hover:saturate-100 group-hover:brightness-100 group-hover:scale-105 transition-all duration-300 ease-in-out" />
                     </div>
                     <span
                         class="font-bold text-lg text-white group-hover:text-[#ADFF2F] transition-colors duration-300">
@@ -20,7 +18,8 @@
 
             {{-- 🌱 Menu Desktop --}}
             <div class="hidden md:flex items-center space-x-8">
-                <a href="{{ route('features') }}" class="relative text-white hover:text-[#ADFF2F] font-medium transition">
+                <a href="{{ route('features') }}"
+                    class="relative text-white hover:text-[#ADFF2F] font-medium transition">
                     Fitur
                     <span
                         class="absolute left-0 bottom-[-4px] w-0 h-[2px] bg-[#ADFF2F] transition-all duration-300 hover:w-full"></span>
@@ -31,12 +30,14 @@
                     <span
                         class="absolute left-0 bottom-[-4px] w-0 h-[2px] bg-[#ADFF2F] transition-all duration-300 hover:w-full"></span>
                 </a>
-                <a href="{{ route('trainers.index') }}" class="relative text-white hover:text-[#ADFF2F] font-medium transition">
+                <a href="{{ route('trainers.index') }}"
+                    class="relative text-white hover:text-[#ADFF2F] font-medium transition">
                     Pelatih
                     <span
                         class="absolute left-0 bottom-[-4px] w-0 h-[2px] bg-[#ADFF2F] transition-all duration-300 hover:w-full"></span>
                 </a>
-                <a href="{{ route('pricing') }}" class="relative text-white hover:text-[#ADFF2F] font-medium transition">
+                <a href="{{ route('pricing') }}"
+                    class="relative text-white hover:text-[#ADFF2F] font-medium transition">
                     Harga
                     <span
                         class="absolute left-0 bottom-[-4px] w-0 h-[2px] bg-[#ADFF2F] transition-all duration-300 hover:w-full"></span>
@@ -70,7 +71,7 @@
                                 class="block px-4 py-2.5 text-white hover:bg-neutral-700 hover:text-[#ADFF2F] transition">
                                 <i class="bi bi-person-circle mr-2 text-[#ADFF2F]"></i> Profil
                             </a>
-                            <a href="#"
+                            <a href="{{ route('member.payment.history') }}"
                                 class="block px-4 py-2.5 text-white hover:bg-neutral-700 hover:text-[#ADFF2F] transition">
                                 <i class="bi bi-cash mr-2 text-[#ADFF2F]"></i> Pembayaran
                             </a>
@@ -107,8 +108,7 @@
                     </div>
                 @else
                     {{-- Tombol Auth --}}
-                        <a href="{{ route('login') }}"
-                            class="text-white hover:text-[#ADFF2F] font-medium transition">Masuk</a>
+                    <a href="{{ route('login') }}" class="text-white hover:text-[#ADFF2F] font-medium transition">Masuk</a>
                     <a href="{{ route('register') }}"
                         class="bg-[#ADFF2F] text-black px-4 py-2 rounded-lg font-medium shadow hover:shadow-lg hover:bg-[#9DE626] transition-all">
                         Daftar
@@ -253,7 +253,9 @@
 
             // inisialisasi & event
             updateNavbarOnScroll();
-            window.addEventListener('scroll', updateNavbarOnScroll, { passive: true });
+            window.addEventListener('scroll', updateNavbarOnScroll, {
+                passive: true
+            });
 
         });
     </script>

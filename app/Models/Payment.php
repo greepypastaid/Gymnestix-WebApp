@@ -16,6 +16,7 @@ class Payment extends Model
         'va_number',
         'amount',
         'status',
+        'payment_method',
         'payment_url',
         'expired_at',
         'paid_at',
