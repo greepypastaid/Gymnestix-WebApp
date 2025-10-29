@@ -116,8 +116,6 @@
                                                 {{ $class->kapasitas }}
                                             </span>
                                         </td>
-                                            {{ $class->kapasitas }} people
-                                        </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             @if($canViewAll || ($currentTrainerId && $class->trainer_id === $currentTrainerId))
                                                 <div class="flex space-x-2">
