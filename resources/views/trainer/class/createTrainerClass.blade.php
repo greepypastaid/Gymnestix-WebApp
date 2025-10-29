@@ -1,18 +1,20 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200">Create New Class</h2>
+        <h2 class="font-semibold text-xl text-white leading-tight">
+            Create New Class
+        </h2>
     </x-slot>
 
-    <div class="py-12">
+    <div class="py-12 bg-black">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
-                <div class="p-6 lg:p-8 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+            <div class="bg-neutral-800 overflow-hidden shadow-xl sm:rounded-lg border border-neutral-700">
+                <div class="p-6 lg:p-8 bg-neutral-800 border-b border-neutral-700">
                     <form action="{{ route('trainer.classes.store') }}" method="POST" class="space-y-6">
                         @csrf
 
                         <!-- Class Name -->
                         <div>
-                            <label for="nama_kelas" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            <label for="nama_kelas" class="block text-sm font-medium text-white mb-2">
                                 Nama Kelas
                             </label>
                             <input
@@ -20,14 +22,14 @@
                                 id="nama_kelas"
                                 name="nama_kelas"
                                 required
-                                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200"
+                                class="w-full px-4 py-3 border border-neutral-600 rounded-lg focus:ring-2 focus:ring-[#ADFF2F] focus:border-[#ADFF2F] bg-neutral-700 text-white transition duration-200"
                                 placeholder="Masukkan nama kelas"
                             />
                         </div>
 
                         <!-- Description -->
                         <div>
-                            <label for="deskripsi" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            <label for="deskripsi" class="block text-sm font-medium text-white mb-2">
                                 Deskripsi
                             </label>
                             <textarea
@@ -35,7 +37,7 @@
                                 name="deskripsi"
                                 rows="4"
                                 required
-                                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200"
+                                class="w-full px-4 py-3 border border-neutral-600 rounded-lg focus:ring-2 focus:ring-[#ADFF2F] focus:border-[#ADFF2F] bg-neutral-700 text-white transition duration-200"
                                 placeholder="Jelaskan tentang kelas ini..."
                             ></textarea>
                         </div>
@@ -43,7 +45,7 @@
                         <!-- Time Fields -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <label for="waktu_mulai" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                <label for="waktu_mulai" class="block text-sm font-medium text-white mb-2">
                                     Waktu Mulai
                                 </label>
                                 <input
@@ -51,12 +53,12 @@
                                     id="waktu_mulai"
                                     name="waktu_mulai"
                                     required
-                                    class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200"
+                                    class="w-full px-4 py-3 border border-neutral-600 rounded-lg focus:ring-2 focus:ring-[#ADFF2F] focus:border-[#ADFF2F] bg-neutral-700 text-white transition duration-200"
                                 />
                             </div>
 
                             <div>
-                                <label for="waktu_selesai" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                <label for="waktu_selesai" class="block text-sm font-medium text-white mb-2">
                                     Waktu Selesai
                                 </label>
                                 <input
@@ -64,7 +66,7 @@
                                     id="waktu_selesai"
                                     name="waktu_selesai"
                                     required
-                                    class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200"
+                                    class="w-full px-4 py-3 border border-neutral-600 rounded-lg focus:ring-2 focus:ring-[#ADFF2F] focus:border-[#ADFF2F] bg-neutral-700 text-white transition duration-200"
                                 />
                             </div>
                         </div>
@@ -72,7 +74,7 @@
                         <!-- Duration and Capacity -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <label for="durasi" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                <label for="durasi" class="block text-sm font-medium text-white mb-2">
                                     Durasi (menit)
                                 </label>
                                 <input
@@ -81,13 +83,13 @@
                                     name="durasi"
                                     min="1"
                                     required
-                                    class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200"
+                                    class="w-full px-4 py-3 border border-neutral-600 rounded-lg focus:ring-2 focus:ring-[#ADFF2F] focus:border-[#ADFF2F] bg-neutral-700 text-white transition duration-200"
                                     placeholder="60"
                                 />
                             </div>
 
                             <div>
-                                <label for="kapasitas" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                <label for="kapasitas" class="block text-sm font-medium text-white mb-2">
                                     Kapasitas
                                 </label>
                                 <input
@@ -96,17 +98,17 @@
                                     name="kapasitas"
                                     min="1"
                                     required
-                                    class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200"
+                                    class="w-full px-4 py-3 border border-neutral-600 rounded-lg focus:ring-2 focus:ring-[#ADFF2F] focus:border-[#ADFF2F] bg-neutral-700 text-white transition duration-200"
                                     placeholder="20"
                                 />
                             </div>
                         </div>
 
                         <!-- Submit Button -->
-                        <div class="flex items-center justify-end pt-6 border-t border-gray-200 dark:border-gray-700">
+                        <div class="flex items-center justify-end pt-6 border-t border-neutral-700">
                             <button
                                 type="submit"
-                                class="inline-flex items-center px-6 py-3 bg-green-600 hover:bg-green-700 focus:bg-green-700 active:bg-green-900 text-white font-medium rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition duration-200"
+                                class="inline-flex items-center px-6 py-3 bg-[#ADFF2F] hover:bg-[#9FE529] text-black font-medium rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#ADFF2F] focus:ring-offset-2 transition duration-200"
                             >
                                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>

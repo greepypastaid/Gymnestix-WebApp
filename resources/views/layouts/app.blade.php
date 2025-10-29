@@ -24,6 +24,84 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
+        /* Custom Gymnestix Theme */
+        :root {
+            --gymnestix-primary: #ADFF2F;
+            --gymnestix-primary-hover: #9DE626;
+            --gymnestix-dark: #1a1a1a;
+            --gymnestix-gray: #2a2a2a;
+            --gymnestix-light-gray: #3a3a3a;
+        }
+
+        body {
+            font-family: 'Inter', 'Nunito', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+            background-color: var(--gymnestix-dark) !important;
+            color: #ffffff;
+        }
+
+        .gymnestix-bg-dark { background-color: var(--gymnestix-dark) !important; }
+        .gymnestix-bg-gray { background-color: var(--gymnestix-gray) !important; }
+        .gymnestix-bg-light-gray { background-color: var(--gymnestix-light-gray) !important; }
+        .gymnestix-primary { color: var(--gymnestix-primary) !important; }
+        .gymnestix-bg-primary { background-color: var(--gymnestix-primary) !important; color: #000000 !important; }
+        .gymnestix-btn-primary { 
+            background-color: var(--gymnestix-primary) !important; 
+            border-color: var(--gymnestix-primary) !important; 
+            color: #000000 !important; 
+        }
+        .gymnestix-btn-primary:hover { 
+            background-color: var(--gymnestix-primary-hover) !important; 
+            border-color: var(--gymnestix-primary-hover) !important; 
+        }
+
+        /* Override Bootstrap dark theme */
+        .card { 
+            background-color: var(--gymnestix-gray) !important; 
+            border: 1px solid var(--gymnestix-light-gray) !important; 
+            color: #ffffff !important;
+        }
+        .table { 
+            --bs-table-bg: var(--gymnestix-gray);
+            --bs-table-color: #ffffff;
+        }
+        .table th, .table td { 
+            border-color: var(--gymnestix-light-gray) !important; 
+            color: #ffffff !important;
+        }
+        .table thead th { 
+            background-color: var(--gymnestix-light-gray) !important;
+            border-color: var(--gymnestix-primary) !important;
+            color: var(--gymnestix-primary) !important;
+            font-weight: 600;
+            letter-spacing: .2px;
+        }
+
+        .btn-outline-primary {
+            color: var(--gymnestix-primary) !important;
+            border-color: var(--gymnestix-primary) !important;
+        }
+        .btn-outline-primary:hover {
+            background-color: var(--gymnestix-primary) !important;
+            border-color: var(--gymnestix-primary) !important;
+            color: #000000 !important;
+        }
+
+        .form-control, .form-select {
+            background-color: var(--gymnestix-light-gray) !important;
+            border-color: var(--gymnestix-primary) !important;
+            color: #ffffff !important;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: var(--gymnestix-primary-hover) !important;
+            box-shadow: 0 0 0 0.25rem rgba(173, 255, 47, 0.25) !important;
+        }
+
+        .alert-success {
+            background-color: rgba(173, 255, 47, 0.1) !important;
+            border-color: var(--gymnestix-primary) !important;
+            color: var(--gymnestix-primary) !important;
+        }
+
         .table td,
         .table th {
             vertical-align: middle;
@@ -36,10 +114,10 @@
     </style>
 </head>
 
-<body class="font-sans antialiased">
-    <div class="min-h-screen bg-gray-100">
+<body class="font-sans antialiased bg-black text-white"> 
+    <div class="min-h-screen bg-black"> 
         @include('layouts.navigation')
-        <main>
+        <main class="md:ml-64 pt-16">
             @isset($slot)
             {{ $slot }}
             @endisset
