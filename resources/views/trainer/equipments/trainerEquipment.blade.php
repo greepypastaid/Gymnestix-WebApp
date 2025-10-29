@@ -1,33 +1,30 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-white leading-tight">
+        <h2 class="font-semibold text-2xl text-white leading-tight">
             Equipment Management
         </h2>
     </x-slot>
 
-    <div class="py-12 bg-black">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+    <div class="py-12 bg-black min-h-screen">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-8">
             <!-- Success Message -->
             @if(session('success'))
-                <div class="bg-neutral-800 p-4 border border-neutral-700 rounded-lg text-white">
+                <div class="bg-neutral-800 p-6 border-l-4 border-[#ADFF2F] rounded-2xl text-white shadow-xl">
                     <div class="flex items-center">
-                        <svg class="w-5 h-5 mr-2" style="color:#ADFF2F;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        {{ session('success') }}
+                        <div class="w-12 h-12 rounded-xl flex items-center justify-center mr-4" style="background: rgba(173,255,47,0.1);">
+                            <svg class="w-6 h-6" style="color:#ADFF2F;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <p class="font-medium">{{ session('success') }}</p>
                     </div>
                 </div>
             @endif
 
-            <!-- Info Banner -->
-            <div class="bg-neutral-800 p-4 border border-neutral-700 rounded-lg text-white">
-                <div class="flex items-center">
-                    <svg class="w-5 h-5 mr-2" style="color:#ADFF2F;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                    <span class="font-medium">Equipment Overview</span>
-                    <span class="ml-2 text-neutral-400">- Report equipment issues to admin for maintenance</span>
-                </div>
+            <!-- Header Section -->
+            <div>
+                <h1 class="text-3xl font-bold text-white">Equipment Overview</h1>
+                <p class="mt-1 text-neutral-400">Monitor equipment status and report issues for maintenance</p>
             </div>
 
             <!-- Equipment List -->
