@@ -33,9 +33,13 @@
         }
     </style>
 
-    {{-- ✅ Tailwind via CDN --}}
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Buat Local Wajib On -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
+    {{-- Buat demo aktifin dibawah ini --}}
+    {{-- Tailwind via CDN --}}
+    <script src="https://cdn.tailwindcss.com"></script>
+    
     {{-- Optional: custom theme colors --}}
     <script>
         tailwind.config = {

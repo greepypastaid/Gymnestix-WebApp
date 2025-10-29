@@ -33,7 +33,7 @@
 
                         <!-- Trainer Name -->
                         <h3 class="text-xl font-poppins font-semibold text-white mb-1">
-                            {{ $trainer->user->name ?? 'Trainer' }}
+                            {{ $trainer->user->nama ?? 'Trainer' }}
                         </h3>
                         
                         <!-- Specialization -->
