@@ -17,11 +17,31 @@
     {{-- Bootstrap Icons (PASTIKAN di dalam <head>) --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
-    <!-- Load Nunito + Inter + Poppins -->
+    {{-- Load Nunito + Inter + Poppins --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
+    {{-- Buat demo aktifin dibawah ini --}}
+    {{-- Tailwind CDN (dev/testing only). For custom theme colors below. --}}
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'gymnestix': '#ADFF2F',
+                        'gymnestix-hover': '#9DE626',
+                        'gymnestix-dark': '#1a1a1a',
+                        'gymnestix-gray': '#2a2a2a',
+                        'gymnestix-light-gray': '#3a3a3a',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Buat Local & Prod-->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         /* Custom Gymnestix Theme */
