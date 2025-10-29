@@ -23,8 +23,10 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 @forelse($classes as $class)
                     @php
-                        $joined = in_array($class->class_id, $userClasses);
+                        $membership = $userClasses ? $userClasses->firstWhere('class_id', $class->class_id) : null;
+                        $joined = $membership !== null;
                     @endphp
+
 
 
                     <div
@@ -66,11 +68,11 @@
                         </div>
 
                         @if ($joined)
-                            {{-- @if ($membership && $membership->expired_at)
+                            @if ($membership && $membership->expired_at)
                                 <p class="text-xs text-neutral-500 mb-3">
                                     Aktif sampai {{ \Carbon\Carbon::parse($membership->expired_at)->format('d M Y') }}
                                 </p>
-                            @endif --}}
+                            @endif
 
                             <!-- Disabled Button -->
                             <button disabled

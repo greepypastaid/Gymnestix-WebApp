@@ -19,7 +19,7 @@ class ClassController extends Controller
             $member = Auth::user()->member;
             if ($member) {
                 // ambil ID kelas yang sudah diikuti oleh member
-                $userClasses = $member->classes()->pluck('classes.class_id')->toArray();
+                $userClasses = $member->classes()->select('classes.class_id', 'class_user.expired_at')->get();
             }
         }
         return view('landing_page.pages.classes', compact('classes', 'userClasses'));
