@@ -20,6 +20,7 @@ class Payment extends Model
         'payment_url',
         'expired_at',
         'paid_at',
+        'membership_plan_id',
     ];
 
     public function user()

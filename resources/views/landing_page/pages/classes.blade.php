@@ -23,16 +23,18 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 @forelse($classes as $class)
                     @php
-                        $joined = $userClasses ? $userClasses->contains('class_id', $class->class_id) : false;
-                        $membership = $joined ? $userClasses->firstWhere('class_id', $class->class_id) : null;
+                        $joined = in_array($class->class_id, $userClasses);
                     @endphp
 
-                    <div class="group bg-neutral-900 p-8 rounded-2xl border border-neutral-800 hover:border-[#ADFF2F]/50 transition-all duration-300 hover:-translate-y-2">
+
+                    <div
+                        class="group bg-neutral-900 p-8 rounded-2xl border border-neutral-800 hover:border-[#ADFF2F]/50 transition-all duration-300 hover:-translate-y-2">
                         <!-- Icon & Badge -->
                         <div class="flex items-start justify-between mb-4">
-                            <div class="w-full h-48 flex items-center justify-center rounded-xl bg-neutral-800 text-[#ADFF2F] text-xl group-hover:bg-[#ADFF2F] group-hover:text-black transition-all duration-300">
+                            <div
+                                class="w-full h-48 flex items-center justify-center rounded-xl bg-neutral-800 text-[#ADFF2F] text-xl group-hover:bg-[#ADFF2F] group-hover:text-black transition-all duration-300">
                                 <!-- <i class="fa-solid fa-users" aria-hidden="true"></i> -->
-                                 <img src="" alt="Coming Soon Update From BE!" class=text-black>
+                                <img src="" alt="Coming Soon Update From BE!" class=text-black>
                             </div>
                             @if ($joined)
                                 <span class="text-xs font-medium text-[#ADFF2F] bg-[#ADFF2F]/10 px-3 py-1 rounded-full">
@@ -45,7 +47,7 @@
                         <h3 class="text-xl font-poppins font-semibold text-white mb-3">
                             {{ $class->nama_kelas }}
                         </h3>
-                        
+
                         <!-- Description -->
                         <p class="text-neutral-400 text-sm mb-4 leading-relaxed">
                             {{ Str::limit($class->deskripsi, 100) }}
@@ -64,12 +66,12 @@
                         </div>
 
                         @if ($joined)
-                            @if ($membership && $membership->expired_at)
+                            {{-- @if ($membership && $membership->expired_at)
                                 <p class="text-xs text-neutral-500 mb-3">
                                     Aktif sampai {{ \Carbon\Carbon::parse($membership->expired_at)->format('d M Y') }}
                                 </p>
-                            @endif
-                            
+                            @endif --}}
+
                             <!-- Disabled Button -->
                             <button disabled
                                 class="w-full py-3 bg-neutral-800 text-neutral-500 font-semibold rounded-lg cursor-not-allowed border border-neutral-700">
@@ -92,13 +94,14 @@
                             <i class="fa-solid fa-inbox text-4xl text-neutral-600"></i>
                         </div>
                         <p class="text-neutral-400 text-lg font-medium">Belum ada kelas yang tersedia saat ini.</p>
-                        <p class="text-neutral-500 text-sm mt-2">Cek kembali nanti atau hubungi admin untuk info lebih lanjut.</p>
+                        <p class="text-neutral-500 text-sm mt-2">Cek kembali nanti atau hubungi admin untuk info lebih
+                            lanjut.</p>
                     </div>
                 @endforelse
             </div>
 
             <!-- Pagination -->
-            @if($classes instanceof \Illuminate\Pagination\LengthAwarePaginator && $classes->hasPages())
+            @if ($classes instanceof \Illuminate\Pagination\LengthAwarePaginator && $classes->hasPages())
                 <div class="mt-12 flex justify-center">
                     <nav class="inline-flex rounded-lg bg-neutral-800 overflow-hidden">
                         {{-- Previous Button --}}
@@ -107,8 +110,8 @@
                                 <i class="fa-solid fa-chevron-left"></i>
                             </span>
                         @else
-                            <a href="{{ $classes->previousPageUrl() }}" 
-                               class="px-4 py-3 text-neutral-300 hover:bg-neutral-700 hover:text-[#ADFF2F] transition-colors">
+                            <a href="{{ $classes->previousPageUrl() }}"
+                                class="px-4 py-3 text-neutral-300 hover:bg-neutral-700 hover:text-[#ADFF2F] transition-colors">
                                 <i class="fa-solid fa-chevron-left"></i>
                             </a>
                         @endif
@@ -120,8 +123,8 @@
                                     {{ $page }}
                                 </span>
                             @else
-                                <a href="{{ $url }}" 
-                                   class="px-4 py-3 text-neutral-300 hover:bg-neutral-700 hover:text-[#ADFF2F] transition-colors">
+                                <a href="{{ $url }}"
+                                    class="px-4 py-3 text-neutral-300 hover:bg-neutral-700 hover:text-[#ADFF2F] transition-colors">
                                     {{ $page }}
                                 </a>
                             @endif
@@ -129,8 +132,8 @@
 
                         {{-- Next Button --}}
                         @if ($classes->hasMorePages())
-                            <a href="{{ $classes->nextPageUrl() }}" 
-                               class="px-4 py-3 text-neutral-300 hover:bg-neutral-700 hover:text-[#ADFF2F] transition-colors">
+                            <a href="{{ $classes->nextPageUrl() }}"
+                                class="px-4 py-3 text-neutral-300 hover:bg-neutral-700 hover:text-[#ADFF2F] transition-colors">
                                 <i class="fa-solid fa-chevron-right"></i>
                             </a>
                         @else
@@ -143,7 +146,8 @@
 
                 {{-- Page Info --}}
                 <div class="mt-4 text-center text-sm text-neutral-500">
-                    Menampilkan {{ $classes->firstItem() }} - {{ $classes->lastItem() }} dari {{ $classes->total() }} kelas
+                    Menampilkan {{ $classes->firstItem() }} - {{ $classes->lastItem() }} dari {{ $classes->total() }}
+                    kelas
                 </div>
             @endif
         </div>
@@ -160,10 +164,12 @@
                     Bergabunglah dengan ribuan member yang sudah merasakan transformasi luar biasa bersama Gymnestix.
                 </p>
                 <div class="flex gap-4 justify-center">
-                    <a href="{{ route('pricing') }}#pricing" class="bg-[#ADFF2F] text-black px-8 py-3 rounded-full font-medium hover:bg-[#9DE625] transition-all duration-300 hover:scale-105">
+                    <a href="{{ route('pricing') }}#pricing"
+                        class="bg-[#ADFF2F] text-black px-8 py-3 rounded-full font-medium hover:bg-[#9DE625] transition-all duration-300 hover:scale-105">
                         Lihat Paket Membership
                     </a>
-                    <a href="{{ route('trainers.index') }}" class="bg-neutral-800 text-white px-8 py-3 rounded-full font-medium hover:bg-neutral-700 transition-all duration-300 border border-neutral-700">
+                    <a href="{{ route('trainers.index') }}"
+                        class="bg-neutral-800 text-white px-8 py-3 rounded-full font-medium hover:bg-neutral-700 transition-all duration-300 border border-neutral-700">
                         Kenali Trainer Kami
                     </a>
                 </div>

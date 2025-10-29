@@ -64,7 +64,8 @@
                             class="absolute right-0 mt-3 w-52 bg-neutral-900 rounded-xl shadow-lg hidden z-50">
                             <div class="px-4 py-3 border-b border-gray-100">
                                 <p class="text-sm font-semibold text-gray-800">{{ Auth::user()->name }}</p>
-                                <p class="text-xs text-gray-500">{{ Auth::user()->role->name ?? 'guest' }} Gymnestix</p>
+                                <p class="text-xs text-gray-500 capitalize">{{ Auth::user()->role->name ?? 'guest' }}
+                                    {{ Auth::user()->member->membershipPlan->nama_plan ?? '' }} Gymnestix</p>
                             </div>
 
                             <a href="{{ route('profile.edit') }}"

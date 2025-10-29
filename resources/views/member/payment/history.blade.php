@@ -69,7 +69,8 @@
                                         </a>
 
                                         <!-- Cetak PDF -->
-                                        <a href="#" class="block px-4 py-2 text-sm text-white hover:bg-neutral-800">
+                                        <a href="{{ route('payment.invoice.pdf', $payment->id) }}" target="_blank"
+                                            class="block px-4 py-2 text-sm text-white hover:bg-neutral-800">
                                             Cetak PDF
                                         </a>
 

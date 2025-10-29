@@ -187,6 +187,11 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/membership/success/{payment}', [MembershipPaymentController::class, 'success'])
         ->name('payment.successPage');
+
+
+    // kelas
+    Route::post('/class/{id}/join', [ClassController::class, 'join'])
+        ->name('class.join');
 });
 
 Route::post('/webhook/payment', [WebhookController::class, 'handlePayment'])->name('webhook.payment');

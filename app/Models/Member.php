@@ -16,6 +16,8 @@ class Member extends Model
         'user_id',
         'tanggal_registrasi',
         'status_keanggotaan',
+        'membership_plan_id',
+        'expired_at',
     ];
 
     protected $casts = [
@@ -47,6 +49,12 @@ class Member extends Model
         return $this->hasMany(\App\Models\Attendance::class, 'member_id', 'user_id');
     }
 
+    public function membershipPlan()
+    {
+        return $this->belongsTo(MembershipPlan::class, 'membership_plan_id', 'plan_id');
+    }
+
+
     /**
      * Convenience many-to-many relation to classes through bookings
      * Access with $member->classes and $member->classes()->attach()/detach() if needed.
@@ -54,11 +62,12 @@ class Member extends Model
     public function classes()
     {
         return $this->belongsToMany(
-            \App\Models\GymClass::class,
-            'bookings', // pivot table
-            'member_id', // foreign key on pivot for this model
-            'class_id'   // foreign key on pivot for the related model
-        )->withPivot('tanggal_booking')->withTimestamps();
+            \App\Models\ClassModel::class,
+            'class_user',
+            'member_id',
+            'class_id'
+        )->withPivot(['joined_at', 'expired_at', 'status'])
+            ->withTimestamps();
     }
 
     public function peminjamans()

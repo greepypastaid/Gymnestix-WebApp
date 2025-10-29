@@ -25,8 +25,7 @@ class DatabaseSeeder extends Seeder
                 ClassSeeder::class,
                 MembershipPlansSeeder::class,
                 WorkoutProgressSeeder::class,
-                MemberClassEnrollmentSeeder::class
-                ,
+                MemberClassEnrollmentSeeder::class,
                 EquipmentsSeeder::class
             ]
         );

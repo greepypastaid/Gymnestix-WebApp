@@ -55,7 +55,7 @@ class MembershipPaymentController extends Controller
 
             // Simpan pembayaran ke database
             // FIX BUAT SI ANJINGGG!!
-            $expiredAt = isset($data['expired_at']) 
+            $expiredAt = isset($data['expired_at'])
                 ? \Carbon\Carbon::parse($data['expired_at'])->format('Y-m-d H:i:s')
                 : now()->addDay()->format('Y-m-d H:i:s');
 
@@ -68,6 +68,7 @@ class MembershipPaymentController extends Controller
                 'status' => $data['status'] ?? 'PENDING',
                 'payment_url' => $data['payment_url'] ?? null,
                 'expired_at' => $expiredAt,
+                'membership_plan_id' => $plan->plan_id
             ]);
 
             return view('landing_page.pages.membership.checkout', compact('plan', 'payment'));
