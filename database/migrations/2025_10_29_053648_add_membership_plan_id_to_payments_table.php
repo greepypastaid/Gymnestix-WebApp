@@ -11,12 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Dalam method public function up(): void
         Schema::table('payments', function (Blueprint $table) {
-            // Tambahkan kolom membership_plan_id setelah member_id
-            $table->unsignedBigInteger('membership_plan_id')->nullable()->after('user_id');
+            // Hanya tambahkan kolom jika belum ada
+            if (!Schema::hasColumn('payments', 'membership_plan_id')) {
+                $table->unsignedBigInteger('membership_plan_id')->nullable()->after('user_id');
 
-            // Tambahkan foreign key (opsional tapi recommended)
-            $table->foreign('membership_plan_id')->references('plan_id')->on('membership_plans')->onDelete('set null');
+                // Tambahkan foreign key (hanya jika kolom sudah dibuat)
+                $table->foreign('membership_plan_id')->references('plan_id')->on('membership_plans')->onDelete('set null');
+            }
         });
     }
 
