@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Payment;
 use App\Models\Member;
+use App\Models\MembershipPlan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -37,8 +38,10 @@ class WebhookController extends Controller
             // --- Process webhook ---
             $event = $request->input('event');
             $data = $request->input('data', []);
+            // $customData = $request->input('meta', []);
             $externalId = $data['external_id'] ?? null;
 
+            Log::info('data semua : ', $request->all());
             if (!$externalId) {
                 Log::warning('Missing external_id', ['data' => $data]);
                 return response()->json(['error' => 'Missing external_id'], 422);
@@ -52,7 +55,7 @@ class WebhookController extends Controller
             }
 
             match ($event) {
-                'payment.success' => $this->handleSuccess($payment),
+                'payment.success' => $this->handleSuccess($payment, $data),
                 'payment.expired' => $payment->update(['status' => 'expired']),
                 'payment.cancelled' => $payment->update(['status' => 'cancelled']),
                 default => Log::warning('Unknown webhook event', ['event' => $event]),
@@ -68,12 +71,15 @@ class WebhookController extends Controller
         }
     }
 
-    protected function handleSuccess($payment)
+    protected function handleSuccess($payment, $data)
     {
         $payment->update([
             'status' => 'paid',
+            'payment_method' => $data['payment_method'],
             'paid_at' => now(),
         ]);
+
+        // $membershipPlan = MembershipPlan::findOrFail($customData['plan_id']);
 
         // Update atau buat data member
         Member::updateOrCreate(
@@ -81,6 +87,8 @@ class WebhookController extends Controller
             [
                 'tanggal_registrasi' => now(),
                 'status_keanggotaan' => 'Aktif',
+                'membership_plan_id' => $payment->membership_plan_id,
+                'expired_at' => now()->addMonths($payment->membershipPlan->periode_bulan),
             ]
         );
 

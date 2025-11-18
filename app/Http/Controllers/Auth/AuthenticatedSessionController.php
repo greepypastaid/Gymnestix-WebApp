@@ -39,7 +39,7 @@ class AuthenticatedSessionController extends Controller
         } elseif ($user->isTrainer()) {
             return redirect()->intended(route('trainer.dashboard', absolute: false));
         } elseif ($user->isMember()) {
-            return redirect()->intended(route('member.dashboard', absolute: true));
+            return redirect()->intended(url('/'));
         }
 
         // Default fallback

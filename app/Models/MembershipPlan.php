@@ -27,4 +27,9 @@ class MembershipPlan extends Model
     {
         return $this->hasMany(Billing::class, 'plan_id', 'plan_id');
     }
+
+    public function payments()
+    {
+        return $this->hasMany(\App\Models\Payment::class);
+    }
 }

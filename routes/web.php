@@ -38,9 +38,9 @@ Route::get('/trainer/dashboard', [DashboardController::class, 'trainer'])
     ->middleware(['auth', 'verified'])
     ->name('trainer.dashboard');
 
-Route::get('/member/dashboard', [DashboardController::class, 'member'])
-    ->middleware(['auth', 'verified'])
-    ->name('member.dashboard');
+// Route::get('/member/dashboard', [DashboardController::class, 'member'])
+//     ->middleware(['auth', 'verified'])
+//     ->name('member.dashboard');
 
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     // Schedule + Assign Trainer (CRUD)
@@ -175,6 +175,23 @@ Route::get('/pricing', function () {
 Route::middleware('auth')->group(function () {
     Route::get('/membership/checkout/{plan_id}', [MembershipPaymentController::class, 'checkout'])
         ->name('membership.checkout');
+    Route::get('/member/payment/history', [MembershipPaymentController::class, 'paymentHistory'])
+        ->name('member.payment.history');
+
+    Route::get('/payment/{payment}/view', [MembershipPaymentController::class, 'viewInvoice'])
+        ->name('payment.view');
+    Route::get('/payment/{payment}/invoice/pdf', [MembershipPaymentController::class, 'downloadInvoicePdf'])
+        ->name('payment.invoice.pdf');
+    Route::get('/payment/check-status/{payment}', [MembershipPaymentController::class, 'checkStatus'])
+        ->name('payment.checkStatus');
+
+    Route::get('/membership/success/{payment}', [MembershipPaymentController::class, 'success'])
+        ->name('payment.successPage');
+
+
+    // kelas
+    Route::post('/class/{id}/join', [ClassController::class, 'join'])
+        ->name('class.join');
 });
 
 Route::post('/webhook/payment', [WebhookController::class, 'handlePayment'])->name('webhook.payment');

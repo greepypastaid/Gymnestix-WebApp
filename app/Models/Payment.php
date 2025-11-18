@@ -16,9 +16,11 @@ class Payment extends Model
         'va_number',
         'amount',
         'status',
+        'payment_method',
         'payment_url',
         'expired_at',
         'paid_at',
+        'membership_plan_id',
     ];
 
     public function user()

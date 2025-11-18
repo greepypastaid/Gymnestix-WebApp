@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
 {
+    public const HOME = "/";
     protected $policies = [
         // 'App\Models\Model' => 'App\Policies\ModelPolicy',
     ];

@@ -22,8 +22,9 @@ class DashboardController extends Controller
 
         if ($user->isAdmin())   return redirect()->route('admin.dashboard');
         if ($user->isTrainer()) return redirect()->route('trainer.dashboard');
-        if ($user->isMember())  return redirect()->route('member.dashboard');
+        if ($user->isMember())  return redirect('/');
 
+        
         // Fallback jika role tidak dikenali
         return redirect('/');
     }

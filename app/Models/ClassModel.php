@@ -32,17 +32,20 @@ class ClassModel extends Model
         return $this->belongsTo(User::class, 'trainer_id');
     }
 
+
+
     /**
      * Relasi ke Member (User) melalui pivot class_user
      */
-    public function users()
+    public function members()
     {
         return $this->belongsToMany(
             \App\Models\User::class,
-            'class_user',  // nama tabel pivot
-            'class_id',    // foreign key di tabel pivot untuk class
-            'user_id'      // foreign key di tabel pivot untuk user
-        )->withPivot(['membership_plan_id', 'joined_at', 'expired_at', 'status'])
+            'class_user',   // pivot table
+            'class_id',     // FK pivot → class_id
+            'member_id'     // FK pivot → member_id (hasil rename)
+        )
+            ->withPivot(['joined_at', 'expired_at', 'status'])
             ->withTimestamps();
     }
 }
