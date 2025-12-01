@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\AttendanceController;
 use App\Http\Controllers\Admin\EquipmentsController;
 use App\Http\Controllers\MembershipPaymentController;
 use App\Http\Controllers\Admin\ScheduleAssignmentController;
+use App\Models\GymClass;
 
 Route::get('/', function () {
     $membershipPlans = MembershipPlan::all();
@@ -192,6 +193,19 @@ Route::middleware('auth')->group(function () {
     // kelas
     Route::post('/class/{id}/join', [ClassController::class, 'join'])
         ->name('class.join');
+});
+
+// emtahlah cok ini kok harus membership, yaudahlah pkoknya bisa jalan :(
+Route::get('/', function () {
+    $membershipPlans = MembershipPlan::all();
+
+    // yang pemting ini buat nampilin 4 kelas booking terbanyak
+    $classes = GymClass::withCount('bookings')
+                ->orderByDesc('bookings_count')
+                ->limit(4)
+                ->get();
+
+    return view('welcome', compact('membershipPlans', 'classes'));
 });
 
 Route::post('/webhook/payment', [WebhookController::class, 'handlePayment'])->name('webhook.payment');

@@ -90,7 +90,7 @@
                         </a>
                         <a href="#"
                             class="block px-4 py-2.5 text-white hover:bg-neutral-700 hover:text-[#ADFF2F] transition">
-                            <i class="bi bi-calendar mr-2 text-[#ADFF2F]"></i> Jadwal
+                            <i class="bi bi-calendar mr-2 text-[#ADFF2F]"></i> Jadwalku
                         </a>
 
                         <a href="#"
