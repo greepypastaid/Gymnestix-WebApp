@@ -6,6 +6,7 @@ namespace App\Models;
 // use Spatie\Permission\Traits\HasRoles;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -28,6 +29,7 @@ class User extends Authenticatable
         'nomor_telepon',
         'tanggal_lahir',
         'role_id',
+        'profile_photo',
     ];
 
     protected $hidden = [
@@ -135,5 +137,15 @@ class User extends Authenticatable
     public function scopeTrainers($query)
     {
         return $this->byRole('trainer');
+    }
+
+    public function getProfilePhotoUrlAttribute()
+    {
+        if ($this->profile_photo) {
+            return Storage::disk('public')->url($this->profile_photo);
+        }
+
+        // default avatar (ubah path jika perlu)
+        return asset('images/default-avatar.png');
     }
 }
