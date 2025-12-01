@@ -64,7 +64,7 @@
                         </div>
                         <div>
                             <p class="text-sm text-neutral-400">Capacity</p>
-                            <p class="text-white font-medium">{{ $members->count() }} / {{ $class->kapasitas }}</p>
+                            <p class="text-white font-medium">{{ $class->bookings_count ?? $class->bookings->count() }} / {{ $class->kapasitas }}</p>
                         </div>
                     </div>
                 </div>
