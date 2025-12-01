@@ -26,7 +26,9 @@
 
                         <div class="flex justify-between text-sm text-gray-500 mb-3">
                             <div><i class="bi bi-clock"></i> {{ $class->waktu_mulai }} - {{ $class->waktu_selesai }}</div>
-                            <div><i class="bi bi-people"></i> Kapasitas: {{ $class->kapasitas }}</div>
+                            <div>
+                                <span>{{ $class->bookings_count ?? $class->bookings->count() }} / {{ $class->kapasitas }}</span>
+                            </div>
                         </div>
 
                         @if ($joined)
@@ -47,7 +49,7 @@
                                 Terdaftar
                             </button>
                         @else
-                            <form action="{{ route('member.classes.join', $class->class_id) }}" method="POST">
+                            <form action="{{ route('member.class.join', $class->class_id) }}" method="POST">
                                 @csrf
                                 <button type="submit"
                                     class="w-full py-2.5 bg-gradient-to-r from-green-600 to-emerald-500 text-white font-semibold rounded-md shadow hover:shadow-lg transition-all">

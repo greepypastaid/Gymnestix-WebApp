@@ -72,7 +72,16 @@ class GymClassController extends Controller
             abort(403);
         }
 
-        return view('gym_class.show', compact('gymClass'));
+        // gatau kata gpt kek gini co buat maksa load enrolled viewMembers
+        $members = $gymClass->bookings()
+            ->with(['member.user'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('gym_class.show', [
+            'class' => $gymClass,
+            'members' => $members,
+        ]);
     }
 
     /**

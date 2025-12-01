@@ -48,6 +48,13 @@ Berikut langkah singkat untuk menjalankan proyek ini baik secara lokal biasa mau
 
 	 - Akses aplikasi di: http://localhost (atau di port yang Anda set di `APP_PORT`)
 
+3) JANGAN LUPA ON IN QUEUE BUAT DAFTAR KELAS
+Project ini menggunakan Laravel Queue (default driver dapat diubah lewat .env). Berikut perintah penting untuk development:
+
+- Jalankan worker (database driver, queue khusus `bookings`):
+  ```bash
+  php artisan queue:work database --queue=bookings --sleep=3 --tries=3 --timeout=120
+
 Catatan singkat:
 
 - Seeder default membuat user test dengan email `test@example.com` dan password `12345678` (password tersimpan ter-hash).

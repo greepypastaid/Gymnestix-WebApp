@@ -46,6 +46,11 @@ class GymClassController extends Controller
             ->where('trainer_id', $trainer->trainer_id)
             ->paginate(15);
 
+        $classes = GymClass::with('trainer.user')
+            ->withCount('bookings')
+            ->where('trainer_id', $trainer->trainer_id)
+            ->paginate(15);
+        
         return view('trainer.class.trainerClass', compact('classes'));
     }
 
