@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use App\Models\GymClass;
 use App\Models\Trainer;
 
@@ -50,7 +51,7 @@ class GymClassController extends Controller
             ->withCount('bookings')
             ->where('trainer_id', $trainer->trainer_id)
             ->paginate(15);
-        
+
         return view('trainer.class.trainerClass', compact('classes'));
     }
 
@@ -60,7 +61,9 @@ class GymClassController extends Controller
     public function create(Request $request)
     {
         $user = $request->user();
-        if (!$user->isTrainer()) { abort(403, 'Anda bukan trainer.'); }
+        if (!$user->isTrainer()) {
+            abort(403, 'Anda bukan trainer.');
+        }
 
         return view('trainer.class.createTrainerClass');
     }
@@ -79,6 +82,7 @@ class GymClassController extends Controller
             'waktu_selesai' => 'required|date_format:H:i',
             'durasi' => 'required|integer',
             'kapasitas' => 'required|integer',
+            'cover' => 'nullable|image|max:2048',
         ]);
 
         // Set trainer_id to current trainer
@@ -87,12 +91,18 @@ class GymClassController extends Controller
             abort(403, 'Anda bukan trainer.');
         }
 
-        $data = $request->only(['nama_kelas','deskripsi','waktu_mulai','waktu_selesai','durasi','kapasitas']);
+        $data = $request->only(['nama_kelas', 'deskripsi', 'waktu_mulai', 'waktu_selesai', 'durasi', 'kapasitas']);
+
+        if ($request->hasFile('cover')) {
+            $path = $request->file('cover')->store('class_covers', 'public');
+            $data['cover'] = $path;
+        }
+
         $data['trainer_id'] = $trainer->trainer_id;
 
         GymClass::create($data);
 
-        return redirect()->route('trainer.classes.index')->with('success','Kelas dibuat.');
+        return redirect()->route('trainer.classes.index')->with('success', 'Kelas dibuat.');
     }
 
     /**
@@ -134,11 +144,23 @@ class GymClassController extends Controller
             'waktu_selesai' => 'required|date_format:H:i',
             'durasi' => 'required|integer',
             'kapasitas' => 'required|integer',
+            'cover'       => 'nullable|image|max:2048',
         ]);
 
-        $gymClass->update($request->only(['nama_kelas','deskripsi','waktu_mulai','waktu_selesai','durasi','kapasitas']));
+        $data = $request->only(['nama_kelas', 'deskripsi', 'waktu_mulai', 'waktu_selesai', 'durasi', 'kapasitas']);
 
-        return redirect()->route('trainer.classes.index')->with('success','Kelas diperbarui.');
+        if ($request->hasFile('cover')) {
+            // delete old file if exists
+            if ($gymClass->cover) {
+                Storage::disk('public')->delete($gymClass->cover);
+            }
+            $path = $request->file('cover')->store('class_covers', 'public');
+            $data['cover'] = $path;
+        }
+
+        $gymClass->update($data);
+
+        return redirect()->route('trainer.classes.index')->with('success', 'Kelas diperbarui.');
     }
 
     /**
@@ -149,7 +171,7 @@ class GymClassController extends Controller
         $this->authorizeOwnership($gymClass, $request);
         $gymClass->delete();
 
-        return redirect()->route('trainer.classes.index')->with('success','Kelas dihapus.');
+        return redirect()->route('trainer.classes.index')->with('success', 'Kelas dihapus.');
     }
 
     /**

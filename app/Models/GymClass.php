@@ -17,6 +17,7 @@ class GymClass extends Model
         'trainer_id',
         'nama_kelas',
         'deskripsi',
+        'cover',
         'waktu_mulai',
         'waktu_selesai',
         'durasi',

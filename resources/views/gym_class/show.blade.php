@@ -34,6 +34,17 @@
             <div class="bg-neutral-800 p-6 shadow sm:rounded-lg">
                 <h3 class="text-lg font-semibold text-white mb-4">Class Details</h3>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        @if(!empty($class->cover))
+                            <img src="{{ asset('storage/' . $class->cover) }}" alt="Class cover" class="w-full h-48 object-cover rounded-lg mb-4">
+                        @endif
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-lg flex items-center justify-center bg-neutral-700">
+                            </div>
+                            <div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="flex items-center space-x-3">
                         <div class="w-10 h-10 rounded-lg flex items-center justify-center bg-neutral-700">
                             <svg class="w-5 h-5 text-[#ADFF2F]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
