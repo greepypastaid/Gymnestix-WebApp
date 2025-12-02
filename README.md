@@ -53,7 +53,7 @@ Project ini menggunakan Laravel Queue (default driver dapat diubah lewat .env). 
 
 - Jalankan worker (database driver, queue khusus `bookings`):
   ```bash
-  php artisan queue:work database --queue=bookings --sleep=3 --tries=3 --timeout=120
+  	 php artisan queue:work database --sleep=3 --tries=3
 
 Catatan singkat:
 
