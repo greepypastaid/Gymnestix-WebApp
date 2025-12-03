@@ -55,11 +55,11 @@
                                 <div class="flex items-center justify-between p-4 rounded-lg bg-neutral-900 border border-neutral-700 hover:border-neutral-600 transition duration-200">
                                     <div class="flex items-center space-x-4">
                                         <div class="w-10 h-10 rounded-full flex items-center justify-center" style="background: linear-gradient(135deg, #ADFF2F 0%, #7CB518 100%);">
-                                            <span class="text-black font-bold text-sm">{{ substr(optional($member->user)->nama ?? 'M', 0, 1) }}</span>
+                                            <span class="text-black font-bold text-sm">{{ substr(optional($member->member->user)->nama ?? 'M', 0, 1) }}</span>
                                         </div>
                                         <div>
-                                            <h4 class="font-semibold text-white">{{ optional($member->user)->nama ?? 'Member' }}</h4>
-                                            <p class="text-sm text-neutral-400">{{ optional($member->user)->email ?? '' }}</p>
+                                            <h4 class="font-semibold text-white">{{ optional($member->member->user)->nama ?? 'Member' }}</h4>
+                                            <p class="text-sm text-neutral-400">{{ optional($member->member->user)->email ?? '' }}</p>
                                         </div>
                                     </div>
                                     <div class="flex items-center space-x-4">
