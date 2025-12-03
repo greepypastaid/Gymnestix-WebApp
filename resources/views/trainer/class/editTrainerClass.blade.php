@@ -59,6 +59,16 @@
                             <input type="time" name="waktu_mulai" id="waktu_mulai" class="block w-full px-3 py-2 border border-neutral-600 rounded-lg shadow-sm bg-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-[#ADFF2F] focus:border-[#ADFF2F]" value="{{ old('waktu_mulai', $gymClass->waktu_mulai ? \Carbon\Carbon::parse($gymClass->waktu_mulai)->format('H:i') : '') }}" required>
                         </div>
                         <div>
+                            <label for="hari" class="block text-sm font-medium text-white mb-2">Hari</label>
+                            @php $days = ['Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Minggu']; @endphp
+                            <select name="hari" id="hari" class="block w-full px-3 py-2 border border-neutral-600 rounded-lg shadow-sm bg-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-[#ADFF2F] focus:border-[#ADFF2F]" required>
+                                <option value="" disabled>-- Pilih Hari --</option>
+                                @foreach($days as $d)
+                                    <option value="{{ $d }}" {{ old('hari', $gymClass->hari) === $d ? 'selected' : '' }}>{{ $d }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div>
                             <label for="waktu_selesai" class="block text-sm font-medium text-white mb-2">Waktu Selesai</label>
                             <input type="time" name="waktu_selesai" id="waktu_selesai" class="block w-full px-3 py-2 border border-neutral-600 rounded-lg shadow-sm bg-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-[#ADFF2F] focus:border-[#ADFF2F]" value="{{ old('waktu_selesai', $gymClass->waktu_selesai ? \Carbon\Carbon::parse($gymClass->waktu_selesai)->format('H:i') : '') }}" required>
                         </div>

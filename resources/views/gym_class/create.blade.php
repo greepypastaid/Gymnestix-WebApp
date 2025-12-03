@@ -58,6 +58,16 @@
                         <input type="time" name="waktu_selesai" id="waktu_selesai" class="block w-full px-3 py-2 border border-neutral-600 rounded-lg shadow-sm bg-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-[#ADFF2F] focus:border-[#ADFF2F]" value="{{ old('waktu_selesai') }}" required>
                     </div>
                     <div>
+                        <label for="hari" class="block text-sm font-medium text-white mb-2">Hari</label>
+                        <select name="hari" id="hari" class="block w-full px-3 py-2 border border-neutral-600 rounded-lg shadow-sm bg-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-[#ADFF2F] focus:border-[#ADFF2F]" required>
+                            @php $days = ['Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Minggu']; @endphp
+                            <option value="" disabled selected>-- Pilih Hari --</option>
+                            @foreach($days as $d)
+                                <option value="{{ $d }}" {{ old('hari')===$d ? 'selected' : '' }}>{{ $d }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div>
                         <label for="durasi" class="block text-sm font-medium text-white mb-2">Durasi (menit)</label>
                         <input type="number" name="durasi" id="durasi" class="block w-full px-3 py-2 border border-neutral-600 rounded-lg shadow-sm bg-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-[#ADFF2F] focus:border-[#ADFF2F]" value="{{ old('durasi') }}" required placeholder="e.g. 60">
                     </div>
