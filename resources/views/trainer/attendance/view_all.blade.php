@@ -69,10 +69,10 @@
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="flex items-center">
                                             <div class="w-8 h-8 rounded-full flex items-center justify-center mr-2" style="background: linear-gradient(135deg, #ADFF2F 0%, #7CB518 100%);">
-                                                <span class="text-black font-bold text-xs">{{ substr($attendance->member->user->name ?? 'M', 0, 1) }}</span>
+                                                <span class="text-black font-bold text-xs">{{ substr($attendance->member->user->nama ?? 'M', 0, 1) }}</span>
                                             </div>
                                             <span class="text-sm font-medium text-white">
-                                                {{ $attendance->member->user->name }}
+                                                {{ $attendance->member->user->nama }}
                                             </span>
                                         </div>
                                     </td>

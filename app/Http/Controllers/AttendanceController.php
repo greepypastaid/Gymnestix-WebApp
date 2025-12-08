@@ -97,6 +97,7 @@ class AttendanceController extends Controller
 
         // Handle bulk attendance submission
         $attendanceData = $request->input('attendance', []);
+        $notes = $request->input('notes', []);
         
         foreach ($attendanceData as $memberId => $status) {
             Attendance::updateOrCreate(
@@ -108,6 +109,7 @@ class AttendanceController extends Controller
                 [
                     'trainer_id' => $class->trainer_id,
                     'status' => $status,
+                    'catatan' => $notes[$memberId] ?? null,
                     'waktu_masuk' => now()->format('H:i:s'),
                     'waktu_keluar' => now()->addHours(1)->format('H:i:s'),
                 ]
