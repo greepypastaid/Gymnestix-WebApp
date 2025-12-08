@@ -152,8 +152,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified'])->group(
 });
 
 Route::middleware(['auth'])->prefix('member')->name('member.')->group(function () {
-    Route::get('/classes', [ClassController::class, 'index'])->name('classes.index');
+    Route::get('/classes', [ClassController::class,'memberClasses'])->name('classes.index');
     Route::post('/classes/join/{class}', [ClassController::class, 'join'])->name('classes.join');
+    Route::get('/jadwalku', [ClassController::class, 'jadwalku'])->name('classes.jadwalku');
 });
 
 Route::get('/kelas', [ClassController::class, 'index'])->name('classes.index');

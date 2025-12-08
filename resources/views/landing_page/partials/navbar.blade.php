@@ -86,9 +86,9 @@
                         @if (Auth::user()->isMember())
                         <a href="{{ route('member.classes.index') }}"
                             class="block px-4 py-2.5 text-white hover:bg-neutral-700 hover:text-[#ADFF2F] transition">
-                            <i class="bi bi-clipboard mr-2 text-[#ADFF2F]"></i> Daftar Kelas
+                            <i class="bi bi-clipboard mr-2 text-[#ADFF2F]"></i> Kelasku
                         </a>
-                        <a href="#"
+                        <a href="{{ route('member.classes.jadwalku') }}"
                             class="block px-4 py-2.5 text-white hover:bg-neutral-700 hover:text-[#ADFF2F] transition">
                             <i class="bi bi-calendar mr-2 text-[#ADFF2F]"></i> Jadwalku
                         </a>
