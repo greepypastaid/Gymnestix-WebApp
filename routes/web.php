@@ -185,6 +185,9 @@ Route::middleware('auth')->group(function () {
         ->name('payment.invoice.pdf');
     Route::get('/payment/check-status/{payment}', [MembershipPaymentController::class, 'checkStatus'])
         ->name('payment.checkStatus');
+    Route::post('/payment/{id}/cancel', [MembershipPaymentController::class, 'cancel'])
+    ->name('payment.cancel');
+
 
     Route::get('/membership/success/{payment}', [MembershipPaymentController::class, 'success'])
         ->name('payment.successPage');
