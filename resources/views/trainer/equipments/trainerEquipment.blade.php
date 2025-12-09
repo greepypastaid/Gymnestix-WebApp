@@ -27,6 +27,27 @@
                 </div>
             </div>
 
+            <!-- Search Bar -->
+            <div class="card-dark p-4">
+                <form method="GET" action="{{ route('trainer.equipments.index') }}" class="flex gap-3">
+                    <div class="flex-1 relative">
+                        <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by equipment name or condition..." class="input-dark w-full pl-10 pr-4 py-2.5">
+                        <svg class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                    </div>
+                    <select name="kondisi" class="input-dark px-4 py-2.5 w-48">
+                        <option value="">All Conditions</option>
+                        <option value="Baik" {{ request('kondisi') == 'Baik' ? 'selected' : '' }}>Baik</option>
+                        <option value="Perlu Perbaikan" {{ request('kondisi') == 'Perlu Perbaikan' ? 'selected' : '' }}>Perlu Perbaikan</option>
+                    </select>
+                    <button type="submit" class="btn-primary-custom px-6">Search</button>
+                    @if(request('search') || request('kondisi'))
+                        <a href="{{ route('trainer.equipments.index') }}" class="btn-secondary px-6">Clear</a>
+                    @endif
+                </form>
+            </div>
+
             <div class="card-dark overflow-hidden">
                 @if($equipments->count())
                     <div class="md:hidden p-4 space-y-3">
@@ -122,10 +143,7 @@
                         </table>
                     </div>
 
-                    <!-- Pagination -->
-                    <div class="px-6 py-4 border-t border-neutral-700">
-                        {{ $equipments->links() }}
-                    </div>
+                    <!-- old pagination removed in favor of unified component below -->
                 @else
                     <div class="p-12 text-center">
                         <svg class="mx-auto h-12 w-12 text-neutral-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -138,6 +156,13 @@
                                 Contact admin to add new equipment to the gym.
                             </p>
                         </div>
+                    </div>
+                @endif
+
+                <!-- Pagination -->
+                @if($equipments instanceof \Illuminate\Pagination\LengthAwarePaginator && $equipments->hasPages())
+                    <div class="px-6 py-4 border-t border-[#2a2a2a]">
+                        <x-pagination :paginator="$equipments" />
                     </div>
                 @endif
             </div>

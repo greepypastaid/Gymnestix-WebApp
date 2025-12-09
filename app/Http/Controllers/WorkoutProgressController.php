@@ -50,9 +50,21 @@ class WorkoutProgressController extends Controller
         return redirect()->route('admin.workout.index')->with('success', 'Workout deleted (placeholder).');
     }
 
-    public function indexForMember(Member $member)
+    public function indexForMember(Member $member, Request $request)
     {
-        $progresses = WorkoutProgress::where('member_id', $member->member_id)->orderByDesc('tanggal')->get();
+        $query = WorkoutProgress::where('member_id', $member->member_id);
+
+        // Add search functionality
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('jenis_latihan', 'LIKE', "%{$search}%")
+                  ->orWhere('catatan', 'LIKE', "%{$search}%")
+                  ->orWhere('tanggal', 'LIKE', "%{$search}%");
+            });
+        }
+
+        $progresses = $query->orderByDesc('tanggal')->paginate(10)->withQueryString();
 
         return view('trainer.workout.trainerViewWorkout', compact('member', 'progresses'));
     }

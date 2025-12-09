@@ -7,9 +7,9 @@
             {{-- Header --}}
             <div class="card-header">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background: rgba(173,255,47,0.08)">
+                    <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: rgba(173,255,47,0.08)">
                         <svg class="w-5 h-5 text-[#ADFF2F]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
                         </svg>
                     </div>
                     <div>
@@ -18,8 +18,11 @@
                     </div>
                 </div>
                 <div class="ml-auto">
-                    <a href="{{ route('trainer.attendance.view_all') }}" class="px-4 py-2 bg-[#1f1f1f] hover:bg-[#2a2a2a] text-white rounded-lg font-medium transition-colors inline-flex items-center gap-2">
-                        📝 View All Records
+                    <a href="{{ route('trainer.attendance.view_all') }}" class="btn-primary-custom inline-flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                        </svg>
+                        <span>Take New Attendance</span>
                     </a>
                 </div>
             </div>
@@ -35,9 +38,25 @@
             </div>
             @endif
 
+            <!-- Search Bar -->
+            <div class="card-dark p-4">
+                <form method="GET" action="{{ route('trainer.attendance.select-class') }}" class="flex gap-3">
+                    <div class="flex-1 relative">
+                        <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by class name, day, or room..." class="input-dark w-full pl-10 pr-4 py-2.5">
+                        <svg class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                    </div>
+                    <button type="submit" class="btn-primary-custom px-6">Search</button>
+                    @if(request('search'))
+                        <a href="{{ route('trainer.attendance.select-class') }}" class="btn-secondary px-6">Clear</a>
+                    @endif
+                </form>
+            </div>
+
             {{-- Classes Grid --}}
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch auto-rows-fr">
-                @if(!empty($classes) && (is_array($classes) || $classes instanceof \Illuminate\Support\Collection))
+                @if(isset($classes) && $classes->count())
                     @foreach($classes as $class)
                     <div class="card-dark p-6 h-full w-full flex flex-col justify-between hover:border-[#ADFF2F]/50 transition-all duration-200 min-h-[220px]">
                         <div class="flex-1">
@@ -71,7 +90,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="mt-6">
                             <a href="{{ route('trainer.attendance.track', ['class' => optional($class)->class_id]) }}" class="btn-primary-custom inline-flex items-center justify-center w-full sm:w-auto px-4 py-2">
                                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -96,6 +114,13 @@
                     </div>
                 @endif
             </div>
+
+            <!-- Pagination -->
+            @if($classes->hasPages())
+                <div class="mt-6 flex justify-center">
+                    <x-pagination :paginator="$classes" />
+                </div>
+            @endif
         </div>
     </div>
 @endsection

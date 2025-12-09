@@ -19,10 +19,21 @@ class GymClassController extends Controller
             abort(403, 'Unauthorized access.');
         }
 
-        $classes = GymClass::with(['trainer.user'])
-            ->withCount('bookings')
-            ->orderBy('created_at', 'desc')
-            ->paginate(15);
+        $query = GymClass::with(['trainer.user'])->withCount('bookings');
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('nama_kelas', 'LIKE', "%{$search}%")
+                  ->orWhere('hari', 'LIKE', "%{$search}%")
+                  ->orWhere('ruangan', 'LIKE', "%{$search}%")
+                  ->orWhereHas('trainer.user', function($q) use ($search) {
+                      $q->where('nama', 'LIKE', "%{$search}%");
+                  });
+            });
+        }
+
+        $classes = $query->orderBy('created_at', 'desc')->paginate(10)->withQueryString();
 
         return view('gym_class.index', compact('classes'));
     }

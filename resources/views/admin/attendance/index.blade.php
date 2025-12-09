@@ -53,11 +53,12 @@
                     <label class="block text-sm font-medium text-gray-400 mb-2">Search</label>
                     <input type="text" name="q" class="input-dark w-full" placeholder="Member name / email" value="{{ $q }}">
                 </div>
-                <div class="flex items-end">
-                    <button type="submit" class="w-full px-4 py-2 bg-[#1f1f1f] hover:bg-[#2a2a2a] text-white rounded-lg font-medium transition">
-                        Apply Filters
-                    </button>
-                </div>
+                <button type="submit" class="btn-primary-custom inline-flex items-center justify-center gap-2 self-center">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L15 13.414V20a1 1 0 01-1 1h-4a1 1 0 01-1-1v-6.586L3.293 6.707A1 1 0 013 6V4z"></path>
+                    </svg>
+                    <span>Filter Attendance</span>
+                </button>
             </form>
         </div>
 

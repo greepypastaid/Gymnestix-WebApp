@@ -11,29 +11,32 @@ class EquipmentsController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         // Check if user is admin or trainer to show different views
         $user = Auth::user();
         
-        // Get filter parameters for admin view
-        $q = request('q');
-        $kondisi = request('kondisi');
+        // Get search parameter
+        $search = $request->input('search');
+        $kondisi = $request->input('kondisi');
         
         // Build query
         $query = Equipments::query();
         
-        if ($q) {
-            $query->where('nama_alat', 'like', "%{$q}%");
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('nama_alat', 'LIKE', "%{$search}%")
+                  ->orWhere('kondisi', 'LIKE', "%{$search}%");
+            });
         }
         
         if ($kondisi) {
-            $query->where('kondisi', 'like', "%{$kondisi}%");
+            $query->where('kondisi', $kondisi);
         }
         
-        $equipments = $query->orderBy('nama_alat')->paginate(20);
+        $equipments = $query->orderBy('nama_alat')->paginate(10)->withQueryString();
         
-        $routeName = optional(request()->route())->getName();
+        $routeName = optional($request->route())->getName();
         if ($routeName && str_starts_with($routeName, 'trainer.')) {
             return view('trainer.equipments.trainerEquipment', compact('equipments'));
         }
@@ -49,7 +52,7 @@ class EquipmentsController extends Controller
         }
         
         // Default: admin view
-        return view('admin.equipment.index', compact('equipments', 'q', 'kondisi'));
+        return view('admin.equipment.index', compact('equipments'));
     }
 
     /**

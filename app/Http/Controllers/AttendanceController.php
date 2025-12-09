@@ -129,17 +129,27 @@ class AttendanceController extends Controller
 
         // Admin can see all classes
         if (Gate::allows('schedule.view_all')) {
-            $classes = GymClass::with('trainer')->orderBy('nama_kelas')->get();
+            $query = GymClass::with('trainer');
         } else {
             // Trainers only see their own classes
             $trainer = $user->trainer;
             if (!$trainer) {
                 abort(403, 'Anda tidak memiliki akses untuk tracking attendance.');
             }
-            $classes = GymClass::where('trainer_id', $trainer->trainer_id)
-                ->orderBy('nama_kelas')
-                ->get();
+            $query = GymClass::where('trainer_id', $trainer->trainer_id);
         }
+
+        // Add search functionality
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('nama_kelas', 'LIKE', "%{$search}%")
+                  ->orWhere('hari', 'LIKE', "%{$search}%")
+                  ->orWhere('ruangan', 'LIKE', "%{$search}%");
+            });
+        }
+
+        $classes = $query->orderBy('nama_kelas')->paginate(10)->withQueryString();
 
         return view('trainer.attendance.select_class', compact('classes'));
     }
@@ -154,9 +164,7 @@ class AttendanceController extends Controller
 
         // Admin/manager can see all attendance records
         if (Gate::allows('attendance.view_all') || Gate::allows('schedule.view_all')) {
-            $attendances = Attendance::with(['member.user', 'trainer', 'gymClass'])
-                ->orderByDesc('tanggal')
-                ->paginate(25);
+            $query = Attendance::with(['member.user', 'trainer', 'gymClass']);
         } else {
             // Trainers only see attendance for their own classes
             $trainer = $user->trainer;
@@ -166,11 +174,26 @@ class AttendanceController extends Controller
 
             $classIds = GymClass::where('trainer_id', $trainer->trainer_id)->pluck('class_id');
 
-            $attendances = Attendance::with(['member.user', 'trainer', 'gymClass'])
-                ->whereIn('class_id', $classIds->toArray())
-                ->orderByDesc('tanggal')
-                ->paginate(25);
+            $query = Attendance::with(['member.user', 'trainer', 'gymClass'])
+                ->whereIn('class_id', $classIds->toArray());
         }
+
+        // Add search functionality
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->whereHas('member.user', function($q) use ($search) {
+                    $q->where('nama', 'LIKE', "%{$search}%");
+                })
+                ->orWhereHas('gymClass', function($q) use ($search) {
+                    $q->where('nama_kelas', 'LIKE', "%{$search}%");
+                })
+                ->orWhere('status', 'LIKE', "%{$search}%")
+                ->orWhere('tanggal', 'LIKE', "%{$search}%");
+            });
+        }
+
+        $attendances = $query->orderByDesc('tanggal')->paginate(10)->withQueryString();
 
         // Group attendances by date
         $groupedAttendances = $attendances->groupBy(function($attendance) {

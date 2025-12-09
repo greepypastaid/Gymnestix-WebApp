@@ -13,14 +13,15 @@ class EquipmentsController extends Controller
         // Tes: uncomment baris di bawah untuk memastikan route masuk ke sini
         // dd('hit equipment index');
 
-        $q        = trim($request->get('q', ''));
+        // support unified param name 'search' used across views
+        $search   = trim($request->get('search', ''));
         $kondisi  = trim($request->get('kondisi', ''));
         $dateFrom = $request->get('from');
         $dateTo   = $request->get('to');
 
         $rows = Equipments::query()
             ->withCount('peminjamans')
-            ->when($q !== '', fn($qq) => $qq->where('nama_alat', 'like', "%{$q}%"))
+            ->when($search !== '', fn($qq) => $qq->where('nama_alat', 'like', "%{$search}%"))
             ->when($kondisi !== '', fn($qq) => $qq->where('kondisi', 'like', "%{$kondisi}%"))
             ->when($dateFrom, fn($qq) => $qq->whereDate('tanggal_pembelian', '>=', $dateFrom))
             ->when($dateTo,   fn($qq) => $qq->whereDate('tanggal_pembelian', '<=', $dateTo))
@@ -28,7 +29,7 @@ class EquipmentsController extends Controller
             ->paginate(10)
             ->appends($request->query());
 
-        return view('admin.equipment.index', compact('rows','q','kondisi','dateFrom','dateTo'));
+        return view('admin.equipment.index', compact('rows','search','kondisi','dateFrom','dateTo'));
     }
 
     public function create()

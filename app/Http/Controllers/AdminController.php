@@ -7,9 +7,21 @@ use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::all();
+        $query = User::with('role');
+        
+        // Search functionality
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('nama', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('nomor_telepon', 'like', "%{$search}%");
+            });
+        }
+        
+        $users = $query->paginate(10)->withQueryString();
         return view('admin.index', compact('users'));
     }
 

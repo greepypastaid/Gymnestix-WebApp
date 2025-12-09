@@ -6,27 +6,41 @@
         <div class="w-full mx-auto space-y-4">
             {{-- Header --}}
             <div class="card-header">
-                <div>
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background: rgba(173,255,47,0.08)">
-                            <svg class="w-5 h-5 text-[#ADFF2F]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10" />
-                            </svg>
-                        </div>
-                        <div>
-                            <div class="title">Attendance History</div>
-                            <div class="subtitle">View all attendance records</div>
-                        </div>
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: rgba(173,255,47,0.08)">
+                        <svg class="w-5 h-5 text-[#ADFF2F]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="title">Attendance History</div>
+                        <div class="subtitle">View all attendance records</div>
                     </div>
                 </div>
                 <div class="ml-auto">
-                    <a href="{{ route('trainer.attendance.select-class') }}" class="btn-primary-custom w-full sm:w-auto inline-flex items-center justify-center gap-2">
+                    <a href="{{ route('trainer.attendance.select-class') }}" class="btn-primary-custom inline-flex items-center gap-2">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                         </svg>
                         <span>Take New Attendance</span>
                     </a>
                 </div>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="card-dark p-4">
+                <form method="GET" action="{{ route('trainer.attendance.view_all') }}" class="flex gap-3">
+                    <div class="flex-1 relative">
+                        <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by member name, class, status, or date..." class="input-dark w-full pl-10 pr-4 py-2.5">
+                        <svg class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                    </div>
+                    <button type="submit" class="btn-primary-custom px-6">Search</button>
+                    @if(request('search'))
+                        <a href="{{ route('trainer.attendance.view_all') }}" class="btn-secondary px-6">Clear</a>
+                    @endif
+                </form>
             </div>
 
             {{-- Attendance Table --}}
@@ -131,9 +145,12 @@
                         </div>
                     @endforeach
 
-                    <div class="px-6 py-4 border-t border-neutral-700">
-                        {{ $attendances->links() }}
-                    </div>
+                    <!-- Pagination -->
+                    @if($attendances->hasPages())
+                        <div class="px-6 py-4 border-t border-neutral-700">
+                            <x-pagination :paginator="$attendances" />
+                        </div>
+                    @endif
                 @else
                     <div class="p-12 text-center">
                         <svg class="mx-auto h-12 w-12 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

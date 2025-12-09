@@ -41,11 +41,20 @@ class GymClassController extends Controller
             abort(403, 'Anda bukan trainer.');
         }
 
-        $classes = GymClass::with('trainer.user')
+        $query = GymClass::with('trainer.user')
             ->withCount('bookings')
-            ->where('trainer_id', $trainer->trainer_id)
-            ->orderBy('created_at', 'desc')
-            ->paginate(15);
+            ->where('trainer_id', $trainer->trainer_id);
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('nama_kelas', 'LIKE', "%{$search}%")
+                  ->orWhere('hari', 'LIKE', "%{$search}%")
+                  ->orWhere('ruangan', 'LIKE', "%{$search}%");
+            });
+        }
+
+        $classes = $query->orderBy('created_at', 'desc')->paginate(10)->withQueryString();
 
         return view('trainer.class.trainerClass', compact('classes'));
     }

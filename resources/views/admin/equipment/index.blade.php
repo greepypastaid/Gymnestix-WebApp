@@ -38,43 +38,46 @@
         <div class="card-dark p-6 mb-6">
             <div class="flex items-center gap-2 mb-4">
                 <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
-                <span class="text-sm font-medium text-gray-400">Filters</span>
+                <span class="text-sm font-medium text-gray-400">Search & Filters</span>
             </div>
             <form method="GET" action="{{ route('admin.equipment.index') }}" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-                <div>
+                <div class="lg:col-span-2">
                     <label class="block text-sm font-medium text-gray-400 mb-2">Search</label>
-                    <input type="text" name="q" class="input-dark w-full" value="{{ $q ?? '' }}" placeholder="Equipment name">
+                    <input type="text" name="search" class="input-dark w-full" value="{{ request('search') }}" placeholder="Search by equipment name or condition...">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-400 mb-2">Condition</label>
-                    <input type="text" name="kondisi" class="input-dark w-full" value="{{ $kondisi ?? '' }}" placeholder="e.g. good">
+                    <label class="block text-sm font-medium text-gray-400 mb-2">Filter by Condition</label>
+                    <select name="kondisi" class="input-dark w-full">
+                        <option value="">All Conditions</option>
+                        <option value="Baik" {{ request('kondisi') == 'Baik' ? 'selected' : '' }}>Baik</option>
+                        <option value="Perlu Perbaikan" {{ request('kondisi') == 'Perlu Perbaikan' ? 'selected' : '' }}>Perlu Perbaikan</option>
+                    </select>
                 </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-400 mb-2">Purchase Date From</label>
-                    <input type="date" name="from" class="input-dark w-full" value="{{ $dateFrom ?? '' }}">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-400 mb-2">Purchase Date To</label>
-                    <input type="date" name="to" class="input-dark w-full" value="{{ $dateTo ?? '' }}">
-                </div>
-                <div class="flex items-end">
-                    <button type="submit" class="w-full bg-[#1f1f1f] hover:bg-[#2a2a2a] text-white px-4 py-2 rounded-lg font-medium flex items-center justify-center gap-2 transition-all">
+                <div class="flex items-end gap-2 lg:col-span-2">
+                    <button type="submit" class="flex-1 btn-primary-custom px-4 py-2 rounded-lg font-medium flex items-center justify-center gap-2">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
-                        <span>Apply</span>
+                        <span>Search</span>
                     </button>
+                    @if(request('search') || request('kondisi'))
+                        <a href="{{ route('admin.equipment.index') }}" class="btn-secondary px-4 py-2 rounded-lg font-medium">Clear</a>
+                    @endif
                 </div>
             </form>
         </div>
 
         {{-- Table / Mobile List --}}
         <div class="card-dark overflow-hidden">
+          @php
+            // support both admin controller (provides $rows) and shared controller (provides $equipments)
+            $list = $equipments ?? $rows ?? collect();
+          @endphp
           <!-- Mobile: list cards -->
           <div class="md:hidden p-4 space-y-3">
-            @forelse($rows as $r)
+            @forelse($list as $r)
               <div class="card-dark p-4">
                 <div class="flex items-center justify-between mb-3">
                   <div>
@@ -116,7 +119,7 @@
                   </tr>
                 </thead>
                 <tbody>
-            @forelse($rows as $r)
+            @forelse($list as $r)
             <tr class="hover:bg-neutral-700/20 transition duration-150">
               <td>
                 <div class="text-sm font-medium text-white">{{ $r->nama_alat }}</div>
@@ -187,10 +190,10 @@
         </table>
       </div>
 
-            @if($rows->hasPages())
-                <div class="px-6 py-4 border-t border-[#2a2a2a]">
-                    {{ $rows->links() }}
-                </div>
+            @if($list instanceof \Illuminate\Pagination\LengthAwarePaginator && $list->hasPages())
+              <div class="px-6 py-4 border-t border-[#2a2a2a]">
+                <x-pagination :paginator="$list" />
+              </div>
             @endif
     </div>
   </div>
