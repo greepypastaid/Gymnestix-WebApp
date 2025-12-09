@@ -35,21 +35,30 @@ class ProcessBooking implements ShouldQueue
             $class = GymClass::where('class_id', $this->classId)->lockForUpdate()->first();
 
             if (!$class) {
+                Log::warning('ProcessBooking: Class not found', ['class_id' => $this->classId]);
                 return;
             }
 
-            // Chek ulang member
+            // Check ulang member
             $already = Booking::where('member_id', $this->memberId)
                 ->where('class_id', $this->classId)
                 ->exists();
             if ($already) {
+                Log::info('ProcessBooking: Member already booked', [
+                    'member_id' => $this->memberId,
+                    'class_id' => $this->classId,
+                ]);
                 return;
             }
 
             // Hitung dan compare ama kapasitas
             $joinedCount = Booking::where('class_id', $this->classId)->lockForUpdate()->count();
             if ($joinedCount >= (int) $class->kapasitas) {
-                // class is full
+                Log::warning('ProcessBooking: Class is full', [
+                    'class_id' => $this->classId,
+                    'capacity' => $class->kapasitas,
+                    'current' => $joinedCount,
+                ]);
                 return;
             }
 
@@ -58,6 +67,11 @@ class ProcessBooking implements ShouldQueue
                 'member_id' => $this->memberId,
                 'class_id' => $this->classId,
                 'tanggal_booking' => now(),
+            ]);
+
+            Log::info('ProcessBooking: Booking created successfully', [
+                'member_id' => $this->memberId,
+                'class_id' => $this->classId,
             ]);
         }, 5); // retry 5x if deadlock
     }

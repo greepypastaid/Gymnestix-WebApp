@@ -75,14 +75,12 @@ class WebhookController extends Controller
     {
         $payment->update([
             'status' => 'paid',
-            'payment_method' => $data['payment_method'],
+            'payment_method' => $data['payment_method'] ?? null,
             'paid_at' => now(),
         ]);
 
-        // $membershipPlan = MembershipPlan::findOrFail($customData['plan_id']);
-
         // Update atau buat data member
-        Member::updateOrCreate(
+        $member = Member::updateOrCreate(
             ['user_id' => $payment->user_id],
             [
                 'tanggal_registrasi' => now(),
@@ -92,6 +90,15 @@ class WebhookController extends Controller
             ]
         );
 
+        // Create billing record for admin view
+        \App\Models\Billing::create([
+            'member_id' => $member->member_id,
+            'plan_id' => $payment->membership_plan_id,
+            'jumlah' => $payment->amount,
+            'tanggal_tagihan' => now(),
+            'tanggal_jatuh_tempo' => now()->addDays(1),
+            'status_pembayaran' => 'Lunas',
+        ]);
 
         $user = \App\Models\User::find($payment->user_id);
         if ($user) {
@@ -102,6 +109,7 @@ class WebhookController extends Controller
             'payment_id' => $payment->id,
             'user_id' => $payment->user_id,
             'plan_id' => $payment->membership_plan_id,
+            'member_id' => $member->member_id,
             'role_updated' => $user ? $user->role_id : 'user not found',
         ]);
     }

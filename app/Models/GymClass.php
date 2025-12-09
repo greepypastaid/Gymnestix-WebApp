@@ -30,6 +30,14 @@ class GymClass extends Model
         'waktu_selesai' => 'datetime:H:i',
     ];
 
+    /**
+     * Get the route key for the model.
+     */
+    public function getRouteKeyName()
+    {
+        return 'class_id';
+    }
+
     public function trainer()
     {
         return $this->belongsTo(Trainer::class, 'trainer_id', 'trainer_id');

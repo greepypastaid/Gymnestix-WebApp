@@ -23,11 +23,11 @@ class AttendanceController extends Controller
         $q    = $request->get('q');         // cari nama/email
         $status = $request->get('status');  // present/absent/late
 
-    $attendances = Attendance::with(['user','gymClass','schedule'])
+    $attendances = Attendance::with(['member.user','gymClass','schedule'])
             ->when($date, fn($qb) => $qb->whereDate('attendance_date', $date))
             ->when($status, fn($qb) => $qb->where('status', $status))
             ->when($q, function($qb) use ($q){
-                $qb->whereHas('user', function($uq) use ($q){
+                $qb->whereHas('member.user', function($uq) use ($q){
                     $uq->where('nama','like',"%$q%")
                        ->orWhere('email','like',"%$q%");
                 });

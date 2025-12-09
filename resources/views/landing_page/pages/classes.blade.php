@@ -5,6 +5,19 @@
 @section('content')
 <div class="relative bg-black pt-20 sm:pt-24 md:pt-32 overflow-hidden">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        {{-- Success/Error Messages --}}
+        @if(session('success'))
+        <div class="mb-6 p-4 bg-[#ADFF2F]/10 border border-[#ADFF2F] rounded-lg">
+            <p class="text-[#ADFF2F] font-medium">{{ session('success') }}</p>
+        </div>
+        @endif
+        
+        @if(session('error'))
+        <div class="mb-6 p-4 bg-red-600/10 border border-red-600 rounded-lg">
+            <p class="text-red-400 font-medium">{{ session('error') }}</p>
+        </div>
+        @endif
+
         <div class="text-left mb-6 sm:mb-8">
             <h1 class="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-poppins text-white mb-4">
                 Daftar Kelas Gymnestix
@@ -92,7 +105,7 @@
                     Tunggu konfirmasi
                 </button>
                 @else
-                <form action="{{ route('member.classes.join', $class->class_id) }}" method="POST">
+                <form action="{{ route('member.classes.join', $class->class_id) }}" method="POST" id="join-form-{{ $class->class_id }}" onsubmit="console.log('Form submitted for class:', {{ $class->class_id }});">
                     @csrf
                     <button type="submit"
                         class="w-full py-3 bg-[#ADFF2F] text-black font-semibold rounded-lg hover:bg-[#9DE626] transition-all duration-300 hover:scale-105">

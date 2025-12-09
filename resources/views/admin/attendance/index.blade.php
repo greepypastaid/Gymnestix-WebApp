@@ -69,7 +69,7 @@
                     <div class="bg-[#1f1f1f] p-4 rounded-lg border border-[#2a2a2a]">
                         <div class="flex items-center justify-between mb-3">
                             <div>
-                                <div class="text-sm font-semibold text-white">{{ $a->user?->nama ?? 'User Terhapus' }}</div>
+                                <div class="text-sm font-semibold text-white">{{ $a->member?->user?->nama ?? 'User Terhapus' }}</div>
                                 <div class="text-xs text-gray-400">{{ $a->attendance_date?->format('d M Y') ?? '-' }} • {{ $a->schedule?->class_name ?? '—' }}</div>
                             </div>
                             <div>
@@ -123,11 +123,11 @@
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="flex items-center">
                                             <div class="w-10 h-10 rounded-full flex items-center justify-center mr-3" style="background: linear-gradient(135deg, #ADFF2F 0%, #7CB518 100%);">
-                                                <span class="text-black font-bold text-sm">{{ substr($a->user?->nama ?? '?', 0, 1) }}</span>
+                                                <span class="text-black font-bold text-sm">{{ substr($a->member?->user?->nama ?? '?', 0, 1) }}</span>
                                             </div>
                                             <div>
-                                                <div class="text-sm font-semibold text-white">{{ $a->user?->nama ?? 'User Terhapus' }}</div>
-                                                <div class="text-xs text-neutral-400 mt-0.5">{{ $a->user?->email ?? '-' }}</div>
+                                                <div class="text-sm font-semibold text-white">{{ $a->member?->user?->nama ?? 'User Terhapus' }}</div>
+                                                <div class="text-xs text-neutral-400 mt-0.5">{{ $a->member?->user?->email ?? '-' }}</div>
                                             </div>
                                         </div>
                                     </td>

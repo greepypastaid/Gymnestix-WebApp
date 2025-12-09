@@ -53,22 +53,28 @@ class ClassController extends Controller
         return view('landing_page.pages.classes', compact('classes', 'userClasses'));
     }
 
-    public function join($classId)
+    public function join(GymClass $class)
     {
         $user = Auth::user();
 
-        // Affakah member
+        // Log untuk debugging
+        \Log::info('Join class attempt', [
+            'user_id' => $user->user_id,
+            'class_id' => $class->class_id,
+        ]);
+
+        // Apakah member
         $member = Member::where('user_id', $user->user_id)->first();
         if (!$member) {
+            \Log::warning('User is not a member', ['user_id' => $user->user_id]);
             return back()->with('error', 'Anda belum menjadi member.');
         }
 
         // Membership masih aktif gak
         if ($member->expired_at && $member->expired_at < Carbon::now()) {
+            \Log::warning('Member membership expired', ['member_id' => $member->member_id]);
             return back()->with('error', 'Membership Anda sudah expired!');
         }
-
-        $class = GymClass::findOrFail($classId);
 
         // Cek apakah sudah pernah join sebelumnya
         $already = Booking::where('member_id', $member->member_id)
@@ -79,23 +85,28 @@ class ClassController extends Controller
             return back()->with('error', 'Anda sudah terdaftar di kelas ini.');
         }
         
-        // precheck
+        // Precheck kapasitas (quick check sebelum masuk queue)
         $joinedCount = $class->bookings()->count();
         if ($joinedCount >= (int)$class->kapasitas) {
             return back()->with('error', 'Kelas sudah penuh!');
         }
 
-        Booking::create([
-            'member_id' => $member->member_id,
+        // Dispatch job ke queue untuk proses booking
+        ProcessBooking::dispatch($class->class_id, $member->member_id);
+
+        // Tambahkan ke pending session untuk UI feedback
+        $pending = session('pending_bookings', []);
+        if (!in_array($class->class_id, $pending)) {
+            $pending[] = $class->class_id;
+            session(['pending_bookings' => $pending]);
+        }
+
+        \Log::info('Booking queued successfully', [
             'class_id' => $class->class_id,
-            'tanggal_booking' => now(),
+            'member_id' => $member->member_id,
         ]);
 
-        $pending = session('pending_bookings', []);
-        $pending = array_filter($pending, fn($id) => $id != $class->class_id);
-        session(['pending_bookings' => array_values($pending)]);
-
-        return back()->with('success', 'Berhasil bergabung dengan kelas!');
+        return back()->with('success', 'Permintaan bergabung kelas sedang diproses. Silakan tunggu beberapa saat!');
     }
 
     public function memberClasses()

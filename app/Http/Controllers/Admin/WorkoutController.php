@@ -21,11 +21,6 @@ class WorkoutController extends Controller
         $search = $request->get('search', '');
         $memberId = $request->get('member_id', '');
 
-        $members = Member::with('user')
-            ->whereHas('user')
-            ->orderBy('member_id')
-            ->get();
-
         $workouts = WorkoutProgress::with(['member.user'])
             ->when($search, function($q) use ($search) {
                 $q->where('jenis_latihan', 'like', "%{$search}%")
@@ -38,7 +33,7 @@ class WorkoutController extends Controller
             ->paginate(15)
             ->withQueryString();
 
-        return view('admin.workouts.index', compact('workouts', 'members', 'search', 'memberId'));
+        return view('admin.workouts.index', compact('workouts', 'search', 'memberId'));
     }
 
     public function show($memberId)

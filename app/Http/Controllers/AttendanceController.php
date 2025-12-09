@@ -116,7 +116,7 @@ class AttendanceController extends Controller
             );
         }
 
-        return redirect()->route('trainer.attendance.view_all')->with('success', 'Attendance saved successfully.');
+        return redirect()->route('trainer.attendance.view_all')->with('success', 'Attendance recorded successfully.');
     }
 
     /**
@@ -172,6 +172,11 @@ class AttendanceController extends Controller
                 ->paginate(25);
         }
 
-        return view('trainer.attendance.view_all', compact('attendances'));
+        // Group attendances by date
+        $groupedAttendances = $attendances->groupBy(function($attendance) {
+            return $attendance->tanggal->format('Y-m-d');
+        });
+
+        return view('trainer.attendance.view_all', compact('attendances', 'groupedAttendances'));
     }
 }
