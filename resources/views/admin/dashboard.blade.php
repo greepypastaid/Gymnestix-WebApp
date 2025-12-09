@@ -165,7 +165,7 @@
                 @endcanany
 
                 @can('workout.manage')
-                <a href="{{ Route::has('admin.workout.index') ? route('admin.workout.index') : '#' }}" class="group">
+                <a href="{{ Route::has('admin.workouts.index') ? route('admin.workouts.index') : '#' }}" class="group">
                     <div class="bg-neutral-800 rounded-2xl p-6 shadow-xl border border-neutral-700 hover:border-[#ADFF2F] transition-all duration-200 h-full hover:shadow-2xl">
                         <div class="w-14 h-14 rounded-xl flex items-center justify-center mb-4" style="background: rgba(173,255,47,0.1);">
                             <svg class="w-7 h-7" style="color:#ADFF2F;" fill="none" stroke="currentColor" viewBox="0 0 24 24">

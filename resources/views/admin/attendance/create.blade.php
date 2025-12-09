@@ -83,13 +83,28 @@
                     <label class="block text-sm font-medium text-white mb-2">Class (optional)</label>
                     <select name="class_schedule_id" class="block w-full px-3 py-2 border border-neutral-600 rounded-lg shadow-sm bg-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-[#ADFF2F] focus:border-[#ADFF2F]">
                         <option value="">— None —</option>
-                        @foreach($schedules as $s)
-                            <option value="{{ $s->id }}" @selected(old('class_schedule_id') == $s->id)>
-                                {{ $s->class_name }} — {{ \Illuminate\Support\Carbon::parse($s->class_date)->format('d M Y') }}
-                                ({{ \Illuminate\Support\Carbon::parse($s->start_time)->format('H:i') }}–{{ \Illuminate\Support\Carbon::parse($s->end_time)->format('H:i') }})
-                            </option>
-                        @endforeach
+                        @if(!empty($classes))
+                            <optgroup label="Classes">
+                                @foreach($classes as $c)
+                                    <option value="class:{{ $c->class_id }}" @selected(old('class_schedule_id') == 'class:'.$c->class_id)>
+                                        {{ $c->nama_kelas }} — {{ \Illuminate\Support\Carbon::parse($c->waktu_mulai)->format('H:i') }}–{{ \Illuminate\Support\Carbon::parse($c->waktu_selesai)->format('H:i') }}
+                                    </option>
+                                @endforeach
+                            </optgroup>
+                        @endif
+
+                        @if(!empty($schedules))
+                            <optgroup label="Schedules">
+                                @foreach($schedules as $s)
+                                    <option value="schedule:{{ $s->id }}" @selected(old('class_schedule_id') == 'schedule:'.$s->id)>
+                                        {{ $s->class_name }}
+                                        ({{ \Illuminate\Support\Carbon::parse($s->start_time)->format('H:i') }}–{{ \Illuminate\Support\Carbon::parse($s->end_time)->format('H:i') }})
+                                    </option>
+                                @endforeach
+                            </optgroup>
+                        @endif
                     </select>
+                    <p class="text-xs text-neutral-400 mt-2">If you select a Class (from Classes), it will be recorded as a class reference; selecting a Schedule links to a specific scheduled session.</p>
                 </div>
 
                 <div>
