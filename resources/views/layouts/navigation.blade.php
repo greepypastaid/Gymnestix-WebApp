@@ -1,10 +1,10 @@
 <!-- Minimalist Navigation -->
 <div x-data="{ sidebarOpen: false }" class="relative">
     <!-- Top Bar -->
-    <nav class="bg-[#0a0a0a] border-b border-[#2a2a2a] fixed top-0 left-0 right-0 z-50">
+    <nav class="bg-transparent fixed top-0 left-0 right-0 z-50">
         <div class="mx-auto px-4 lg:px-6">
-            <div class="flex justify-between h-16">
-                <div class="flex items-center">
+            <div class="flex items-center justify-between h-16 gap-4">
+                <div class="flex items-center gap-2">
                     <!-- Mobile Menu Toggle -->
                     <button @click="sidebarOpen = !sidebarOpen" class="md:hidden p-2 rounded-lg text-gray-400 hover:text-white hover:bg-[#1f1f1f] transition">
                         <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -20,12 +20,14 @@
                     </a>
                 </div>
 
-                <!-- User Menu -->
-                <div class="flex items-center">
+                <!-- Right: Quick actions + User Menu -->
+                <div class="flex items-center gap-2">
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
                             <button class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-white bg-[#141414] hover:bg-[#1f1f1f] transition">
+                                <img src="{{ Auth::user()->profile_photo_url }}" alt="Profile" class="w-6 h-6 rounded-full object-cover" />
                                 <span class="hidden sm:block">{{ Auth::user()->name }}</span>
+                                <h4 class="hidden sm:block text-sm">Menu</h4>
                                 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                                 </svg>
@@ -53,10 +55,29 @@
          x-transition:leave="transition-opacity duration-300"
          class="fixed inset-0 bg-black/80 z-40 md:hidden" style="display: none;"></div>
 
-    <!-- Sidebar -->
-    <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'" 
-           class="fixed inset-y-0 left-0 z-50 w-64 bg-[#0a0a0a] border-r border-[#2a2a2a] transform md:translate-x-0 transition-transform duration-300 pt-16 overflow-y-auto">
-        <div class="px-4 py-6 space-y-1">
+        <!-- Sidebar -->
+        <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'" 
+            class="fixed inset-y-0 left-0 z-50 w-64 bg-[#0a0a0a] border-r border-[#2a2a2a] transform md:translate-x-0 transition-transform duration-300 overflow-y-auto flex flex-col">
+        <!-- Sidebar top header -->
+        <div class="px-6 py-6 border-b border-[#1f1f1f] bg-[#0b0b0b]">
+            <div class="flex items-center gap-3">
+                <img src="{{ Auth::user()->profile_photo_url }}" alt="Profile Photo" class="w-9 h-9 rounded-full object-cover" />
+                <div class="leading-tight">
+                    <p class="text-lg font-semibold text-white">Welcome back</p>
+                    <p class="text-sm font-semibold text-white">{{ Auth::user()->name }}</p>
+                </div>
+            </div>
+            <div class="mt-3">
+                <a href="{{ route('profile.edit') }}" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium bg-[#141414] text-gray-300 hover:text-white hover:bg-[#1f1f1f] transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5" />
+                    </svg>
+                    Edit Profile
+                </a>
+            </div>
+        </div>
+
+        <div class="px-4 py-6 space-y-1 flex-1 overflow-y-auto">
             <!-- Dashboard Link -->
             <a href="{{ route('dashboard') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium {{ request()->routeIs('dashboard') ? 'bg-[#ADFF2F] text-black' : 'text-gray-400 hover:text-white hover:bg-[#1f1f1f]' }} transition">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -168,6 +189,14 @@
                     Payment History
                 </a>
             @endif
+        </div>
+
+        <!-- Bottom: Go to Home button -->
+        <div class="px-6 py-4 border-t border-[#1f1f1f]">
+            <a href="{{ url('/') }}" class="w-full inline-flex items-center gap-3 px-3 py-2 rounded-md bg-[#141414] text-gray-200 hover:bg-[#1f1f1f] transition">
+                <img src="{{ asset('images/GymnestixLogo.png') }}" alt="Gymnestix" class="w-6 h-6 rounded-sm" />
+                <span class="font-medium">Go to Home</span>
+            </a>
         </div>
     </aside>
 </div>

@@ -141,11 +141,28 @@ class User extends Authenticatable
 
     public function getProfilePhotoUrlAttribute()
     {
-        if ($this->profile_photo) {
-            return Storage::disk('public')->url($this->profile_photo);
+        // Jika profile_photo kosong, return default
+        if (empty($this->profile_photo)) {
+            return asset('images/default-avatar.png');
         }
 
-        // default avatar (ubah path jika perlu)
-        return asset('images/default-avatar.png');
+        // Jika sudah berupa URL lengkap (http/https), return langsung
+        if (str_starts_with($this->profile_photo, 'http')) {
+            return $this->profile_photo;
+        }
+
+        // Coba cek di Storage disk 'public'
+        if (Storage::disk('public')->exists($this->profile_photo)) {
+            return asset('storage/' . $this->profile_photo);
+        }
+
+        // Fallback ke public/storage/ jika file ada
+        $path = public_path('storage/' . $this->profile_photo);
+        if (file_exists($path)) {
+            return asset('storage/' . $this->profile_photo);
+        }
+
+        // Jika tidak ada, return default
+        return asset('images/GymnestixLogo.png');
     }
 }

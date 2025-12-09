@@ -54,7 +54,7 @@
                 <div class="relative">
                     <button id="profile-dropdown-btn"
                         class="flex items-center gap-2 text-white hover:text-[#ADFF2F] focus:outline-none transition font-medium">
-                        <img src="{{ asset('storage/' . Auth::user()->profile_photo) }}" alt="Profile" class="w-10 h-10 object-cover rounded-full" />
+                        <img src="{{ Auth::user()->profile_photo_url }}" alt="Profile" class="w-10 h-10 object-cover rounded-full" />
                         <span>{{ Auth::user()->name }}</span>
                         <i class="bi bi-chevron-down text-gray-500 hover:text-[#ADFF2F] text-sm"></i>
                     </button>
@@ -163,7 +163,7 @@
                 {{-- 👤 Bagian Auth --}}
                 @auth
                 <div class="flex items-center gap-3 border-b pb-3">
-                    <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}" alt="Avatar"
+                    <img src="{{ Auth::user()->profile_photo_url }}" alt="Avatar"
                         class="w-10 h-10 rounded-full border border-green-400" />
                     <div>
                         <p class="text-gray-800 font-semibold">{{ Auth::user()->name }}</p>
