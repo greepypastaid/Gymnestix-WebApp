@@ -117,6 +117,25 @@ class ClassController extends Controller
         return view('member.classes.index', compact('classes'));
     }
 
+    public function show(GymClass $class)
+    {
+        $user = Auth::user();
+        $member = $user ? Member::where('user_id', $user->user_id)->first() : null;
+
+        $booking = null;
+        $joined = false;
+        if ($member) {
+            $booking = Booking::where('member_id', $member->member_id)
+                ->where('class_id', $class->class_id)
+                ->first();
+            $joined = (bool) $booking;
+        }
+
+        $bookings_count = $class->bookings()->count();
+
+        return view('member.classes.show', compact('class', 'joined', 'booking', 'bookings_count'));
+    }
+
     public function jadwalku()
 {
     $user = Auth::user();

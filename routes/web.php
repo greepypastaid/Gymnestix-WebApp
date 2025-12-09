@@ -153,6 +153,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified'])->group(
 
 Route::middleware(['auth'])->prefix('member')->name('member.')->group(function () {
     Route::get('/classes', [ClassController::class,'memberClasses'])->name('classes.index');
+    Route::get('/classes/{class}', [ClassController::class, 'show'])->name('classes.show');
     Route::post('/classes/join/{class}', [ClassController::class, 'join'])->name('classes.join');
     Route::get('/jadwalku', [ClassController::class, 'jadwalku'])->name('classes.jadwalku');
 });

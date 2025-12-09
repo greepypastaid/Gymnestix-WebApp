@@ -45,7 +45,7 @@
             --primary: #ADFF2F;
             --primary-hover: #9DE626;
             --bg-dark: #0a0a0a;
-            --bg-card: #141414;
+            --bg-card: #0a0a0a;
             --bg-hover: #1f1f1f;
             --border: #2a2a2a;
             --text-primary: #ffffff;

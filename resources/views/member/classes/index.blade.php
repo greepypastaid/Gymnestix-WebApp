@@ -15,40 +15,47 @@
                     $class = $booking->class;
                 @endphp
 
-                <div class="card-dark p-6 hover:border-[#ADFF2F]/50 transition">
+                <div class="group card-dark bg-[#1a1a1a] rounded-xl p-6 hover:shadow-lg hover:shadow-[#ADFF2F]/5 transition-all">
+                    @if(!empty($class->cover) && file_exists(public_path('storage/' . $class->cover)))
+                        <img src="{{ asset('storage/' . $class->cover) }}" alt="{{ $class->nama_kelas }} cover" class="w-full h-48 object-cover rounded-md mb-4" />
+                    @else
+                        <div class="w-full h-48 rounded-md mb-4 flex items-center justify-center text-neutral-400">
+                        </div>
+                    @endif
+
                     <h2 class="text-xl font-bold text-[#ADFF2F] mb-2">
                         {{ $class->nama_kelas }}
                     </h2>
 
-                    <p class="text-sm text-gray-400 mb-4">
+                    <p class="text-sm text-neutral-300 mb-4">
                         {{ Str::limit($class->deskripsi, 100) }}
                     </p>
 
-                    <div class="flex justify-between text-sm text-gray-400 mb-4">
-                        <div class="flex items-center gap-1">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="flex justify-between text-sm text-neutral-300 mb-4">
+                        <div class="flex items-center gap-2">
+                            <svg class="w-4 h-4 text-neutral-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
-                            {{ \Carbon\Carbon::parse($class->waktu_mulai)->format('H:i') }} - {{ \Carbon\Carbon::parse($class->waktu_selesai)->format('H:i') }}
+                            <span class="leading-4">{{ \Carbon\Carbon::parse($class->waktu_mulai)->format('H:i') }} - {{ \Carbon\Carbon::parse($class->waktu_selesai)->format('H:i') }}</span>
                         </div>
-                        <div>
+                        <div class="leading-4">
                             {{ $class->bookings_count ?? $class->bookings->count() }} / {{ $class->kapasitas }}
                         </div>
                     </div>
 
-                    <div class="bg-[#ADFF2F]/10 border border-[#ADFF2F]/30 rounded-lg p-3 mb-4">
-                        <p class="text-[#ADFF2F] font-medium text-sm flex items-center gap-2">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="bg-[#ADFF2F]/12 border border-[#ADFF2F]/30 rounded-lg p-3 mb-4">
+                        <p class="text-white font-medium text-sm flex items-center gap-2">
+                            <svg class="w-4 h-4 text-[#ADFF2F] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                             </svg>
                             Kamu sudah bergabung
                         </p>
-                        <p class="text-xs text-gray-400 mt-1">
-                            Bergabung pada: <span class="text-white">{{ \Carbon\Carbon::parse($booking->tanggal_booking)->format('d M Y H:i') }}</span>
+                        <p class="text-xs text-neutral-300 mt-1">
+                            Bergabung pada: <span class="text-neutral-100">{{ \Carbon\Carbon::parse($booking->tanggal_booking)->format('d M Y H:i') }}</span>
                         </p>
                     </div>
 
-                    <a href="#" class="block text-center py-2.5 bg-[#1f1f1f] hover:bg-[#2a2a2a] text-white rounded-lg font-medium transition">
+                    <a href="{{ route('member.classes.show', $class) }}" class="w-full justify-center py-2.5 px-4 bg-[#ADFF2F] hover:bg-[#9DE626] text-[#0a0a0a] font-semibold rounded-lg text-center inline-flex items-center gap-2 transition-colors">
                         Lihat Detail Kelas
                     </a>
                 </div>
