@@ -21,7 +21,12 @@ use App\Http\Controllers\Admin\ScheduleAssignmentController;
 
 Route::get('/', function () {
     $membershipPlans = MembershipPlan::all();
-    $classes = \App\Models\GymClass::all();
+    // Pass top 4 classes ordered by number of bookings (most participants first)
+    $classes = \App\Models\GymClass::withCount('bookings')
+                ->orderByDesc('bookings_count')
+                ->take(4)
+                ->get();
+
     return view('welcome', compact('membershipPlans', 'classes'));
 })->name('home');
 

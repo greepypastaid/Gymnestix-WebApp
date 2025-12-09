@@ -9,11 +9,21 @@
 
         <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6">
             @forelse ($classes as $c)
-            @break($loop->index >= 4)
             <div class="group relative h-[250px] md:h-[420px] rounded-2xl overflow-hidden cursor-pointer bg-neutral-800">
                 <div class="absolute inset-0">
-                    <img src="{{ $c->image_url ?? asset('images/default_class.jpg') }}" 
-                         alt="{{ $c->nama_kelas }}" 
+                    @php
+                        // Prefer stored cover (public disk), then fallback to image_url, then to default
+                        $cover = null;
+                        if (!empty($c->cover) && file_exists(public_path('storage/' . $c->cover))) {
+                            $cover = asset('storage/' . $c->cover);
+                        } elseif (!empty($c->image_url)) {
+                            $cover = $c->image_url;
+                        } else {
+                            $cover = asset('images/default_class.jpg');
+                        }
+                    @endphp
+                    <img src="{{ $cover }}" 
+                         alt="{{ $c->nama_kelas ?? $c->nama }}" 
                          class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                     <div class="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent"></div>
                 </div>
