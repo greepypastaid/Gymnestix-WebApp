@@ -2,15 +2,15 @@
 
 @section('content')
 <div class="py-12 bg-black min-h-screen">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         <!-- Header with Action -->
-        <div class="flex justify-between items-center">
+        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
             <div>
-                <h1 class="text-3xl font-bold text-white">Schedule & Trainer Assignment</h1>
-                <p class="mt-1 text-neutral-400">Assign trainers to class schedules</p>
+                <h1 class="text-2xl sm:text-3xl font-bold text-white">Schedule & Trainer Assignment</h1>
+                <p class="mt-1 text-sm sm:text-base text-neutral-400">Assign trainers to class schedules</p>
             </div>
             <a href="{{ route('admin.assignments.create') }}"
-               class="inline-flex items-center px-6 py-3 bg-[#ADFF2F] hover:bg-[#9FE529] text-black font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200">
+               class="inline-flex items-center justify-center px-6 py-3 bg-[#ADFF2F] hover:bg-[#9FE529] text-black font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 w-full sm:w-auto">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                 </svg>
@@ -34,9 +34,44 @@
             </form>
         </div>
 
-        <!-- Schedules Table -->
+        <!-- Schedules Table / Mobile List -->
         <div class="bg-neutral-800 rounded-2xl shadow-2xl overflow-hidden border border-neutral-700">
-            <div class="overflow-x-auto">
+            <!-- Mobile: stacked schedule cards -->
+            <div class="md:hidden p-4 space-y-4">
+                @forelse($schedules as $s)
+                    <div class="bg-neutral-900/40 p-4 rounded-lg border border-neutral-700">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <div class="text-sm font-semibold text-white">{{ $s->class_name }}</div>
+                                <div class="text-xs text-neutral-300">{{ $s->class_date->format('d M Y') }} • {{ $s->start_time->format('H:i') }}–{{ $s->end_time->format('H:i') }}</div>
+                            </div>
+                            <div class="text-xs">
+                                @if(optional($s->assignments->first()?->trainer)->nama)
+                                    <div class="flex items-center">
+                                        <div class="w-8 h-8 rounded-full flex items-center justify-center mr-2" style="background: linear-gradient(135deg, #ADFF2F 0%, #7CB518 100%);">
+                                            <span class="text-black font-bold text-xs">{{ substr(optional($s->assignments->first()?->trainer)->nama, 0, 1) }}</span>
+                                        </div>
+                                    </div>
+                                @else
+                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-orange-600/20 text-orange-400">Not assigned</span>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="mt-3 flex flex-col space-y-2">
+                            <a href="{{ route('admin.assignments.edit', $s) }}" class="w-full text-center px-4 py-2 bg-[#ADFF2F] hover:bg-[#9FE529] text-black text-sm font-semibold rounded-lg">Assign / Edit</a>
+                            <form action="{{ route('admin.assignments.destroy', $s) }}" method="post" onsubmit="return confirm('Delete schedule?')">
+                                @csrf @method('DELETE')
+                                <button type="submit" class="w-full text-center px-4 py-2 bg-red-600/90 hover:bg-red-600 text-white text-sm font-semibold rounded-lg">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                @empty
+                    <div class="p-4 text-center text-neutral-400">No schedules found</div>
+                @endforelse
+            </div>
+
+            <!-- Desktop: table -->
+            <div class="hidden md:block overflow-x-auto">
                 <table class="min-w-full divide-y divide-neutral-700">
                     <thead class="bg-neutral-900/50">
                         <tr>

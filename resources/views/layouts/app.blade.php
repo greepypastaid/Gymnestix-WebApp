@@ -137,7 +137,7 @@
 <body class="font-sans antialiased bg-black text-white"> 
     <div class="min-h-screen bg-black"> 
         @include('layouts.navigation')
-        <main class="md:ml-64 pt-16">
+        <main class="pt-16 md:ml-64">
             @isset($slot)
             {{ $slot }}
             @endisset

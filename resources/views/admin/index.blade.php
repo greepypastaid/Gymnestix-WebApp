@@ -1,14 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="py-12 bg-black min-h-screen">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-8">
+<div class="py-6 sm:py-12 bg-black min-h-screen">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4 sm:space-y-8">
         <!-- Success Message -->
         @if(session('success'))
-            <div class="bg-neutral-800 p-6 border-l-4 border-[#ADFF2F] rounded-2xl text-white shadow-xl">
+            <div class="bg-neutral-800 p-3 sm:p-6 border-l-4 border-[#ADFF2F] rounded-lg sm:rounded-2xl text-white shadow-xl">
                 <div class="flex items-center">
-                    <div class="w-12 h-12 rounded-xl flex items-center justify-center mr-4" style="background: rgba(173,255,47,0.1);">
-                        <svg class="w-6 h-6" style="color:#ADFF2F;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-8 h-8 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl flex items-center justify-center mr-3 sm:mr-4" style="background: rgba(173,255,47,0.1);">
+                        <svg class="w-4 h-4 sm:w-6 sm:h-6" style="color:#ADFF2F;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
                     </div>
@@ -18,13 +18,13 @@
         @endif
 
         <!-- Header with Action -->
-        <div class="flex justify-between items-center">
+        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 sm:gap-4">
             <div>
-                <h1 class="text-3xl font-bold text-white">User Management</h1>
-                <p class="mt-1 text-neutral-400">Manage all system users and members</p>
+                <h1 class="text-xl sm:text-3xl font-bold text-white">User Management</h1>
+                <p class="mt-0.5 sm:mt-1 text-xs sm:text-base text-neutral-400">Manage all system users and members</p>
             </div>
             <a href="{{ route('admin.create') }}"
-               class="inline-flex items-center px-6 py-3 bg-[#ADFF2F] hover:bg-[#9FE529] text-black font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200">
+               class="inline-flex items-center justify-center px-4 sm:px-6 py-2 sm:py-3 bg-[#ADFF2F] hover:bg-[#9FE529] text-black text-sm sm:text-base font-semibold rounded-lg sm:rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 w-full sm:w-auto">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                 </svg>
@@ -32,9 +32,38 @@
             </a>
         </div>
 
-        <!-- Users Table -->
-        <div class="bg-neutral-800 rounded-2xl shadow-2xl overflow-hidden border border-neutral-700">
-            <div class="overflow-x-auto">
+        <!-- Users Table (desktop) & Mobile Cards -->
+        <div class="bg-neutral-800 rounded-lg sm:rounded-2xl shadow-2xl overflow-hidden border border-neutral-700">
+            <!-- Mobile: stacked cards -->
+            <div class="md:hidden space-y-3 p-3">
+                @foreach($users as $user)
+                    <div class="bg-neutral-900/40 p-3 rounded-lg border border-neutral-700">
+                        <div class="flex items-start justify-between">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-full flex items-center justify-center mr-2.5" style="background: linear-gradient(135deg, #ADFF2F 0%, #7CB518 100%);">
+                                    <span class="text-black font-bold text-xs">{{ substr($user->nama, 0, 1) }}</span>
+                                </div>
+                                <div>
+                                    <div class="text-sm font-semibold text-white leading-tight">{{ $user->nama }}</div>
+                                    <div class="text-xs text-neutral-400 mt-0.5">{{ $user->email }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-2.5 flex gap-1.5">
+                            <a href="{{ route('admin.show', $user->user_id) }}" class="flex-1 text-center px-2.5 py-1.5 bg-neutral-700 hover:bg-neutral-600 text-white text-xs font-medium rounded-md transition">Detail</a>
+                            <a href="{{ route('admin.edit', $user->user_id) }}" class="flex-1 text-center px-2.5 py-1.5 bg-[#ADFF2F] hover:bg-[#9FE529] text-black text-xs font-semibold rounded-md transition">Edit</a>
+                            <form action="{{ route('admin.destroy', $user->user_id) }}" method="POST" onsubmit="return confirm('Yakin hapus user?')" class="flex-1">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="w-full text-center px-2.5 py-1.5 bg-red-600/90 hover:bg-red-600 text-white text-xs font-semibold rounded-md transition">Hapus</button>
+                            </form>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+
+            <!-- Desktop: table view -->
+            <div class="hidden md:block overflow-x-auto">
                 <table class="min-w-full divide-y divide-neutral-700">
                     <thead class="bg-neutral-900/50">
                         <tr>

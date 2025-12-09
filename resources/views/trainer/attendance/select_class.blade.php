@@ -5,8 +5,8 @@
         </h2>
     </x-slot>
 
-    <div class="py-12 bg-black min-h-screen">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+    <div class="py-6 sm:py-12 bg-black min-h-screen">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4 sm:space-y-8">
             {{-- Header --}}
             <div class="flex justify-between items-center">
                 <div>

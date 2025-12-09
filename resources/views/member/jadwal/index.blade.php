@@ -3,14 +3,14 @@
 @section('title', 'Jadwalku')
 
 @section('content')
-<div class="max-w-5xl mx-auto py-10 px-6 my-10">
+<div class="max-w-5xl mx-auto py-10 px-4 sm:px-6 lg:px-8 my-10">
 
-    <h1 class="text-3xl font-bold text-neutral-200  mb-6">
+    <h1 class="text-2xl sm:text-3xl font-bold text-neutral-200 mb-6">
         Jadwal Kelas – {{ $month->translatedFormat('F Y') }}
     </h1>
 
     {{-- Kalender --}}
-    <div class="grid grid-cols-7 gap-4 text-center font-semibold text-neutral-300  mb-4">
+    <div class="grid grid-cols-7 gap-2 sm:gap-4 text-center text-xs sm:text-sm font-semibold text-neutral-300 mb-4">
         <div>Min</div><div>Sen</div><div>Sel</div><div>Rab</div><div>Kam</div><div>Jum</div><div>Sab</div>
     </div>
 
@@ -21,11 +21,11 @@
         $eventsByDate = collect($events)->groupBy('date');
     @endphp
 
-    <div class="grid grid-cols-7 gap-3">
+    <div class="grid grid-cols-7 gap-2 sm:gap-3">
         @foreach ($period as $day)
-            <div class="border rounded-lg p-3 {{ $day->isCurrentDay() ? 'bg-green-300 border-green-400' : 'bg-gray-600' }}">
+            <div class="border rounded-lg p-1.5 sm:p-3 {{ $day->isCurrentDay() ? 'bg-green-300 border-green-400' : 'bg-gray-600' }}">
                 
-                <div class="text-sm font-semibold {{ $day->month !== $month->month ? 'text-gray-400' : 'text-gray-800' }}">
+                <div class="text-xs sm:text-sm font-semibold {{ $day->month !== $month->month ? 'text-gray-400' : 'text-gray-800' }}">
                     {{ $day->format('d') }}
                 </div>
 

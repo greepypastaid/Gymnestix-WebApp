@@ -5,16 +5,16 @@
         </h2>
     </x-slot>
 
-    <div class="py-12 bg-black min-h-screen">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+    <div class="py-6 sm:py-12 bg-black min-h-screen">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4 sm:space-y-8">
             {{-- Header --}}
-            <div class="flex justify-between items-center">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h1 class="text-3xl font-bold text-white">Attendance History</h1>
+                    <h1 class="text-2xl sm:text-3xl font-bold text-white">Attendance History</h1>
                     <p class="mt-1 text-neutral-400">View all attendance records</p>
                 </div>
                 <a href="{{ route('trainer.attendance.select-class') }}"
-                   class="px-6 py-3 rounded-lg font-semibold text-black hover:bg-[#9FE529] inline-flex items-center space-x-2 transition-all duration-200" style="background-color:#ADFF2F;">
+                   class="w-full sm:w-auto px-6 py-3 rounded-lg font-semibold text-black hover:bg-[#9FE529] inline-flex items-center justify-center space-x-2 transition-all duration-200" style="background-color:#ADFF2F;">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                     </svg>
@@ -24,7 +24,31 @@
 
             {{-- Attendance Table --}}
             <div class="bg-neutral-800 shadow sm:rounded-lg overflow-hidden border border-white">
-                <div class="overflow-x-auto">
+                <!-- Mobile: cards -->
+                <div class="md:hidden p-4 space-y-4">
+                    @forelse($attendances as $attendance)
+                        <div class="bg-neutral-900/40 p-4 rounded-lg border border-neutral-700">
+                            <div class="flex items-center justify-between mb-3">
+                                <div>
+                                    <div class="text-sm font-semibold text-white">{{ $attendance->member->user->nama }}</div>
+                                    <div class="text-xs text-neutral-400">{{ $attendance->tanggal->format('Y-m-d') }} • {{ $attendance->class->nama_kelas }}</div>
+                                </div>
+                                <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full {{ $attendance->status === 'hadir' ? 'bg-[#ADFF2F] text-black' : ($attendance->status === 'izin' ? 'bg-yellow-500 text-white' : ($attendance->status === 'sakit' ? 'bg-orange-500 text-white' : 'bg-red-600 text-white')) }}">{{ ucfirst($attendance->status) }}</span>
+                            </div>
+                            <div class="text-xs text-neutral-400">
+                                <div>Time: {{ $attendance->waktu_masuk->format('H:i') }} - {{ $attendance->waktu_keluar->format('H:i') }}</div>
+                                @if($attendance->catatan)
+                                    <div class="mt-1">Notes: {{ $attendance->catatan }}</div>
+                                @endif
+                            </div>
+                        </div>
+                    @empty
+                        <div class="text-center py-6 text-neutral-400">No attendance records found.</div>
+                    @endforelse
+                </div>
+
+                <!-- Desktop: table -->
+                <div class="hidden md:block overflow-x-auto">
                     <table class="min-w-full divide-y divide-neutral-700">
                         <thead class="bg-neutral-900/50">
                             <tr>

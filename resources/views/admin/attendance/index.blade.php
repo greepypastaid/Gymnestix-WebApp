@@ -2,21 +2,21 @@
 
 @section('content')
 <div class="py-12 bg-black">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="bg-neutral-800 p-6 shadow sm:rounded-lg text-white">
 
             {{-- Header --}}
-            <div class="flex items-center justify-between mb-6">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
                 <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center" style="color:#ADFF2F;">
+                    <div class="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center flex-shrink-0" style="color:#ADFF2F;">
                         <i class="bi bi-clipboard-check"></i>
                     </div>
                     <div>
-                        <h2 class="text-xl font-semibold text-white mb-0">Attendance</h2>
-                        <p class="text-neutral-400 text-sm">Track member attendance & manage records</p>
+                        <h2 class="text-lg sm:text-xl font-semibold text-white mb-0">Attendance</h2>
+                        <p class="text-neutral-400 text-xs sm:text-sm hidden sm:block">Track member attendance & manage records</p>
                     </div>
                 </div>
-                <a href="{{ route('admin.attendance.create') }}" class="px-4 py-2 rounded-md text-black font-medium" style="background-color:#ADFF2F;">
+                <a href="{{ route('admin.attendance.create') }}" class="w-full sm:w-auto px-4 py-2 rounded-md text-black font-medium flex items-center justify-center" style="background-color:#ADFF2F;">
                     <i class="bi bi-plus-lg me-1"></i> Record Attendance
                 </a>
             </div>
@@ -64,9 +64,42 @@
                 </form>
             </div>
 
-            {{-- Table Section --}}
+            {{-- Table Section / Mobile List --}}
             <div class="bg-neutral-800 rounded-2xl shadow-2xl overflow-hidden border border-neutral-700">
-                <div class="overflow-x-auto">
+                <!-- Mobile: cards -->
+                <div class="md:hidden p-4 space-y-4">
+                    @forelse($attendances as $a)
+                        <div class="bg-neutral-900/40 p-4 rounded-lg border border-neutral-700">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <div class="text-sm font-semibold text-white">{{ $a->user->nama }}</div>
+                                    <div class="text-xs text-neutral-300">{{ $a->attendance_date->format('d M Y') }} • {{ $a->schedule?->class_name ?? '—' }}</div>
+                                </div>
+                                <div>
+                                    @if($a->status === 'present')
+                                        <span class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full bg-[#ADFF2F] text-black">Present</span>
+                                    @elseif($a->status === 'late')
+                                        <span class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full bg-yellow-600/20 text-yellow-400">Late</span>
+                                    @else
+                                        <span class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full bg-neutral-700 text-neutral-400">{{ ucfirst($a->status) }}</span>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="mt-3 flex flex-col space-y-2">
+                                <a href="{{ route('admin.attendance.edit', $a) }}" class="w-full text-center px-4 py-2 bg-[#ADFF2F] hover:bg-[#9FE529] text-black text-sm font-semibold rounded-lg">Edit</a>
+                                <form action="{{ route('admin.attendance.destroy', $a) }}" method="post" onsubmit="return confirm('Delete this record?')">
+                                    @csrf @method('DELETE')
+                                    <button type="submit" class="w-full text-center px-4 py-2 bg-red-600/90 hover:bg-red-600 text-white text-sm font-semibold rounded-lg">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="p-4 text-center text-neutral-400">No attendance records</div>
+                    @endforelse
+                </div>
+
+                <!-- Desktop: table -->
+                <div class="hidden md:block overflow-x-auto">
                     <table class="min-w-full divide-y divide-neutral-700">
                         <thead class="bg-neutral-900/50">
                             <tr>

@@ -1,4 +1,4 @@
-<nav id="site-navbar" class="fixed w-full top-0 z-50 px-2 bg-black md:bg-transparent transition-colors duration-300 ease-in-out">
+<nav id="site-navbar" class="fixed w-full top-0 z-50 px-2 bg-transparent backdrop-blur-lg transition-all duration-300 ease-in-out">
     <div class="max-w-7xl mx-auto">
         <div class="flex justify-between h-16 items-center">
             {{-- Logo --}}
@@ -132,7 +132,7 @@
 
         {{-- 🌿 Mobile Menu (Hijau, Modern & Fresh) --}}
         <div id="mobile-menu"
-            class="md:hidden hidden border-t border-gray-800 bg-black/0 shadow-lg transition-all duration-300 ease-in-out overflow-hidden rounded-b-2xl">
+            class="md:hidden hidden border-t border-gray-800 bg-black/95 backdrop-blur-lg shadow-lg transition-all duration-300 ease-in-out overflow-hidden rounded-b-2xl">
             <div class="px-5 py-5 space-y-4">
                 {{-- 🔗 Navigasi Utama --}}
                 <div class="flex flex-col gap-3">
@@ -235,47 +235,40 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Navbar transparency logic:
+    // Navbar transparency logic for all screen sizes
     const navbar = document.getElementById('site-navbar');
     const SCROLL_THRESHOLD = 30; // pixel threshold untuk berubah
-    const DESKTOP_BREAKPOINT = 768; // md: 768px
-
-    function isDesktop() {
-        return window.innerWidth >= DESKTOP_BREAKPOINT;
-    }
 
     function applySolid() {
         if (!navbar) return;
-        // Solid background (full black) + shadow + blur for readability
-        navbar.classList.add('bg-black', 'bg-opacity-100', 'shadow-md', 'backdrop-blur-sm');
-        // Remove any "transparent" variants
-        navbar.classList.remove('bg-transparent', 'bg-black/10', 'bg-opacity-10');
-        // Mobile menu should be solid on mobile or when navbar is solid
+        // Solid background (full black) + shadow
+        navbar.classList.remove('bg-transparent', 'backdrop-blur-lg');
+        navbar.classList.add('bg-black', 'shadow-lg');
+        
+        // Mobile menu juga solid
         if (menu) {
-            menu.classList.add('bg-black', 'bg-opacity-100');
-            menu.classList.remove('bg-black/0');
+            menu.classList.remove('bg-black/95');
+            menu.classList.add('bg-black');
         }
     }
 
     function applyTransparent() {
         if (!navbar) return;
-        navbar.classList.remove('bg-black', 'bg-opacity-100', 'shadow-md');
-        navbar.classList.add('bg-black', 'backdrop-blur-lg');
+        // Transparent + blur effect
+        navbar.classList.remove('bg-black', 'shadow-lg');
+        navbar.classList.add('bg-transparent', 'backdrop-blur-lg');
 
+        // Mobile menu tetap semi-transparent
         if (menu) {
-            menu.classList.remove('bg-black', 'bg-opacity-100');
-            menu.classList.add('bg-black/100');
+            menu.classList.remove('bg-black');
+            menu.classList.add('bg-black/95');
         }
     }
 
     function updateNavbarState() {
         if (!navbar) return;
 
-        if (!isDesktop()) {
-            applySolid();
-            return;
-        }
-
+        // Berlaku untuk semua ukuran layar
         if (window.scrollY > SCROLL_THRESHOLD) {
             applySolid();
         } else {
@@ -283,9 +276,13 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    // Initial state
     updateNavbarState();
+    
+    // Update on scroll
     window.addEventListener('scroll', updateNavbarState, { passive: true });
 
+    // Update on resize (untuk memastikan konsistensi)
     let resizeTimer;
     window.addEventListener('resize', () => {
         clearTimeout(resizeTimer);

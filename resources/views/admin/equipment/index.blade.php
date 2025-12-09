@@ -1,25 +1,25 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="py-12 bg-black">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+<div class="py-6 sm:py-12 bg-black">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {{-- Header --}}
-        <div class="bg-neutral-800 p-6 shadow sm:rounded-lg mb-6">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-4">
-                    <div class="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center" style="color:#ADFF2F;">
+        <div class="bg-neutral-800 p-3 sm:p-6 shadow sm:rounded-lg mb-4 sm:mb-6">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div class="flex items-center space-x-3 sm:space-x-4">
+                    <div class="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center flex-shrink-0" style="color:#ADFF2F;">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                         </svg>
                     </div>
                     <div>
-                        <h1 class="text-2xl font-bold text-white">Equipment Management</h1>
-                        <p class="text-neutral-400">Manage gym equipment data</p>
+                        <h1 class="text-xl sm:text-2xl font-bold text-white">Equipment Management</h1>
+                        <p class="text-sm text-neutral-400 hidden sm:block">Manage gym equipment data</p>
                     </div>
                 </div>
                 @can('equipment.manage')
-                <a href="{{ route('admin.equipment.create') }}" class="px-4 py-2 rounded-lg font-medium flex items-center space-x-2 text-black" style="background-color:#ADFF2F;">
+                <a href="{{ route('admin.equipment.create') }}" class="w-full sm:w-auto px-4 py-2 rounded-lg font-medium flex items-center justify-center space-x-2 text-black" style="background-color:#ADFF2F;">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                     </svg>
@@ -78,10 +78,41 @@
             </form>
         </div>
 
-        {{-- Table --}}
+        {{-- Table / Mobile List --}}
         <div class="bg-neutral-800 shadow sm:rounded-lg overflow-hidden border border-white">
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-neutral-600">
+          <!-- Mobile: list cards -->
+          <div class="md:hidden p-3 space-y-3">
+            @forelse($rows as $r)
+              <div class="bg-neutral-900/40 p-3 rounded-lg border border-neutral-700">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <div class="text-sm font-semibold text-white leading-tight">{{ $r->nama_alat }}</div>
+                    <div class="text-xs text-neutral-300 mt-0.5">{{ $r->tanggal_pembelian?->format('d M Y') ?? '—' }}</div>
+                  </div>
+                  <div>
+                    <span class="inline-flex px-2 py-0.5 text-xs font-semibold rounded-full {{ $r->kondisi == 'baik' ? 'bg-[#ADFF2F] text-black' : ($r->kondisi == 'rusak' ? 'bg-red-600/90 text-white' : 'bg-neutral-700 text-neutral-300') }}">{{ $r->kondisi ?: '—' }}</span>
+                  </div>
+                </div>
+                <div class="mt-2.5 flex gap-1.5">
+                  @can('equipment.manage')
+                    <a href="{{ route('admin.equipment.edit', $r->equipment_id) }}" class="flex-1 text-center px-2.5 py-1.5 bg-[#ADFF2F] hover:bg-[#9FE529] text-black text-xs font-semibold rounded-md">Edit</a>
+                    <form action="{{ route('admin.equipment.destroy', $r->equipment_id) }}" method="post" onsubmit="return confirm('Are you sure you want to delete this equipment?')" class="flex-1">
+                      @csrf @method('DELETE')
+                      <button type="submit" class="w-full text-center px-2.5 py-1.5 bg-red-600/90 hover:bg-red-600 text-white text-xs font-semibold rounded-md">Delete</button>
+                    </form>
+                  @else
+                    <span class="text-neutral-400 text-xs">No actions</span>
+                  @endcan
+                </div>
+              </div>
+            @empty
+              <div class="p-4 text-center text-neutral-400">No equipment found</div>
+            @endforelse
+          </div>
+
+          <!-- Desktop: table -->
+          <div class="hidden md:block overflow-x-auto">
+            <table class="min-w-full divide-y divide-neutral-600">
                     <thead class="bg-neutral-700">
                         <tr>
                             <th class="px-6 py-3 text-left text-xs font-medium text-neutral-300 uppercase tracking-wider">Equipment Name</th>
@@ -173,11 +204,11 @@
         </table>
       </div>
 
-      @if($rows->hasPages())
-      <div class="px-6 py-5 border-t border-neutral-700 bg-neutral-900/30">
-        {{ $rows->links() }}
-      </div>
-      @endif
+            @if($rows->hasPages())
+                <div class="px-6 py-5 border-t border-neutral-700 bg-neutral-900/30">
+                    {{ $rows->links() }}
+                </div>
+            @endif
     </div>
   </div>
 </div>

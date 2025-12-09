@@ -5,8 +5,8 @@
         </h2>
     </x-slot>
 
-    <div class="py-12 bg-black min-h-screen">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-8">
+    <div class="py-6 sm:py-12 bg-black min-h-screen">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4 sm:space-y-8">
             <!-- Success Message -->
             @if(session('success'))
                 <div class="bg-neutral-800 p-6 border-l-4 border-[#ADFF2F] rounded-2xl text-white shadow-xl">
@@ -30,7 +30,29 @@
             <!-- Equipment List -->
             <div class="bg-neutral-800 rounded-2xl shadow-2xl overflow-hidden border border-neutral-700">
                 @if($equipments->count())
-                    <div class="overflow-x-auto">
+                    <!-- Mobile: cards -->
+                    <div class="md:hidden p-4 space-y-4">
+                        @foreach($equipments as $equipment)
+                            <div class="bg-neutral-900/40 p-4 rounded-lg border border-neutral-700">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="text-sm font-semibold text-white">{{ $equipment->nama_alat }}</div>
+                                    <span class="inline-flex px-3 py-1 text-xs font-semibold rounded-full {{ $equipment->kondisi == 'Baik' ? 'bg-[#ADFF2F] text-black' : 'bg-red-600 text-white' }}">{{ $equipment->kondisi }}</span>
+                                </div>
+                                <div class="text-xs text-neutral-400 mb-3">
+                                    <div>Purchase: {{ $equipment->tanggal_pembelian->format('d M Y') }}</div>
+                                    <div>Maintenance: {{ $equipment->jadwal_perawatan->format('d M Y') }}</div>
+                                </div>
+                                @if($equipment->kondisi == 'Baik')
+                                    <button onclick="reportEquipment('{{ $equipment->equipment_id }}', '{{ $equipment->nama_alat }}')" class="w-full px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white text-sm font-medium rounded-lg">Report Issue</button>
+                                @else
+                                    <div class="w-full px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-lg text-center">Already Reported</div>
+                                @endif
+                            </div>
+                        @endforeach
+                    </div>
+
+                    <!-- Desktop: table -->
+                    <div class="hidden md:block overflow-x-auto">
                         <table class="min-w-full divide-y divide-neutral-700">
                             <thead class="bg-neutral-900/50">
                                 <tr>

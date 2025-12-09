@@ -5,8 +5,8 @@
         </h2>
     </x-slot>
 
-    <div class="py-12 bg-black min-h-screen">
-        <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
+    <div class="py-6 sm:py-12 bg-black min-h-screen">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4 sm:space-y-8">
             {{-- Header --}}
             <div class="bg-neutral-800 p-6 shadow sm:rounded-lg mb-6">
                 <div class="flex items-center justify-between">
@@ -95,14 +95,14 @@
                         <p class="text-xs text-neutral-400 mt-1">Unggah untuk mengganti cover. Maks 2MB.</p>
                     </div>
 
-                    <div class="mt-8 flex items-center space-x-4">
-                        <button type="submit" class="px-6 py-2 rounded-lg font-medium flex items-center space-x-2 text-black hover:bg-[#9FE529] transition-all duration-200" style="background-color:#ADFF2F;">
+                    <div class="mt-8 flex flex-col sm:flex-row sm:items-center sm:space-x-4 space-y-3 sm:space-y-0">
+                        <button type="submit" class="w-full sm:w-auto px-6 py-2 rounded-lg font-medium flex items-center justify-center sm:justify-start space-x-2 text-black hover:bg-[#9FE529] transition-all duration-200" style="background-color:#ADFF2F;">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                             </svg>
                             <span>Update Class</span>
                         </button>
-                        <a href="{{ route('trainer.classes.index') }}" class="px-6 py-2 bg-neutral-600 text-white rounded-lg hover:bg-neutral-500 font-medium transition duration-200">Cancel</a>
+                        <a href="{{ route('trainer.classes.index') }}" class="w-full sm:w-auto text-center px-6 py-2 bg-neutral-600 text-white rounded-lg hover:bg-neutral-500 font-medium transition duration-200">Cancel</a>
                     </div>
                 </form>
             </div>
