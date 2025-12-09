@@ -57,4 +57,17 @@ class Attendance extends Model
     {
         return $this->belongsTo(GymClass::class, 'class_id', 'class_id');
     }
+
+    public function user()
+    {
+        // Menghubungkan member_id langsung ke tabel User
+        // Agar controller bisa memanggil $attendance->user
+        return $this->belongsTo(User::class, 'member_id');
+    }
+
+    public function schedule()
+    {
+        // Menghubungkan ke GymClass menggunakan class_id
+        return $this->belongsTo(GymClass::class, 'class_id', 'class_id');
+    }
 }
