@@ -55,7 +55,9 @@
 
                     <div>
                         <label class="block text-sm font-medium text-white mb-2">Date</label>
-                        <input type="date" name="attendance_date" class="block w-full px-3 py-2 border border-neutral-600 rounded-lg shadow-sm bg-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-[#ADFF2F] focus:border-[#ADFF2F]" value="{{ old('attendance_date', isset($attendance) ? $attendance->attendance_date->format('Y-m-d') : '') }}" required>
+                        {{-- REVISI PENTING DI SINI: Pakai tanda tanya (?->) --}}
+                        <input type="date" name="attendance_date" class="block w-full px-3 py-2 border border-neutral-600 rounded-lg shadow-sm bg-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-[#ADFF2F] focus:border-[#ADFF2F]" 
+                               value="{{ old('attendance_date', $attendance->attendance_date?->format('Y-m-d') ?? '') }}" required>
                     </div>
 
                     <div>
@@ -71,25 +73,47 @@
 
                     <div>
                         <label class="block text-sm font-medium text-white mb-2">Check-in</label>
-                        <input type="datetime-local" name="check_in_at" class="block w-full px-3 py-2 border border-neutral-600 rounded-lg shadow-sm bg-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-[#ADFF2F] focus:border-[#ADFF2F]" value="{{ old('check_in_at', isset($attendance)&&$attendance->check_in_at ? $attendance->check_in_at->format('Y-m-d\TH:i') : '') }}">
+                        {{-- REVISI: Pakai tanda tanya (?->) --}}
+                        <input type="datetime-local" name="check_in_at" class="block w-full px-3 py-2 border border-neutral-600 rounded-lg shadow-sm bg-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-[#ADFF2F] focus:border-[#ADFF2F]" 
+                               value="{{ old('check_in_at', $attendance->check_in_at?->format('Y-m-d\TH:i') ?? '') }}">
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-white mb-2">Check-out</label>
-                        <input type="datetime-local" name="check_out_at" class="block w-full px-3 py-2 border border-neutral-600 rounded-lg shadow-sm bg-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-[#ADFF2F] focus:border-[#ADFF2F]" value="{{ old('check_out_at', isset($attendance)&&$attendance->check_out_at ? $attendance->check_out_at->format('Y-m-d\TH:i') : '') }}">
+                        {{-- REVISI: Pakai tanda tanya (?->) --}}
+                        <input type="datetime-local" name="check_out_at" class="block w-full px-3 py-2 border border-neutral-600 rounded-lg shadow-sm bg-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-[#ADFF2F] focus:border-[#ADFF2F]" 
+                               value="{{ old('check_out_at', $attendance->check_out_at?->format('Y-m-d\TH:i') ?? '') }}">
                     </div>
                 </div>
 
                 <div>
                     <label class="block text-sm font-medium text-white mb-2">Class (optional)</label>
+                    @php
+                        $selected = old('class_schedule_id', ($attendance->class_id ? 'class:'.$attendance->class_id : ($attendance->class_schedule_id ? 'schedule:'.$attendance->class_schedule_id : '')));
+                    @endphp
                     <select name="class_schedule_id" class="block w-full px-3 py-2 border border-neutral-600 rounded-lg shadow-sm bg-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-[#ADFF2F] focus:border-[#ADFF2F]">
                         <option value="">— None —</option>
-                        @foreach($schedules as $s)
-                            <option value="{{ $s->id }}" @selected(old('class_schedule_id', $attendance->class_schedule_id ?? '') == $s->id)>
-                                {{ $s->class_name }} — {{ \Illuminate\Support\Carbon::parse($s->class_date)->format('d M Y') }}
-                                ({{ \Illuminate\Support\Carbon::parse($s->start_time)->format('H:i') }}–{{ \Illuminate\Support\Carbon::parse($s->end_time)->format('H:i') }})
-                            </option>
-                        @endforeach
+
+                        @if(!empty($classes))
+                            <optgroup label="Classes">
+                                @foreach($classes as $c)
+                                    <option value="class:{{ $c->class_id }}" @selected($selected == 'class:'.$c->class_id)>
+                                        {{ $c->nama_kelas }} — {{ \Illuminate\Support\Carbon::parse($c->waktu_mulai)->format('H:i') }}–{{ \Illuminate\Support\Carbon::parse($c->waktu_selesai)->format('H:i') }}
+                                    </option>
+                                @endforeach
+                            </optgroup>
+                        @endif
+
+                        @if(!empty($schedules))
+                            <optgroup label="Schedules">
+                                @foreach($schedules as $s)
+                                    <option value="schedule:{{ $s->id }}" @selected($selected == 'schedule:'.$s->id)>
+                                        {{ $s->class_name }}
+                                        ({{ \Illuminate\Support\Carbon::parse($s->start_time)->format('H:i') }}–{{ \Illuminate\Support\Carbon::parse($s->end_time)->format('H:i') }})
+                                    </option>
+                                @endforeach
+                            </optgroup>
+                        @endif
                     </select>
                 </div>
 
