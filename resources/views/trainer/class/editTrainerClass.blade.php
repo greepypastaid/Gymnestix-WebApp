@@ -80,6 +80,11 @@
                         <textarea name="deskripsi" id="deskripsi" rows="4" class="block w-full px-3 py-2 border border-neutral-600 rounded-lg shadow-sm bg-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-[#ADFF2F] focus:border-[#ADFF2F]" required placeholder="Enter class description">{{ old('deskripsi', $gymClass->deskripsi) }}</textarea>
                     </div>
 
+                    <div>
+                        <label for="ruangan" class="block text-sm font-medium text-white mb-2">Ruangan / Lokasi</label>
+                        <input type="text" name="ruangan" id="ruangan" class="block w-full px-3 py-2 border border-neutral-600 rounded-lg shadow-sm bg-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-[#ADFF2F] focus:border-[#ADFF2F]" value="{{ old('ruangan', $gymClass->ruangan) }}" placeholder="e.g. Studio A, Gym Hall">
+                    </div>
+
                     <!-- Cover upload -->
                     <div>
                         <label for="cover" class="block text-sm font-medium text-white mb-2">Cover Image (max 2MB)</label>

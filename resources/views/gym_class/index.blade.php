@@ -43,6 +43,9 @@
                                 Schedule
                             </th>
                             <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-neutral-300 uppercase tracking-wider">
+                                Room
+                            </th>
+                            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-neutral-300 uppercase tracking-wider">
                                 Duration
                             </th>
                             <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-neutral-300 uppercase tracking-wider">
@@ -82,6 +85,9 @@
                                         <div class="text-xs text-neutral-500">{{ $class->waktu_selesai }}</div>
                                     </div>
                                 </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-sm text-neutral-300">{{ $class->ruangan ?? '-' }}</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-neutral-700 text-neutral-300">

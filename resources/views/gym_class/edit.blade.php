@@ -83,6 +83,11 @@
                     <textarea name="deskripsi" id="deskripsi" rows="4" class="input-dark w-full" required placeholder="Enter class description">{{ old('deskripsi', $gymClass->deskripsi) }}</textarea>
                 </div>
 
+                <div>
+                    <label for="ruangan" class="block text-sm font-medium text-white mb-2">Ruangan / Lokasi</label>
+                    <input type="text" name="ruangan" id="ruangan" class="input-dark w-full" value="{{ old('ruangan', $gymClass->ruangan) }}" placeholder="e.g. Studio A, Gym Hall">
+                </div>
+
                 <div class="mt-8 flex items-center space-x-4">
                     <button type="submit" class="btn-primary-custom flex items-center gap-2">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -67,6 +67,7 @@
                                     <th>Class Name</th>
                                     <th>Trainer</th>
                                     <th>Schedule</th>
+                                    <th>Room</th>
                                     <th>Duration</th>
                                     <th>Capacity</th>
                                     <th>Actions</th>
@@ -107,6 +108,11 @@
                                                 </svg>
                                                 {{ $class->hari ?? '' }} - {{ \Carbon\Carbon::parse($class->waktu_mulai)->format('H:i') }} - {{ \Carbon\Carbon::parse($class->waktu_selesai)->format('H:i') }}
                                             </div>
+                                        </td>
+                                        <td class="muted">
+                                            <span class="text-sm text-neutral-300">
+                                                {{ $class->ruangan ?? '-' }}
+                                            </span>
                                         </td>
                                         <td class="muted">
                                             <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-neutral-700 text-neutral-300">

@@ -16,6 +16,67 @@
                 </div>
             </div>
 
+            <!-- Statistics Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <!-- Total Members Card -->
+                <div class="card-dark p-6">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="w-12 h-12 rounded-lg bg-[#ADFF2F]/10 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-[#ADFF2F]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                        </div>
+                        <span class="text-xs text-gray-500 uppercase tracking-wider">Total Members</span>
+                    </div>
+                    <div class="text-3xl font-bold text-white mb-1">{{ $stats['total_members'] }}</div>
+                    <p class="text-sm text-gray-400">Member aktif di kelasmu</p>
+                </div>
+
+                <!-- Next Schedule Card -->
+                <div class="card-dark p-6">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="w-12 h-12 rounded-lg bg-[#ADFF2F]/10 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-[#ADFF2F]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <span class="text-xs text-gray-500 uppercase tracking-wider">Jadwal Terdekat</span>
+                    </div>
+                    @if($stats['next_schedule'])
+                        <div class="text-xl font-bold text-white mb-1">{{ ucfirst($stats['next_schedule']->hari) }}</div>
+                        <p class="text-sm text-gray-400">
+                            {{ $stats['next_schedule']->nama_kelas }} • 
+                            {{ \Carbon\Carbon::parse($stats['next_schedule']->waktu_mulai)->format('H:i') }}
+                            @if($stats['next_schedule']->ruangan)
+                                <br><span class="text-xs">📍 {{ $stats['next_schedule']->ruangan }}</span>
+                            @endif
+                        </p>
+                    @else
+                        <div class="text-xl font-bold text-gray-500 mb-1">Tidak ada</div>
+                        <p class="text-sm text-gray-400">Jadwal minggu ini</p>
+                    @endif
+                </div>
+
+                <!-- Most Popular Class Card -->
+                <div class="card-dark p-6">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="w-12 h-12 rounded-lg bg-[#ADFF2F]/10 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-[#ADFF2F]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                            </svg>
+                        </div>
+                        <span class="text-xs text-gray-500 uppercase tracking-wider">Kelas Terpopuler</span>
+                    </div>
+                    @if($stats['top_class'])
+                        <div class="text-xl font-bold text-white mb-1">{{ $stats['top_class']->nama_kelas }}</div>
+                        <p class="text-sm text-gray-400">{{ $stats['top_class_count'] }} peserta terdaftar</p>
+                    @else
+                        <div class="text-xl font-bold text-gray-500 mb-1">Belum ada</div>
+                        <p class="text-sm text-gray-400">Kelas dengan peserta</p>
+                    @endif
+                </div>
+            </div>
+
             <!-- Quick Actions -->
             <div>
                 <h2 class="text-xl font-semibold text-white mb-4">Quick Actions</h2>

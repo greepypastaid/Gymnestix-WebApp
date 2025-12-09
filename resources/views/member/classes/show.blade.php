@@ -25,6 +25,12 @@
                         <div class="text-xs text-neutral-400">Kapasitas</div>
                         <div class="font-medium text-white">{{ $bookings_count }} / {{ $class->kapasitas }}</div>
                     </div>
+                    @if($class->ruangan)
+                        <div class="space-y-2">
+                            <div class="text-xs text-neutral-400">Ruangan</div>
+                            <div class="font-medium text-white">{{ $class->ruangan }}</div>
+                        </div>
+                    @endif
                 </div>
 
                 <div class="mb-4">

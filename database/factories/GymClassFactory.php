@@ -17,10 +17,13 @@ class GymClassFactory extends Factory
      */
     public function definition(): array
     {
+        $ruangans = ['Studio A', 'Studio B', 'Studio C', 'Ruang Fitness', 'Outdoor Arena', 'Gym Hall', 'Yoga Room', 'Cardio Zone'];
+        
         return [
             'trainer_id' => Trainer::all()->random()->trainer_id,
             'nama_kelas' => fake()->word(),
             'deskripsi' => fake()->sentence(),
+            'ruangan' => fake()->randomElement($ruangans),
             'waktu_mulai' => fake()->time('H:i'),
             'waktu_selesai' => fake()->time('H:i'),
             'durasi' => fake()->numberBetween(30, 120),

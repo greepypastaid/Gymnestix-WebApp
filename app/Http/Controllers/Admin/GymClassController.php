@@ -53,6 +53,7 @@ class GymClassController extends Controller
         $request->validate([
             'nama_kelas' => 'required|string|max:255',
             'deskripsi' => 'required|string',
+            'ruangan' => 'nullable|string|max:100',
             'hari' => 'required|string|in:Senin,Selasa,Rabu,Kamis,Jumat,Sabtu,Minggu',
             'waktu_mulai' => 'required|date_format:H:i',
             'waktu_selesai' => 'required|date_format:H:i',
@@ -61,7 +62,7 @@ class GymClassController extends Controller
             'trainer_id' => 'required|exists:trainers,trainer_id',
         ]);
 
-        $data = $request->only(['nama_kelas','deskripsi','hari','waktu_mulai','waktu_selesai','durasi','kapasitas','trainer_id']);
+        $data = $request->only(['nama_kelas','deskripsi','ruangan','hari','waktu_mulai','waktu_selesai','durasi','kapasitas','trainer_id']);
 
         if ($request->hasFile('cover')) {
             $coverPath = $request->file('cover')->store('class-covers', 'public');
@@ -119,6 +120,7 @@ class GymClassController extends Controller
         $request->validate([
             'nama_kelas' => 'required|string|max:255',
             'deskripsi' => 'required|string',
+            'ruangan' => 'nullable|string|max:100',
             'hari' => 'required|string|in:Senin,Selasa,Rabu,Kamis,Jumat,Sabtu,Minggu',
             'waktu_mulai' => 'required|date_format:H:i',
             'waktu_selesai' => 'required|date_format:H:i',
@@ -128,7 +130,7 @@ class GymClassController extends Controller
             'cover' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $data = $request->only(['nama_kelas','deskripsi','hari','waktu_mulai','waktu_selesai','durasi','kapasitas','trainer_id']);
+        $data = $request->only(['nama_kelas','deskripsi','ruangan','hari','waktu_mulai','waktu_selesai','durasi','kapasitas','trainer_id']);
 
         if ($request->hasFile('cover')) {
             if ($gymClass->cover && \Storage::disk('public')->exists($gymClass->cover)) {
