@@ -16,6 +16,93 @@
             </div>
         </div>
 
+        <!-- Statistics Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+            <!-- Total Users -->
+            <div class="card-dark p-6">
+                <div class="flex items-start justify-between mb-3">
+                    <div class="w-12 h-12 rounded-lg bg-[#ADFF2F]/10 flex items-center justify-center">
+                        <svg class="w-6 h-6 text-[#ADFF2F]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                    </div>
+                    <span class="text-xs text-gray-500 uppercase tracking-wider">Total Users</span>
+                </div>
+                <div class="text-3xl font-bold text-white mb-1">{{ number_format($stats['total_users']) }}</div>
+                <p class="text-sm text-gray-400">Registered accounts</p>
+            </div>
+
+            <!-- Active Members -->
+            <div class="card-dark p-6">
+                <div class="flex items-start justify-between mb-3">
+                    <div class="w-12 h-12 rounded-lg bg-[#ADFF2F]/10 flex items-center justify-center">
+                        <svg class="w-6 h-6 text-[#ADFF2F]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <span class="text-xs text-gray-500 uppercase tracking-wider">Active Members</span>
+                </div>
+                <div class="text-3xl font-bold text-white mb-1">{{ number_format($stats['active_members']) }}</div>
+                <p class="text-sm text-gray-400">With valid membership</p>
+            </div>
+
+            <!-- Total Classes -->
+            <div class="card-dark p-6">
+                <div class="flex items-start justify-between mb-3">
+                    <div class="w-12 h-12 rounded-lg bg-[#ADFF2F]/10 flex items-center justify-center">
+                        <svg class="w-6 h-6 text-[#ADFF2F]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <span class="text-xs text-gray-500 uppercase tracking-wider">Total Classes</span>
+                </div>
+                <div class="text-3xl font-bold text-white mb-1">{{ number_format($stats['total_classes']) }}</div>
+                <p class="text-sm text-gray-400">Available schedules</p>
+            </div>
+
+            <!-- Monthly Bookings -->
+            <div class="card-dark p-6">
+                <div class="flex items-start justify-between mb-3">
+                    <div class="w-12 h-12 rounded-lg bg-[#ADFF2F]/10 flex items-center justify-center">
+                        <svg class="w-6 h-6 text-[#ADFF2F]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                        </svg>
+                    </div>
+                    <span class="text-xs text-gray-500 uppercase tracking-wider">Monthly Bookings</span>
+                </div>
+                <div class="text-3xl font-bold text-white mb-1">{{ number_format($stats['monthly_bookings']) }}</div>
+                <p class="text-sm text-gray-400">Class registrations</p>
+            </div>
+
+            <!-- Equipment Issues -->
+            <div class="card-dark p-6">
+                <div class="flex items-start justify-between mb-3">
+                    <div class="w-12 h-12 rounded-lg bg-[#ADFF2F]/10 flex items-center justify-center">
+                        <svg class="w-6 h-6 text-[#ADFF2F]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                    </div>
+                    <span class="text-xs text-gray-500 uppercase tracking-wider">Equipment Issues</span>
+                </div>
+                <div class="text-3xl font-bold text-white mb-1">{{ number_format($stats['equipment_issues']) }}</div>
+                <p class="text-sm text-gray-400">Need maintenance</p>
+            </div>
+
+            <!-- Monthly Revenue -->
+            <div class="card-dark p-6">
+                <div class="flex items-start justify-between mb-3">
+                    <div class="w-12 h-12 rounded-lg bg-[#ADFF2F]/10 flex items-center justify-center">
+                        <svg class="w-6 h-6 text-[#ADFF2F]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <span class="text-xs text-gray-500 uppercase tracking-wider">Monthly Revenue</span>
+                </div>
+                <div class="text-3xl font-bold text-white mb-1">Rp {{ number_format($stats['monthly_revenue'], 0, ',', '.') }}</div>
+                <p class="text-sm text-gray-400">{{ now()->format('F Y') }}</p>
+            </div>
+        </div>
+
         <!-- Quick Access -->
         <div>
             <h2 class="text-xl font-semibold text-white mb-4">Quick Access</h2>

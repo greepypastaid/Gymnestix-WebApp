@@ -42,7 +42,36 @@ class DashboardController extends Controller
             abort(403, 'You do not have permission to access admin dashboard.');
         }
 
-    return view('admin.dashboard');
+        // Calculate admin statistics
+        $stats = [
+            // Total registered users (all roles)
+            'total_users' => \App\Models\User::count(),
+            
+            // Active members (with valid membership)
+            'active_members' => \App\Models\Member::where(function($q) {
+                $q->whereNull('expired_at')
+                  ->orWhere('expired_at', '>', now());
+            })->count(),
+            
+            // Total classes/schedules
+            'total_classes' => \App\Models\GymClass::count(),
+            
+            // Total bookings this month
+            'monthly_bookings' => \App\Models\Booking::whereYear('tanggal_booking', now()->year)
+                ->whereMonth('tanggal_booking', now()->month)
+                ->count(),
+            
+            // Equipment needing maintenance (kondisi: Perlu Perbaikan)
+            'equipment_issues' => \App\Models\Equipments::where('kondisi', 'Perlu Perbaikan')->count(),
+            
+            // Monthly revenue (current month, paid status)
+            'monthly_revenue' => \App\Models\Payment::where('status', 'paid')
+                ->whereYear('created_at', now()->year)
+                ->whereMonth('created_at', now()->month)
+                ->sum('amount'),
+        ];
+
+        return view('admin.dashboard', compact('stats'));
     }
 
     /**
