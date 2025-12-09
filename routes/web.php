@@ -21,7 +21,8 @@ use App\Http\Controllers\Admin\ScheduleAssignmentController;
 
 Route::get('/', function () {
     $membershipPlans = MembershipPlan::all();
-    return view('welcome', compact('membershipPlans'));
+    $classes = \App\Models\GymClass::all();
+    return view('welcome', compact('membershipPlans', 'classes'));
 })->name('home');
 
 // Main dashboard - redirects based on role
@@ -151,8 +152,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified'])->group(
 });
 
 Route::middleware(['auth'])->prefix('member')->name('member.')->group(function () {
-    Route::get('/classes', [ClassController::class, 'index'])->name('classes.index');
+    Route::get('/classes', [ClassController::class,'memberClasses'])->name('classes.index');
     Route::post('/classes/join/{class}', [ClassController::class, 'join'])->name('classes.join');
+    Route::get('/jadwalku', [ClassController::class, 'jadwalku'])->name('classes.jadwalku');
 });
 
 Route::get('/kelas', [ClassController::class, 'index'])->name('classes.index');
@@ -177,13 +179,15 @@ Route::middleware('auth')->group(function () {
         ->name('membership.checkout');
     Route::get('/member/payment/history', [MembershipPaymentController::class, 'paymentHistory'])
         ->name('member.payment.history');
-
     Route::get('/payment/{payment}/view', [MembershipPaymentController::class, 'viewInvoice'])
         ->name('payment.view');
     Route::get('/payment/{payment}/invoice/pdf', [MembershipPaymentController::class, 'downloadInvoicePdf'])
         ->name('payment.invoice.pdf');
     Route::get('/payment/check-status/{payment}', [MembershipPaymentController::class, 'checkStatus'])
         ->name('payment.checkStatus');
+    Route::post('/payment/{id}/cancel', [MembershipPaymentController::class, 'cancel'])
+    ->name('payment.cancel');
+
 
     Route::get('/membership/success/{payment}', [MembershipPaymentController::class, 'success'])
         ->name('payment.successPage');

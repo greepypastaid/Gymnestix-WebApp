@@ -42,6 +42,7 @@ class GymClassController extends Controller
      */
     public function store(Request $request)
     {
+        file_put_contents(storage_path('admin_store_called.txt'), 'Admin GymClassController::store() called at ' . now() . "\nData: " . json_encode($request->all(), JSON_PRETTY_PRINT));
         if (!Gate::allows('schedule.assign_trainer')) {
             abort(403);
         }
@@ -49,6 +50,7 @@ class GymClassController extends Controller
         $request->validate([
             'nama_kelas' => 'required|string|max:255',
             'deskripsi' => 'required|string',
+            'hari' => 'required|string|in:Senin,Selasa,Rabu,Kamis,Jumat,Sabtu,Minggu',
             'waktu_mulai' => 'required|date_format:H:i',
             'waktu_selesai' => 'required|date_format:H:i',
             'durasi' => 'required|integer',
@@ -56,7 +58,7 @@ class GymClassController extends Controller
             'trainer_id' => 'required|exists:trainers,trainer_id',
         ]);
 
-        $data = $request->only(['nama_kelas','deskripsi','waktu_mulai','waktu_selesai','durasi','kapasitas','trainer_id']);
+        $data = $request->only(['nama_kelas','deskripsi','hari','waktu_mulai','waktu_selesai','durasi','kapasitas','trainer_id']);
 
         GymClass::create($data);
 
@@ -109,6 +111,7 @@ class GymClassController extends Controller
         $request->validate([
             'nama_kelas' => 'required|string|max:255',
             'deskripsi' => 'required|string',
+            'hari' => 'required|string|in:Senin,Selasa,Rabu,Kamis,Jumat,Sabtu,Minggu',
             'waktu_mulai' => 'required|date_format:H:i',
             'waktu_selesai' => 'required|date_format:H:i',
             'durasi' => 'required|integer',
@@ -116,7 +119,7 @@ class GymClassController extends Controller
             'trainer_id' => 'required|exists:trainers,trainer_id',
         ]);
 
-        $gymClass->update($request->only(['nama_kelas','deskripsi','waktu_mulai','waktu_selesai','durasi','kapasitas','trainer_id']));
+        $gymClass->update($request->only(['nama_kelas','deskripsi','hari','waktu_mulai','waktu_selesai','durasi','kapasitas','trainer_id']));
 
         return redirect()->route('gym_class.index')->with('success', 'Kelas diperbarui.');
     }

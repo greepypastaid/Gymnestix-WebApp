@@ -42,7 +42,7 @@
 
             {{-- Form --}}
             <div class="bg-neutral-800 shadow sm:rounded-lg p-6">
-                <form action="{{ route('trainer.classes.store') }}" method="POST" class="space-y-6">
+                <form action="{{ route('trainer.classes.store') }}" method="POST" class="space-y-6" enctype="multipart/form-data">
                     @csrf
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
@@ -58,6 +58,16 @@
                             <input type="time" name="waktu_mulai" id="waktu_mulai" class="block w-full px-3 py-2 border border-neutral-600 rounded-lg shadow-sm bg-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-[#ADFF2F] focus:border-[#ADFF2F]" value="{{ old('waktu_mulai') }}" required>
                         </div>
                         <div>
+                            <label for="hari" class="block text-sm font-medium text-white mb-2">Hari</label>
+                            <select name="hari" id="hari" class="block w-full px-3 py-2 border border-neutral-600 rounded-lg shadow-sm bg-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-[#ADFF2F] focus:border-[#ADFF2F]" required>
+                                @php $days = ['Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Minggu']; @endphp
+                                <option value="" disabled selected>-- Pilih Hari --</option>
+                                @foreach($days as $d)
+                                    <option value="{{ $d }}" {{ old('hari')===$d ? 'selected' : '' }}>{{ $d }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div>
                             <label for="waktu_selesai" class="block text-sm font-medium text-white mb-2">Waktu Selesai</label>
                             <input type="time" name="waktu_selesai" id="waktu_selesai" class="block w-full px-3 py-2 border border-neutral-600 rounded-lg shadow-sm bg-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-[#ADFF2F] focus:border-[#ADFF2F]" value="{{ old('waktu_selesai') }}" required>
                         </div>
@@ -70,6 +80,11 @@
                     <div>
                         <label for="deskripsi" class="block text-sm font-medium text-white mb-2">Deskripsi</label>
                         <textarea name="deskripsi" id="deskripsi" rows="4" class="block w-full px-3 py-2 border border-neutral-600 rounded-lg shadow-sm bg-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-[#ADFF2F] focus:border-[#ADFF2F]" required placeholder="Enter class description">{{ old('deskripsi') }}</textarea>
+                    </div>
+                    <div>
+                        <label for="cover" class="block text-sm font-medium text-white mb-2">Cover Image (max 2MB)</label>
+                        <input type="file" name="cover" id="cover" accept="image/*" class="block w-full text-sm text-white" />
+                        <p class="text-xs text-neutral-400 mt-1">Maks 2MB. Format: jpg, png, gif.</p>
                     </div>
 
                     <div class="mt-8 flex items-center space-x-4">

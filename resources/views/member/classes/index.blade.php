@@ -1,70 +1,77 @@
 @extends('landing_page.layouts.app')
 
-@section('title', 'Daftar Kelas')
+@section('title', 'Kelas Saya')
 
 @section('content')
-    <div class="max-w-7xl mx-auto py-12 px-6">
-        <div class="flex items-center justify-between mb-10">
-            <h1 class="text-3xl font-extrabold text-gray-800">
-                🏋️‍♂️ Daftar Kelas Gymnestix
-            </h1>
-            <p class="text-gray-500">Pilih kelas yang ingin kamu ikuti sesuai jadwal dan rencana membership.</p>
+    <div class="max-w-7xl mx-auto py-12 px-6 my-10">
+        <div class="mb-10">
+            <h1 class="text-3xl font-extrabold text-gray-100">Kelas yang Kamu Ikuti</h1>
+            <p class="text-gray-400 mt-1">Berikut daftar kelas yang sudah kamu join.</p>
         </div>
 
-        {{-- Daftar Kelas --}}
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            @forelse($classes as $class)
+            @forelse($classes as $booking)
                 @php
-                    $joined = $userClasses->contains('class_id', $class->class_id);
-                    $membership = $joined ? $userClasses->firstWhere('class_id', $class->class_id) : null;
+                    $class = $booking->class; // relasi belongsTo pada Booking
                 @endphp
 
-                <div class="bg-white shadow-md hover:shadow-lg transition rounded-xl overflow-hidden border border-gray-100">
+                <div class="bg-neutral-900 border border-neutral-800 rounded-xl shadow-lg overflow-hidden">
                     <div class="p-5">
-                        <h2 class="text-xl font-bold text-green-700 mb-1">{{ $class->nama_kelas }}</h2>
-                        <p class="text-sm text-gray-600 mb-3">{{ Str::limit($class->deskripsi, 100) }}</p>
+                        <h2 class="text-xl font-bold text-[#ADFF2F] mb-1">
+                            {{ $class->nama_kelas }}
+                        </h2>
 
-                        <div class="flex justify-between text-sm text-gray-500 mb-3">
-                            <div><i class="bi bi-clock"></i> {{ $class->waktu_mulai }} - {{ $class->waktu_selesai }}</div>
+                        <p class="text-sm text-neutral-400 mb-3">
+                            {{ Str::limit($class->deskripsi, 100) }}
+                        </p>
+
+                        <div class="flex justify-between text-sm text-neutral-500 mb-3">
                             <div>
-                                <span>{{ $class->bookings_count ?? $class->bookings->count() }} / {{ $class->kapasitas }}</span>
+                                <i class="bi bi-clock"></i>
+                                {{ \Carbon\Carbon::parse($class->waktu_mulai)->format('H:i') }}
+                                -
+                                {{ \Carbon\Carbon::parse($class->waktu_selesai)->format('H:i') }}
+                            </div>
+                            <div>
+                                {{ $class->bookings_count ?? $class->bookings->count() }} / {{ $class->kapasitas }}
                             </div>
                         </div>
 
-                        @if ($joined)
-                            <div class="bg-green-50 border border-green-100 rounded-md p-3 text-sm mb-3">
-                                <p class="text-green-700 font-medium flex items-center gap-1">
-                                    <i class="bi bi-check-circle-fill"></i>
-                                    Sudah bergabung
-                                </p>
-                                @if ($membership && $membership->expired_at)
-                                    <p class="text-xs text-gray-500 mt-1">
-                                        Masa aktif sampai
-                                        {{ \Carbon\Carbon::parse($membership->expired_at)->format('d M Y') }}
-                                    </p>
-                                @endif
-                            </div>
-                            <button disabled
-                                class="w-full py-2.5 bg-gray-200 text-gray-500 font-medium rounded-md cursor-not-allowed">
-                                Terdaftar
-                            </button>
-                        @else
-                            <form action="{{ route('member.class.join', $class->class_id) }}" method="POST">
-                                @csrf
-                                <button type="submit"
-                                    class="w-full py-2.5 bg-gradient-to-r from-green-600 to-emerald-500 text-white font-semibold rounded-md shadow hover:shadow-lg transition-all">
-                                    Gabung Kelas
-                                </button>
-                            </form>
-                        @endif
+                        <div class="bg-[#ADFF2F]/20 border border-[#ADFF2F]/40 rounded-md p-3 text-sm mb-3">
+                            <p class="text-[#ADFF2F] font-medium">
+                                <i class="bi bi-check-circle"></i>
+                                Kamu sudah bergabung
+                            </p>
+
+                            <p class="text-xs text-neutral-400 mt-1">
+                                Bergabung pada:
+                                <span class="text-white">
+                                    {{ \Carbon\Carbon::parse($booking->tanggal_booking)->format('d M Y H:i') }}
+                                </span>
+                            </p>
+                        </div>
+
+                        <a href="#"
+                            class="block text-center py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-md font-semibold transition">
+                            Lihat Detail Kelas
+                        </a>
                     </div>
                 </div>
             @empty
                 <div class="col-span-3 text-center py-12">
-                    <i class="bi bi-emoji-neutral text-4xl text-gray-400 mb-3"></i>
-                    <p class="text-gray-600 font-medium">Belum ada kelas yang tersedia saat ini.</p>
+                    <i class="bi bi-emoji-frown text-4xl text-gray-500"></i>
+                    <p class="text-gray-400 mt-3">Kamu belum bergabung dengan kelas manapun.</p>
                 </div>
             @endforelse
+            
+           
         </div>
+         <div class="flex py-5">
+                <a href="{{ route('classes.index') }}" class="mx-auto">
+                    <button class="block text-center p-2.5 bg-[#ADFF2F] hover:bg-[#ADFF2F]/80 text-black rounded-md font-semibold transition">
+                        Gabung kelas lain
+                    </button>
+                </a>
+            </div>
     </div>
 @endsection

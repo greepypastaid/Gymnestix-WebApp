@@ -98,4 +98,64 @@ class ClassController extends Controller
 
         return back()->with('success', 'Permintaan bergabung dikirim. Tunggu konfirmasi.');
     }
+
+    public function memberClasses()
+    {
+        $user = Auth::user();
+        $member = Member::where('user_id', $user->user_id)->first();
+        $classes = $member->bookings()->select('class_id', 'tanggal_booking')->get();
+        return view('member.classes.index', compact('classes'));
+    }
+
+    public function jadwalku()
+{
+    $user = Auth::user();
+    $member = Member::where('user_id', $user->user_id)->first();
+
+    // Ambil kelas yang sudah diikuti
+    $classes = Booking::with('class')
+        ->where('member_id', $member->member_id)
+        ->get()
+        ->pluck('class');
+
+    // Generate jadwal bulan ini
+    $now = now();
+    $startMonth = $now->copy()->startOfMonth();
+    $endMonth   = $now->copy()->endOfMonth();
+
+    $events = [];
+
+    foreach ($classes as $class) {
+        $dayIndex = [
+            'senin' => 2,
+            'selasa' => 3,
+            'rabu' => 4,
+            'kamis' => 5,
+            'jumat' => 6,
+            'sabtu' => 7,
+            'minggu' => 1,
+        ][strtolower($class->hari)] ?? null;
+
+        if ($dayIndex === null) continue;
+
+        $current = $startMonth->copy()->next($dayIndex);
+        if ($current->month !== $startMonth->month) {
+            $current->subWeek();
+        }
+
+        while ($current->lte($endMonth)) {
+            $events[] = [
+                'date' => $current->format('Y-m-d'),
+                'class' => $class
+            ];
+            $current->addWeek();
+        }
+    }
+
+    return view('member.jadwal.index', [
+        'events' => $events,
+        'month' => $now,
+    ]);
+}
+
 }

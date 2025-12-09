@@ -13,7 +13,7 @@
 
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('home') }}" class="flex items-center gap-2 group">
+                    <a href="{{ url('/') }}" class="flex items-center gap-2 group">
                         <div class="w-10 h-10 rounded-md flex items-center justify-center shadow-md">
                             <img src="{{ asset('images/GymnestixLogo.png') }}" alt="Gymnestix"
                                 class="object-cover w-8 h-8 filter saturate-0 brightness-200 group-hover:saturate-100 group-hover:brightness-100 group-hover:scale-105 transition-all duration-300 ease-in-out" />

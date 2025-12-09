@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use App\Models\GymClass;
 use App\Models\Trainer;
 
@@ -46,11 +47,6 @@ class GymClassController extends Controller
             ->where('trainer_id', $trainer->trainer_id)
             ->paginate(15);
 
-        $classes = GymClass::with('trainer.user')
-            ->withCount('bookings')
-            ->where('trainer_id', $trainer->trainer_id)
-            ->paginate(15);
-        
         return view('trainer.class.trainerClass', compact('classes'));
     }
 
@@ -70,11 +66,15 @@ class GymClassController extends Controller
      */
     public function store(Request $request)
     {
+        // Write what we actually received
+        file_put_contents(storage_path('request_dump.txt'), 'ALL REQUEST DATA:' . PHP_EOL . json_encode($request->all(), JSON_PRETTY_PRINT) . PHP_EOL . PHP_EOL);
+        
         $user = $request->user();
 
         $request->validate([
             'nama_kelas' => 'required|string|max:255',
             'deskripsi' => 'required|string',
+            'hari' => 'required|string|in:Senin,Selasa,Rabu,Kamis,Jumat,Sabtu,Minggu',
             'waktu_mulai' => 'required|date_format:H:i',
             'waktu_selesai' => 'required|date_format:H:i',
             'durasi' => 'required|integer',
@@ -88,9 +88,42 @@ class GymClassController extends Controller
         }
 
         $data = $request->only(['nama_kelas','deskripsi','waktu_mulai','waktu_selesai','durasi','kapasitas']);
+        $data['hari'] = $request->input('hari');
         $data['trainer_id'] = $trainer->trainer_id;
 
-        GymClass::create($data);
+        // Prevent overlapping schedule for same trainer on same day
+        // Overlap condition: new.start < existing.end AND existing.start < new.end
+        $start = $data['waktu_mulai'];
+        $end = $data['waktu_selesai'];
+
+        $overlap = GymClass::where('trainer_id', $trainer->trainer_id)
+            ->where('hari', $data['hari'])
+            ->where(function($q) use ($start, $end) {
+                $q->where(function($q2) use ($start, $end) {
+                    $q2->where('waktu_mulai', '<', $end)
+                        ->where('waktu_selesai', '>', $start);
+                });
+            })->exists();
+
+        if ($overlap) {
+            return back()->withErrors(['hari' => 'Anda sudah memiliki jadwal yang tumpang tindih pada hari dan jam tersebut.'])->withInput();
+        }
+
+        // Temporary debug logging
+        Log::debug('GymClass store - DATA ABOUT TO CREATE', [
+            'request_hari' => $request->input('hari'),
+            'data_hari' => $data['hari'] ?? 'NOT SET',
+            'full_data' => $data,
+        ]);
+
+        
+        $created = GymClass::create($data);
+
+        Log::debug('GymClass created - VERIFICATION', [
+            'class_id' => $created->class_id,
+            'hari_from_db' => $created->hari,
+            'all_attrs' => $created->toArray(),
+        ]);
 
         return redirect()->route('trainer.classes.index')->with('success','Kelas dibuat.');
     }
@@ -130,13 +163,36 @@ class GymClassController extends Controller
         $request->validate([
             'nama_kelas' => 'required|string|max:255',
             'deskripsi' => 'required|string',
+            'hari' => 'required|string|in:Senin,Selasa,Rabu,Kamis,Jumat,Sabtu,Minggu',
             'waktu_mulai' => 'required|date_format:H:i',
             'waktu_selesai' => 'required|date_format:H:i',
             'durasi' => 'required|integer',
             'kapasitas' => 'required|integer',
         ]);
 
-        $gymClass->update($request->only(['nama_kelas','deskripsi','waktu_mulai','waktu_selesai','durasi','kapasitas']));
+        $data = $request->only(['nama_kelas','deskripsi','hari','waktu_mulai','waktu_selesai','durasi','kapasitas']);
+
+        // Prevent overlapping schedule for same trainer on same day (exclude current class)
+        $trainer = $request->user()->trainer;
+        if ($trainer) {
+            $start = $data['waktu_mulai'];
+            $end = $data['waktu_selesai'];
+
+            $conflict = GymClass::where('trainer_id', $trainer->trainer_id)
+                ->where('hari', $data['hari'])
+                ->where('class_id', '<>', $gymClass->class_id)
+                ->where(function($q) use ($start, $end) {
+                    $q->where('waktu_mulai', '<', $end)
+                      ->where('waktu_selesai', '>', $start);
+                })
+                ->exists();
+
+            if ($conflict) {
+                return back()->withErrors(['hari' => 'Anda sudah memiliki jadwal yang tumpang tindih pada hari dan jam tersebut.'])->withInput();
+            }
+        }
+
+        $gymClass->update($data);
 
         return redirect()->route('trainer.classes.index')->with('success','Kelas diperbarui.');
     }

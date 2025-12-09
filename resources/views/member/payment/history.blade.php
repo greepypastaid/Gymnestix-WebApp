@@ -3,11 +3,12 @@
 @section('title', 'Riwayat Pembayaran')
 
 @section('content')
-    <div class="max-w-5xl mx-auto px-4 py-10 text-white">
+    <div class="max-w-7xl mx-auto px-4 py-10 mt-12 text-white">
 
-        <h1 class="text-3xl font-heading font-semibold my-8">Riwayat Pembayaran</h1>
+        <h1 class="text-6xl font-poppins mb-4">Riwayat Pembayaran</h1>
+        <p class="text-left text-neutral-400 text-lg max-w-2xl mb-8">Monitoring Pembayaran mu dengan mudah disini!</p>
 
-        <div class="bg-neutral-900/70 border border-neutral-800 backdrop-blur-sm rounded-xl shadow-lg overflow-hidden">
+        <div class="bg-neutral-900/70 border border-neutral-800 backdrop-blur-sm rounded-xl shadow-lg">
             <table class="min-w-full text-sm">
                 <thead class="bg-neutral-800/60 text-gray-300">
                     <tr>
@@ -52,7 +53,7 @@
                                 {{ $payment->expired_at ? \Carbon\Carbon::parse($payment->expired_at)->format('d M Y H:i') : '-' }}
                             </td>
 
-                            <td class="px-4 py-3 text-center relative">
+                            <td class="px-4 py-3 text-center ">
                                 <div x-data="{ open: false }" class="inline-block text-left">
                                     <button @click="open = !open"
                                         class="px-3 py-1 bg-neutral-800 hover:bg-neutral-700 text-white text-sm rounded-lg">
@@ -80,6 +81,14 @@
                                                 class="block px-4 py-2 text-sm text-emerald-400 hover:bg-neutral-800">
                                                 Bayar Sekarang
                                             </a>
+
+                                            <form action="{{ route('payment.cancel', $payment->id) }}" method="POST">
+                                                @csrf
+                                                <button type="submit"
+                                                    class="w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-neutral-800">
+                                                    Batalkan
+                                                </button>
+                                            </form>
                                         @endif
 
                                     </div>
