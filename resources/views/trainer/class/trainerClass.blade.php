@@ -34,7 +34,7 @@
                 </div>
             </div>
             <div class="card-dark overflow-hidden">
-                @if(!empty($classes) && (is_array($classes) || $classes instanceof \Illuminate\Support\Collection) && count($classes) > 0)
+                @if($classes->count() > 0)
                     @php
                         $currentTrainerId = auth()->user()?->trainer?->trainer_id ?? null;
                         $canViewAll = auth()->user()?->hasPermission('schedule.view_all');
@@ -157,39 +157,38 @@
                                                 <span class="inline-flex items-center px-3 py-1 rounded-lg text-xs font-medium bg-neutral-700 text-neutral-400">
                                                     No actions
                                                 </span>
-                                            @endif
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <!-- Pagination -->
-                    <div class="px-6 py-5 border-t border-neutral-700 bg-neutral-900/30">
-                        @if(is_object($classes) && method_exists($classes, 'links'))
-                            {{ $classes->links() }}
-                        @endif
-                    </div>
-                @else
-                    <div class="p-16 text-center">
-                        <div class="w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6" style="background: rgba(173,255,47,0.1);">
-                            <svg class="w-10 h-10" style="color:#ADFF2F;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                            </svg>
-                        </div>
-                        <h3 class="text-xl font-bold text-white mb-2">No classes found</h3>
-                        <p class="text-neutral-400 mb-6">Get started by creating your first class.</p>
-                        <a href="{{ route('trainer.classes.create') }}"
-                           class="inline-flex items-center px-6 py-3 bg-[#ADFF2F] hover:bg-[#9FE529] text-black font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                            </svg>
-                            Create Your First Class
-                        </a>
-                    </div>
-                @endif
+                                @endif
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
+
+            <div class="px-6 py-4 border-t border-neutral-700">
+                {{ $classes->links() }}
+            </div>
+            @else
+            <div class="p-12 text-center">
+                <div class="inline-block p-4 bg-neutral-800 rounded-full mb-4">
+                    <svg class="w-12 h-12 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                    </svg>
+                </div>
+                <h3 class="mt-2 text-sm font-medium text-white">No classes found</h3>
+                <p class="mt-1 text-sm text-neutral-400">Get started by creating your first class.</p>
+                <div class="mt-6">
+                    <a href="{{ route('trainer.classes.create') }}"
+                       class="inline-flex items-center px-4 py-2 bg-[#ADFF2F] text-black font-medium rounded-lg shadow-sm transition duration-200">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                        </svg>
+                        Create Your First Class
+                    </a>
+                </div>
+            </div>
+            @endif
         </div>
     </div>
+</div>
 @endsection

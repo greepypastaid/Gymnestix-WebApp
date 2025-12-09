@@ -85,18 +85,17 @@ class ClassController extends Controller
             return back()->with('error', 'Kelas sudah penuh!');
         }
 
-        // dispatch job asynchronously
-        \App\Jobs\ProcessBooking::dispatch($class->class_id, $member->member_id)
-            ->onConnection(config('queue.default'));
+        Booking::create([
+            'member_id' => $member->member_id,
+            'class_id' => $class->class_id,
+            'tanggal_booking' => now(),
+        ]);
 
-        // mark "Tunggu konfirmasi"
         $pending = session('pending_bookings', []);
-        if (!in_array($class->class_id, $pending)) {
-            $pending[] = $class->class_id;
-            session(['pending_bookings' => $pending]);
-        }
+        $pending = array_filter($pending, fn($id) => $id != $class->class_id);
+        session(['pending_bookings' => array_values($pending)]);
 
-        return back()->with('success', 'Permintaan bergabung dikirim. Tunggu konfirmasi.');
+        return back()->with('success', 'Berhasil bergabung dengan kelas!');
     }
 
     public function memberClasses()

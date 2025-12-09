@@ -15,12 +15,15 @@ class GymClassController extends Controller
      */
     public function index(Request $request)
     {
-        // Only admin with schedule.view_all permission
         if (!Gate::allows('schedule.view_all') && !($request->user()->hasPermission('schedule.view_all') ?? false)) {
             abort(403, 'Unauthorized access.');
         }
 
-        $classes = GymClass::with(['trainer.user'])->paginate(15);
+        $classes = GymClass::with(['trainer.user'])
+            ->withCount('bookings')
+            ->orderBy('created_at', 'desc')
+            ->paginate(15);
+
         return view('gym_class.index', compact('classes'));
     }
 
@@ -59,6 +62,11 @@ class GymClassController extends Controller
         ]);
 
         $data = $request->only(['nama_kelas','deskripsi','hari','waktu_mulai','waktu_selesai','durasi','kapasitas','trainer_id']);
+
+        if ($request->hasFile('cover')) {
+            $coverPath = $request->file('cover')->store('class-covers', 'public');
+            $data['cover'] = $coverPath;
+        }
 
         GymClass::create($data);
 
@@ -117,9 +125,30 @@ class GymClassController extends Controller
             'durasi' => 'required|integer',
             'kapasitas' => 'required|integer',
             'trainer_id' => 'required|exists:trainers,trainer_id',
+            'cover' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $gymClass->update($request->only(['nama_kelas','deskripsi','hari','waktu_mulai','waktu_selesai','durasi','kapasitas','trainer_id']));
+        $data = $request->only(['nama_kelas','deskripsi','hari','waktu_mulai','waktu_selesai','durasi','kapasitas','trainer_id']);
+
+        if ($request->hasFile('cover')) {
+            if ($gymClass->cover && \Storage::disk('public')->exists($gymClass->cover)) {
+                \Storage::disk('public')->delete($gymClass->cover);
+            }
+            $coverPath = $request->file('cover')->store('class-covers', 'public');
+            $data['cover'] = $coverPath;
+        }
+
+        $gymClass->update($data);
+
+        if ($request->hasFile('cover')) {
+            if ($gymClass->cover && \Storage::disk('public')->exists($gymClass->cover)) {
+                \Storage::disk('public')->delete($gymClass->cover);
+            }
+            $coverPath = $request->file('cover')->store('class-covers', 'public');
+            $data['cover'] = $coverPath;
+        }
+
+        $gymClass->update($data);
 
         return redirect()->route('gym_class.index')->with('success', 'Kelas diperbarui.');
     }

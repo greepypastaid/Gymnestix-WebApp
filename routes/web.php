@@ -77,7 +77,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
     // Workout manager (resource routes -> creates admin.workouts.index etc.)
     Route::resource('workouts', \App\Http\Controllers\Admin\WorkoutController::class)
-        ->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
+        ->only(['index', 'show', 'destroy']);
 });
 
 Route::middleware('auth')->group(function () {

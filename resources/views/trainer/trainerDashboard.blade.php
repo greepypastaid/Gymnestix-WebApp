@@ -162,49 +162,16 @@
                         <input id="memberSearch" type="text" placeholder="Search members by name or email..." class="w-full px-4 py-3 border border-neutral-600 rounded-lg bg-neutral-700 text-white placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition duration-200" />
                     </div>
 
-                    <div id="memberList" class="max-h-96 overflow-y-auto"
-                        @if($historyMembers->isNotEmpty())
-                            <div class="p-4 bg-neutral-700/50 border-b border-neutral-700">
-                                <p class="text-xs font-semibold text-neutral-400 uppercase tracking-wider">Your Members</p>
+                    <div id="memberList" class="max-h-96 overflow-y-auto">
+                        <div class="text-center py-12 px-4">
+                            <div class="w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-4" style="background: rgba(173, 255, 47, 0.1);">
+                                <svg class="h-8 w-8" style="color:#ADFF2F;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                </svg>
                             </div>
-                            @foreach($historyMembers as $member)
-                                <a href="{{ url('trainer/members/'.$member->member_id.'/workouts') }}"
-                                   class="block px-4 py-3 hover:bg-neutral-700 text-white transition duration-200 border-b border-neutral-700/50 last:border-0">
-                                    <div class="flex items-center">
-                                        <div class="flex-shrink-0">
-                                            <div class="w-12 h-12 rounded-full flex items-center justify-center" style="background: linear-gradient(135deg, #ADFF2F 0%, #7CB518 100%);">
-                                                <span class="text-black font-bold text-lg">
-                                                    {{ substr($member->user->nama ?? 'M', 0, 1) }}
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div class="ml-4 flex-1">
-                                            <p class="text-sm font-semibold text-white">
-                                                {{ $member->user->nama ?? 'Member' }}
-                                            </p>
-                                            <p class="text-xs text-neutral-400 mt-0.5">
-                                                {{ $member->user->email ?? '' }}
-                                            </p>
-                                        </div>
-                                        <div class="ml-auto">
-                                            <svg class="w-5 h-5 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                                            </svg>
-                                        </div>
-                                    </div>
-                                </a>
-                            @endforeach
-                        @else
-                            <div class="text-center py-12 px-4">
-                                <div class="w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-4" style="background: rgba(173, 255, 47, 0.1);">
-                                    <svg class="h-8 w-8" style="color:#ADFF2F;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                                    </svg>
-                                </div>
-                                <h3 class="text-base font-semibold text-white mb-1">No Members Yet</h3>
-                                <p class="text-sm text-neutral-400">No members have attended your classes yet.</p>
-                            </div>
-                        @endif
+                            <h3 class="text-base font-semibold text-white mb-1">Search Members</h3>
+                            <p class="text-sm text-neutral-400">Type a name or email to find members</p>
+                        </div>
                     </div>
                         <script id="allMembersData" type="application/json">{!! json_encode($allMembersData, JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS|JSON_HEX_QUOT) !!}</script>
                         <script id="historyMembersData" type="application/json">{!! json_encode($historyMembersData, JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS|JSON_HEX_QUOT) !!}</script>
@@ -259,18 +226,23 @@
                             searchEl.addEventListener('input', function() {
                                 const q = this.value.trim().toLowerCase();
                                 if (!q) {
-                                    // show history members
-                                    renderMembers(historyMembers);
+                                    memberListEl.innerHTML = `
+                                        <div class="text-center py-12 px-4">
+                                            <div class="w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-4" style="background: rgba(173, 255, 47, 0.1);">
+                                                <svg class="h-8 w-8" style="color:#ADFF2F;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                                </svg>
+                                            </div>
+                                            <h3 class="text-base font-semibold text-white mb-1">Search Members</h3>
+                                            <p class="text-sm text-neutral-400">Type a name or email to find members</p>
+                                        </div>
+                                    `;
                                     return;
                                 }
 
-                                // search across all members
                                 const results = allMembers.filter(m => (m.name || '').toLowerCase().includes(q) || (m.email || '').toLowerCase().includes(q));
                                 renderMembers(results);
                             });
-
-                            // initial render
-                            renderMembers(historyMembers.length ? historyMembers : allMembers);
                         })();
                         </script>
             </div>

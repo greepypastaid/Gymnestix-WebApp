@@ -57,8 +57,7 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-neutral-700/50">
-                        @if(!empty($classes) && (is_array($classes) || $classes instanceof \Illuminate\Support\Collection))
-                            @foreach($classes as $class)
+                        @forelse($classes as $class)
                             <tr class="hover:bg-neutral-700/30 transition duration-200">
                             <td class="px-6 py-4">
                                 <div class="flex items-center">
@@ -140,11 +139,39 @@
                                 </div>
                             </td>
                         </tr>
-                            @endforeach
-                        @endif
+                        @empty
+                        <tr>
+                            <td colspan="6" class="px-6 py-12">
+                                <div class="text-center">
+                                    <div class="inline-block p-4 bg-neutral-800 rounded-full mb-4">
+                                        <svg class="w-12 h-12 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                                        </svg>
+                                    </div>
+                                    <h3 class="text-sm font-medium text-white">No classes found</h3>
+                                    <p class="mt-1 text-sm text-neutral-400">Get started by creating your first class.</p>
+                                    <div class="mt-6">
+                                        <a href="{{ route('gym_class.create') }}"
+                                           class="inline-flex items-center px-4 py-2 bg-[#ADFF2F] text-black font-medium rounded-lg shadow-sm transition duration-200">
+                                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                            </svg>
+                                            Create First Class
+                                        </a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
+
+            @if($classes->hasPages())
+            <div class="px-6 py-4 border-t border-neutral-700">
+                {{ $classes->links() }}
+            </div>
+            @endif
         </div>
     </div>
 </div>

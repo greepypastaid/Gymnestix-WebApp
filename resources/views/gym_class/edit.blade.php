@@ -38,7 +38,7 @@
 
         {{-- Form --}}
         <div class="card-dark p-6">
-            <form action="{{ route('gym_class.update', $gymClass->class_id) }}" method="POST" class="space-y-6">
+            <form action="{{ route('gym_class.update', $gymClass->class_id) }}" method="POST" class="space-y-6" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">

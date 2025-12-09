@@ -36,15 +36,15 @@ class GymClassController extends Controller
     {
         $user = $request->user();
 
-        // Require trainer role
         $trainer = $user->trainer;
         if (!$trainer) {
             abort(403, 'Anda bukan trainer.');
         }
 
-        // Show only classes owned by this trainer
         $classes = GymClass::with('trainer.user')
+            ->withCount('bookings')
             ->where('trainer_id', $trainer->trainer_id)
+            ->orderBy('created_at', 'desc')
             ->paginate(15);
 
         return view('trainer.class.trainerClass', compact('classes'));
@@ -90,6 +90,11 @@ class GymClassController extends Controller
         $data = $request->only(['nama_kelas','deskripsi','waktu_mulai','waktu_selesai','durasi','kapasitas']);
         $data['hari'] = $request->input('hari');
         $data['trainer_id'] = $trainer->trainer_id;
+
+        if ($request->hasFile('cover')) {
+            $coverPath = $request->file('cover')->store('class-covers', 'public');
+            $data['cover'] = $coverPath;
+        }
 
         // Prevent overlapping schedule for same trainer on same day
         // Overlap condition: new.start < existing.end AND existing.start < new.end
@@ -168,11 +173,19 @@ class GymClassController extends Controller
             'waktu_selesai' => 'required|date_format:H:i',
             'durasi' => 'required|integer',
             'kapasitas' => 'required|integer',
+            'cover' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $data = $request->only(['nama_kelas','deskripsi','hari','waktu_mulai','waktu_selesai','durasi','kapasitas']);
 
-        // Prevent overlapping schedule for same trainer on same day (exclude current class)
+        if ($request->hasFile('cover')) {
+            if ($gymClass->cover && \Storage::disk('public')->exists($gymClass->cover)) {
+                \Storage::disk('public')->delete($gymClass->cover);
+            }
+            $coverPath = $request->file('cover')->store('class-covers', 'public');
+            $data['cover'] = $coverPath;
+        }
+
         $trainer = $request->user()->trainer;
         if ($trainer) {
             $start = $data['waktu_mulai'];
