@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Attendance;
 use App\Models\ClassSchedule;
+use App\Models\GymClass;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -22,7 +23,7 @@ class AttendanceController extends Controller
         $q    = $request->get('q');         // cari nama/email
         $status = $request->get('status');  // present/absent/late
 
-        $attendances = Attendance::with(['user','schedule'])
+    $attendances = Attendance::with(['user','gymClass','schedule'])
             ->when($date, fn($qb) => $qb->whereDate('attendance_date', $date))
             ->when($status, fn($qb) => $qb->where('status', $status))
             ->when($q, function($qb) use ($q){
@@ -44,10 +45,14 @@ class AttendanceController extends Controller
         $members = User::whereHas('role', fn($r)=>$r->where('name','member'))
                        ->orderBy('nama')->get(['user_id','nama','email']);
 
+        // load both class schedules and gym classes — some admins add classes
+        // in `classes` (GymClass) while others use class_schedules. Show both.
         $schedules = ClassSchedule::orderByDesc('class_date')
                      ->orderBy('start_time')->limit(100)->get(['id','class_name','class_date','start_time','end_time']);
 
-        return view('admin.attendance.create', compact('members','schedules'));
+        $classes = GymClass::orderBy('nama_kelas')->get(['class_id','nama_kelas','waktu_mulai','waktu_selesai']);
+
+        return view('admin.attendance.create', compact('members','schedules','classes'));
     }
 
     public function store(Request $request)
@@ -55,7 +60,8 @@ class AttendanceController extends Controller
         $data = $request->validate([
             'user_id'          => ['required','exists:users,user_id'],
             'attendance_date'  => ['required','date'],
-            'class_schedule_id'=> ['nullable','exists:class_schedules,id'],
+            // may be 'class:<id>' or 'schedule:<id>' from the form
+            'class_schedule_id'=> ['nullable','string'],
             'check_in_at'      => ['nullable','date'],
             'check_out_at'     => ['nullable','date','after_or_equal:check_in_at'],
             'status'           => ['required','in:present,absent,late'],
@@ -63,6 +69,29 @@ class AttendanceController extends Controller
         ]);
 
         $data['recorded_by'] = $request->user()->user_id ?? null;
+
+        // normalize class selection
+        $sel = $request->input('class_schedule_id');
+        if ($sel) {
+            if (str_starts_with($sel, 'class:')) {
+                $id = (int) str_replace('class:', '', $sel);
+                if (!GymClass::where('class_id', $id)->exists()) {
+                    return back()->withErrors(['class_schedule_id' => 'Selected class not found'])->withInput();
+                }
+                $data['class_id'] = $id;
+                $data['class_schedule_id'] = null;
+            } elseif (str_starts_with($sel, 'schedule:')) {
+                $id = (int) str_replace('schedule:', '', $sel);
+                if (!ClassSchedule::where('id', $id)->exists()) {
+                    return back()->withErrors(['class_schedule_id' => 'Selected schedule not found'])->withInput();
+                }
+                $data['class_schedule_id'] = $id;
+                $data['class_id'] = null;
+            } elseif (is_numeric($sel)) {
+                $data['class_schedule_id'] = (int) $sel;
+                $data['class_id'] = null;
+            }
+        }
 
         Attendance::create($data);
 
@@ -76,7 +105,9 @@ class AttendanceController extends Controller
         $schedules = ClassSchedule::orderByDesc('class_date')
                      ->orderBy('start_time')->limit(100)->get(['id','class_name','class_date','start_time','end_time']);
 
-        return view('admin.attendance.edit', compact('attendance','members','schedules'));
+        $classes = GymClass::orderBy('nama_kelas')->get(['class_id','nama_kelas','waktu_mulai','waktu_selesai']);
+
+        return view('admin.attendance.edit', compact('attendance','members','schedules','classes'));
     }
 
     public function update(Request $request, Attendance $attendance)
@@ -84,7 +115,7 @@ class AttendanceController extends Controller
         $data = $request->validate([
             'user_id'          => ['required','exists:users,user_id'],
             'attendance_date'  => ['required','date'],
-            'class_schedule_id'=> ['nullable','exists:class_schedules,id'],
+            'class_schedule_id'=> ['nullable','string'],
             'check_in_at'      => ['nullable','date'],
             'check_out_at'     => ['nullable','date','after_or_equal:check_in_at'],
             'status'           => ['required','in:present,absent,late'],
@@ -92,6 +123,29 @@ class AttendanceController extends Controller
         ]);
 
         $data['recorded_by'] = $request->user()->user_id ?? null;
+
+        // normalize class selection for update as well
+        $sel = $request->input('class_schedule_id');
+        if ($sel) {
+            if (str_starts_with($sel, 'class:')) {
+                $id = (int) str_replace('class:', '', $sel);
+                if (!GymClass::where('class_id', $id)->exists()) {
+                    return back()->withErrors(['class_schedule_id' => 'Selected class not found'])->withInput();
+                }
+                $data['class_id'] = $id;
+                $data['class_schedule_id'] = null;
+            } elseif (str_starts_with($sel, 'schedule:')) {
+                $id = (int) str_replace('schedule:', '', $sel);
+                if (!ClassSchedule::where('id', $id)->exists()) {
+                    return back()->withErrors(['class_schedule_id' => 'Selected schedule not found'])->withInput();
+                }
+                $data['class_schedule_id'] = $id;
+                $data['class_id'] = null;
+            } elseif (is_numeric($sel)) {
+                $data['class_schedule_id'] = (int) $sel;
+                $data['class_id'] = null;
+            }
+        }
 
         $attendance->update($data);
 

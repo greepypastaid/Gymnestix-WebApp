@@ -88,16 +88,32 @@
 
                 <div>
                     <label class="block text-sm font-medium text-white mb-2">Class (optional)</label>
+                    @php
+                        $selected = old('class_schedule_id', ($attendance->class_id ? 'class:'.$attendance->class_id : ($attendance->class_schedule_id ? 'schedule:'.$attendance->class_schedule_id : '')));
+                    @endphp
                     <select name="class_schedule_id" class="block w-full px-3 py-2 border border-neutral-600 rounded-lg shadow-sm bg-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-[#ADFF2F] focus:border-[#ADFF2F]">
                         <option value="">— None —</option>
-                        @foreach($schedules as $s)
-                            {{-- REVISI: Sesuaikan nama kolom dengan database (nama_kelas, waktu_mulai) --}}
-                            {{-- Perhatikan: Ganti 'id' dengan primary key tabel kelas jika beda (misal class_id) --}}
-                            <option value="{{ $s->class_id ?? $s->id }}" @selected(old('class_schedule_id', $attendance->class_schedule_id ?? '') == ($s->class_id ?? $s->id))>
-                                {{ $s->nama_kelas ?? $s->class_name }} — {{ \Illuminate\Support\Carbon::parse($s->waktu_mulai ?? $s->class_date)->format('d M Y') }}
-                                ({{ \Illuminate\Support\Carbon::parse($s->waktu_mulai ?? $s->start_time)->format('H:i') }}–{{ \Illuminate\Support\Carbon::parse($s->waktu_selesai ?? $s->end_time)->format('H:i') }})
-                            </option>
-                        @endforeach
+
+                        @if(!empty($classes))
+                            <optgroup label="Classes">
+                                @foreach($classes as $c)
+                                    <option value="class:{{ $c->class_id }}" @selected($selected == 'class:'.$c->class_id)>
+                                        {{ $c->nama_kelas }} — {{ \Illuminate\Support\Carbon::parse($c->waktu_mulai)->format('H:i') }}–{{ \Illuminate\Support\Carbon::parse($c->waktu_selesai)->format('H:i') }}
+                                    </option>
+                                @endforeach
+                            </optgroup>
+                        @endif
+
+                        @if(!empty($schedules))
+                            <optgroup label="Schedules">
+                                @foreach($schedules as $s)
+                                    <option value="schedule:{{ $s->id }}" @selected($selected == 'schedule:'.$s->id)>
+                                        {{ $s->class_name }}
+                                        ({{ \Illuminate\Support\Carbon::parse($s->start_time)->format('H:i') }}–{{ \Illuminate\Support\Carbon::parse($s->end_time)->format('H:i') }})
+                                    </option>
+                                @endforeach
+                            </optgroup>
+                        @endif
                     </select>
                 </div>
 

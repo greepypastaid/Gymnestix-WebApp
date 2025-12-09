@@ -102,7 +102,7 @@
                                         </div>
                                     </td>
                                     <td class="px-6 py-4">
-                                        @if($a->schedule)
+                                        @if($a->gymClass)
                                             <div class="flex items-center">
                                                 <div class="w-8 h-8 rounded-lg flex items-center justify-center mr-2" style="background: rgba(173,255,47,0.1);">
                                                     <svg class="w-4 h-4" style="color:#ADFF2F;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -110,10 +110,23 @@
                                                     </svg>
                                                 </div>
                                                 <div>
-                                                    <div class="text-sm font-semibold text-white">{{ $a->schedule->nama_kelas }}</div>
+                                                    <div class="text-sm font-semibold text-white">{{ $a->gymClass->nama_kelas }}</div>
                                                     <div class="text-xs text-neutral-400 mt-0.5">
-                                                        {{ $a->schedule->waktu_mulai?->format('d M') ?? '-' }},
-                                                        {{ \Illuminate\Support\Carbon::parse($a->schedule->waktu_mulai)->format('H:i') }}–{{ \Illuminate\Support\Carbon::parse($a->schedule->waktu_selesai)->format('H:i') }}
+                                                        {{ \Illuminate\Support\Carbon::parse($a->gymClass->waktu_mulai)->format('H:i') }}–{{ \Illuminate\Support\Carbon::parse($a->gymClass->waktu_selesai)->format('H:i') }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @elseif($a->schedule)
+                                            <div class="flex items-center">
+                                                <div class="w-8 h-8 rounded-lg flex items-center justify-center mr-2" style="background: rgba(173,255,47,0.1);">
+                                                    <svg class="w-4 h-4" style="color:#ADFF2F;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                                                    </svg>
+                                                </div>
+                                                <div>
+                                                    <div class="text-sm font-semibold text-white">{{ $a->schedule->class_name }}</div>
+                                                    <div class="text-xs text-neutral-400 mt-0.5">
+                                                        {{ \Illuminate\Support\Carbon::parse($a->schedule->start_time)->format('H:i') }}–{{ \Illuminate\Support\Carbon::parse($a->schedule->end_time)->format('H:i') }}
                                                     </div>
                                                 </div>
                                             </div>
