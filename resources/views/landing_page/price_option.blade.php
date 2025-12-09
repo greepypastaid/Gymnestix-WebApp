@@ -3,10 +3,10 @@
         <div class="absolute top-0 left-0 w-96 h-96 bg-[#ADFF2F]/10 rounded-full blur-3xl"></div>
         <div class="absolute bottom-0 right-0 w-96 h-96 bg-[#ADFF2F]/10 rounded-full blur-3xl"></div>
         
-        <div class="max-w-7xl mx-auto relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <!-- Header -->
             <div class="text-center mb-16">
-                <h2 class="text-6xl font-poppins text-white mb-6">
+                <h2 class="text-3xl sm:text-4xl md:text-6xl font-poppins text-white mb-6">
                     Paket yang Sempurna untuk Kebutuhanmu
                 </h2>
                 <p class="text-neutral-400 font-poppins text-lg max-w-2xl mx-auto">
@@ -15,14 +15,14 @@
             </div>
 
             <!-- Pricing Cards Grid -->
-            <div class="grid lg:grid-cols-3 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
                 @forelse ($membershipPlans as $index => $p)
                     @php
                         // Mark the middle plan as recommended (or customize logic)
                         $isRecommended = $index === 1 || $p->nama_plan === 'Premium';
                     @endphp
                     
-                    <div class="group relative bg-neutral-800 rounded-3xl border {{ $isRecommended ? 'border-[#ADFF2F]' : 'border-neutral-700' }} p-8 hover:border-[#ADFF2F]/50 transition-all duration-300 {{ $isRecommended ? 'lg:scale-105 shadow-2xl shadow-[#ADFF2F]/20' : '' }}">
+                    <div class="group relative bg-neutral-800 rounded-3xl border {{ $isRecommended ? 'border-[#ADFF2F]' : 'border-neutral-700' }} p-6 sm:p-8 hover:border-[#ADFF2F]/50 transition-all duration-300 {{ $isRecommended ? 'lg:scale-105 shadow-2xl shadow-[#ADFF2F]/20' : '' }}">
                         
                         <!-- Recommended Badge -->
                         @if ($isRecommended)

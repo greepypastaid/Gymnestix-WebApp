@@ -1,5 +1,5 @@
-<nav id="site-navbar" class="fixed w-full top-0 z-50 bg-transparent transition-colors duration-300 ease-in-out">
-    <div class="max-w-7xl mx-auto">
+<nav id="site-navbar" role="navigation" aria-label="Main navigation" class="fixed w-full top-0 z-50 bg-transparent transition-colors duration-300 ease-in-out">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16 items-center">
             {{-- Logo --}}
             {{-- 🌿 Navbar (Tema Hijau Modern) --}}
@@ -121,17 +121,16 @@
 
             {{-- Mobile Toggle --}}
             <div class="md:hidden">
-                <button id="mobile-menu-button" class="text-white focus:outline-none">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 6h16M4 12h16m-7 6h7" />
+                <button id="mobile-menu-button" class="text-white focus:outline-none" aria-controls="mobile-menu" aria-expanded="false" aria-label="Toggle navigation">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
                     </svg>
                 </button>
             </div>
         </div>
 
         {{-- 🌿 Mobile Menu (Hijau, Modern & Fresh) --}}
-        <div id="mobile-menu"
+        <div id="mobile-menu" aria-hidden="true"
             class="md:hidden hidden border-t border-gray-800 bg-black/0 shadow-lg transition-all duration-300 ease-in-out overflow-hidden rounded-b-2xl">
             <div class="px-5 py-5 space-y-4">
                 {{-- 🔗 Navigasi Utama --}}
@@ -209,15 +208,32 @@
         const profileBtn = document.getElementById('profile-dropdown-btn');
         const dropdownMenu = document.getElementById('profile-dropdown-menu');
 
-        profileBtn?.addEventListener('click', (e) => {
-            e.stopPropagation();
-            dropdownMenu.classList.toggle('hidden');
-        });
+        if (profileBtn && dropdownMenu) {
+            profileBtn.setAttribute('aria-expanded', 'false');
+            profileBtn.setAttribute('aria-controls', 'profile-dropdown-menu');
+
+            profileBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isOpen = !dropdownMenu.classList.contains('hidden');
+                dropdownMenu.classList.toggle('hidden');
+                profileBtn.setAttribute('aria-expanded', String(!isOpen));
+                dropdownMenu.setAttribute('aria-hidden', String(isOpen));
+            });
+
+            profileBtn.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    profileBtn.click();
+                }
+            });
+        }
 
         // Tutup menu kalau klik di luar
         document.addEventListener('click', (e) => {
-            if (!profileBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+            if (profileBtn && dropdownMenu && !profileBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
                 dropdownMenu.classList.add('hidden');
+                profileBtn.setAttribute('aria-expanded', 'false');
+                dropdownMenu.setAttribute('aria-hidden', 'true');
             }
         });
 
@@ -225,10 +241,25 @@
         const menu = document.getElementById('mobile-menu');
 
         if (btn && menu) {
+            // initialize aria
+            btn.setAttribute('aria-expanded', 'false');
+            menu.setAttribute('aria-hidden', 'true');
+
             btn.addEventListener('click', () => {
+                const wasHidden = menu.classList.contains('hidden');
                 menu.classList.toggle('hidden');
                 menu.classList.toggle('max-h-0');
                 menu.classList.toggle('max-h-[500px]');
+                btn.setAttribute('aria-expanded', String(wasHidden));
+                menu.setAttribute('aria-hidden', String(!wasHidden));
+            });
+
+            // keyboard support: toggle with Enter/Space
+            btn.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    btn.click();
+                }
             });
         }
 

@@ -2,11 +2,11 @@
         <div class="absolute top-0 left-0 w-96 h-96 bg-[#ADFF2F]/10 rounded-full blur-3xl"></div>
         <div class="absolute bottom-0 right-0 w-96 h-96 bg-[#ADFF2F]/10 rounded-full blur-3xl"></div>
 
-        <div class="max-w-7xl mx-auto justify-center">
-            <div class="flex justify-between items-stretch gap-8">
-                <h2 class="w-1/2 text-left text-6xl font-poppins font-base">Temui Fitur Unggulan Kami!</h2>
-                <div class="w-1/3 flex flex-col justify-end">
-                    <p class="text-neutral-400 text-right">Fasilitas lengkap, pelatih berpengalaman, dan komunitas suportif yang dirancang untuk hasil nyata. Coba sekali, rasakan bedanya.</p>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 justify-center">
+            <div class="flex flex-col md:flex-row justify-between items-start gap-8">
+                <h2 class="md:w-1/2 w-full text-left text-3xl md:text-6xl font-poppins font-base">Temui Fitur Unggulan Kami!</h2>
+                <div class="md:w-1/3 w-full flex flex-col justify-end">
+                    <p class="text-neutral-400 md:text-right text-left">Fasilitas lengkap, pelatih berpengalaman, dan komunitas suportif yang dirancang untuk hasil nyata. Coba sekali, rasakan bedanya.</p>
                 </div>
             </div>
             @php
@@ -44,7 +44,7 @@
             ];
             @endphp
 
-            <div class="grid md:grid-cols-3 sm:grid-cols-2 gap-6 mt-16">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-12 md:mt-16">
                 @foreach ($features as $f)
                 <div class="bg-neutral-800 p-6 rounded-xl shadow hover:-translate-y-1 hover:shadow-lg transition">
                     <div class="w-12 h-12 flex items-center justify-center rounded-full bg-neutral-900 text-[#ADFF2F] mb-3">

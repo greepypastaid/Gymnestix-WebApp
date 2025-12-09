@@ -1,19 +1,19 @@
 <section id="kelas" class="py-20">
-    <div class="max-w-7xl mx-auto">
-        <div class="flex justify-between items-stretch gap-8 mb-16">
-            <a href="{{ route('classes.index') }}" class="w-1/2 text-left text-6xl font-poppins font-base">Yuk, Explore Kelas Populer di Gymnestix!</a>
-            <div class="w-1/3 flex flex-col justify-end">
-                <p class="text-neutral-400 text-right">Pilih kelas yang sesuai dengan tujuanmu — dari kelas-kelas terbaik. Instruktur berpengalaman siap membimbingmu di setiap sesi.</p>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row justify-between items-start gap-8 mb-16">
+            <a href="{{ route('classes.index') }}" class="md:w-1/2 w-full text-left text-3xl md:text-6xl font-poppins font-base">Yuk, Explore Kelas Populer di Gymnestix!</a>
+            <div class="md:w-1/3 w-full flex flex-col justify-end">
+                <p class="text-neutral-400 md:text-right text-left">Pilih kelas yang sesuai dengan tujuanmu — dari kelas-kelas terbaik. Instruktur berpengalaman siap membimbingmu di setiap sesi.</p>
             </div>
         </div>
 
-        <div class="grid lg:grid-cols-4 md:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             @forelse ($classes as $c)
-            <div class="group relative h-[420px] rounded-2xl overflow-hidden cursor-pointer bg-neutral-800">
+            <div class="group relative md:h-[420px] h-auto rounded-2xl overflow-hidden cursor-pointer bg-neutral-800">
                 <div class="absolute inset-0">
                     <img src="{{ $c->image_url ?? asset('images/default_class.jpg') }}" 
-                         alt="{{ $c->nama_kelas }}" 
-                         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        alt="{{ $c->nama_kelas }}" 
+                        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" loading="lazy" decoding="async">
                     <div class="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent"></div>
                 </div>
 

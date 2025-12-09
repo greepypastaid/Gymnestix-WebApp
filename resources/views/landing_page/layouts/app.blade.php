@@ -69,7 +69,7 @@
     @include('landing_page.partials.navbar')
 
     {{-- Main Content --}}
-    <main id="utama" class="min-h-screen">
+    <main id="utama" class="min-h-screen px-4 sm:px-6 lg:px-8">
         @yield('content')
     </main>
 
