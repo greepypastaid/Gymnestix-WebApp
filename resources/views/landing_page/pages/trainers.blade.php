@@ -4,13 +4,13 @@
 
 @section('content')
 <!-- Hero Section -->
-<div class="relative bg-black pt-32 overflow-hidden">
-    <div class="max-w-7xl mx-auto relative z-10">
-        <div class="text-left mb-4">
-            <h1 class="text-5xl md:text-6xl font-poppins text-white mb-4">
+<div class="relative bg-black pt-20 sm:pt-24 md:pt-32 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="text-left mb-6 sm:mb-8">
+            <h1 class="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-poppins text-white mb-4">
                 Daftar Tenaga Profesional Kami
             </h1>
-            <p class="text-left text-neutral-400 text-lg max-w-2xl">
+            <p class="text-left text-neutral-400 text-sm sm:text-base lg:text-lg max-w-2xl">
                 Pilih trainer kesukaan kamu untuk membuatmu lebih baik!
             </p>
         </div>
@@ -18,31 +18,31 @@
 </div>
 
 <!-- Trainers Grid Section -->
-<div class="bg-black py-12">
-    <div class="max-w-7xl mx-auto">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<div class="bg-black py-8 sm:py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             @forelse($trainers as $trainer)
-            <div class="group bg-neutral-900 p-8 rounded-2xl border border-neutral-800 hover:border-[#ADFF2F]/50 transition-all duration-300 hover:-translate-y-2">
+            <div class="group bg-neutral-900 p-4 sm:p-6 md:p-8 rounded-2xl border border-neutral-800 hover:border-[#ADFF2F]/50 transition-all duration-300 hover:-translate-y-2">
                 <!-- Icon & Badge -->
                 <div class="flex items-start justify-between mb-4">
-                    <div class="w-full h-72 flex items-center justify-center rounded-xl group-hover:text-black transition-all duration-300">
+                    <div class="w-full h-56 sm:h-64 md:h-72 flex items-center justify-center rounded-xl group-hover:text-black transition-all duration-300">
                         <img src="{{ asset('storage/' . $trainer->user->profile_photo) }}" alt="Trainer photo" class="w-full h-full object-cover rounded-lg mb-4">
                     </div>
                 </div>
 
                 <!-- Trainer Name -->
-                <h3 class="text-xl font-poppins font-semibold text-white mb-1">
+                <h3 class="text-lg sm:text-xl font-poppins font-semibold text-white mb-1">
                     {{ $trainer->user->nama ?? 'Trainer' }}
                 </h3>
 
                 <!-- Specialization -->
-                <p class="text-[#ADFF2F] text-sm font-medium mb-3">
+                <p class="text-[#ADFF2F] text-xs sm:text-sm font-medium mb-2 sm:mb-3">
                     {{ $trainer->spesialisasi ?? 'Personal Trainer' }}
                 </p>
 
                 <!-- Bio / Description -->
                 @if($trainer->bio)
-                <p class="text-neutral-400 text-sm mb-4 leading-relaxed">
+                <p class="text-neutral-400 text-xs sm:text-sm mb-3 sm:mb-4 leading-relaxed">
                     {{ Str::limit($trainer->bio, 100) }}
                 </p>
                 @endif
@@ -133,20 +133,20 @@
 </div>
 
 <!-- CTA Section -->
-<div class="relative bg-black py-20">
-    <div class="max-w-7xl mx-auto text-center">
-        <div class="bg-gradient-to-br from-neutral-900 to-neutral-950 border border-neutral-800 rounded-3xl p-12">
-            <h2 class="text-4xl font-poppins font-semibold text-white mb-4">
+<div class="relative bg-black py-12 sm:py-16 md:py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div class="bg-gradient-to-br from-neutral-900 to-neutral-950 border border-neutral-800 rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-12">
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-poppins font-semibold text-white mb-3 sm:mb-4">
                 Siap Memulai Perjalanan Fitness Anda?
             </h2>
-            <p class="text-neutral-400 mb-8 max-w-2xl mx-auto">
+            <p class="text-neutral-400 text-sm sm:text-base mb-6 sm:mb-8 max-w-2xl mx-auto">
                 Bergabunglah dengan ribuan member yang sudah merasakan transformasi luar biasa bersama Gymnestix.
             </p>
-            <div class="flex gap-4 justify-center">
-                <a href="{{ route('pricing') }}#pricing" class="bg-[#ADFF2F] text-black px-8 py-3 rounded-full font-medium hover:bg-[#9DE625] transition-all duration-300 hover:scale-105">
+            <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
+                <a href="{{ route('pricing') }}#pricing" class="bg-[#ADFF2F] text-black px-6 sm:px-8 py-2.5 sm:py-3 rounded-full font-medium hover:bg-[#9DE625] transition-all duration-300 hover:scale-105 text-sm sm:text-base">
                     Lihat Paket Membership
                 </a>
-                <a href="{{ route('trainers.index') }}" class="bg-neutral-800 text-white px-8 py-3 rounded-full font-medium hover:bg-neutral-700 transition-all duration-300 border border-neutral-700">
+                <a href="{{ route('trainers.index') }}" class="bg-neutral-800 text-white px-6 sm:px-8 py-2.5 sm:py-3 rounded-full font-medium hover:bg-neutral-700 transition-all duration-300 border border-neutral-700 text-sm sm:text-base">
                     Kenali Trainer Kami
                 </a>
             </div>

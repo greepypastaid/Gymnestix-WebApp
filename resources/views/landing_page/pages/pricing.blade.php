@@ -4,13 +4,13 @@
 
 @section('content')
     <!-- Hero Section -->
-    <div class="relative bg-black pt-32 overflow-hidden">
-        <div class="max-w-7xl mx-auto relative">
-            <div class="flex flex-col text-left mb-8">
-                <h1 class="text-left text-5xl md:text-6xl font-poppins text-white mb-6">
+    <div class="relative bg-black pt-20 sm:pt-24 md:pt-32 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+            <div class="flex flex-col text-left mb-6 sm:mb-8">
+                <h1 class="text-left text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-poppins text-white mb-4 sm:mb-6">
                     Pilih Paket yang Tepat untuk Anda
                 </h1>
-                <p class="text-neutral-400 text-lg max-w-3xl">
+                <p class="text-neutral-400 text-sm sm:text-base lg:text-lg max-w-3xl">
                     Mulai dengan paket dasar gratis selama 30 hari. Ganti paket atau batalkan kapan saja.
                 </p>
             </div>
@@ -18,9 +18,10 @@
     </div>
 
     <!-- Pricing Cards Section -->
-    <div class="relative bg-black py-12">
-        <div class="max-w-7xl mx-auto">
-            <div class="grid md:grid-cols-3 gap-8" id="pricing-cards">
+    <div class="relative bg-black py-8 sm:py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- 2 kolom untuk md, 3 kolom untuk lg -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8" id="pricing-cards">
                 @forelse($membershipPlans as $index => $plan)
                     @php
                         $isPopular = $index === 1; // Middle plan is popular
@@ -30,10 +31,10 @@
                         }
                     @endphp
 
-                    <div class="group relative bg-neutral-900 p-8 rounded-2xl border {{ $isPopular ? 'border-[#ADFF2F]' : 'border-neutral-800' }} hover:border-[#ADFF2F]/50 transition-all duration-300 hover:-translate-y-2">
-                        <!-- Popular Badge -->
+                    <div class="group relative bg-neutral-900 p-6 md:p-6 lg:p-8 rounded-2xl border {{ $isPopular ? 'border-[#ADFF2F]' : 'border-neutral-800' }} transition-all duration-300 md:hover:-translate-y-2 flex flex-col h-full">
+                        <!-- Popular Badge: right aligned on small/md, centered on lg -->
                         @if($isPopular)
-                            <div class="absolute -top-4 left-1/2 -translate-x-1/2">
+                            <div class="absolute -top-4 right-4 lg:left-1/2 lg:-translate-x-1/2 lg:right-auto">
                                 <span class="bg-[#ADFF2F] text-black text-xs font-bold px-4 py-1 rounded-full">
                                     TERPOPULER
                                 </span>
@@ -43,42 +44,42 @@
                         <!-- Plan Header -->
                         <div class="mb-6">
                             <div class="flex items-center gap-3 mb-4">
-                                <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-neutral-800 text-[#ADFF2F] group-hover:bg-[#ADFF2F] group-hover:text-black transition-all duration-300">
-                                    <i class="fa-solid {{ $index === 0 ? 'fa-gift' : ($index === 1 ? 'fa-star' : 'fa-crown') }}"></i>
+                                <div class="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-xl bg-neutral-800 text-[#ADFF2F] group-hover:bg-[#ADFF2F] group-hover:text-black transition-all duration-300">
+                                    <i class="fa-solid {{ $index === 0 ? 'fa-gift' : ($index === 1 ? 'fa-star' : 'fa-crown') }} text-sm sm:text-base"></i>
                                 </div>
                                 <div>
-                                    <h3 class="text-xl font-poppins font-bold text-white">{{ $plan->nama_plan }}</h3>
-                                    <p class="text-sm text-neutral-400">{{ $plan->deskripsi ?? 'Paket membership' }}</p>
+                                    <h3 class="text-base sm:text-lg md:text-xl font-poppins font-bold text-white">{{ $plan->nama_plan }}</h3>
+                                    <p class="text-xs sm:text-sm text-neutral-400">{{ $plan->deskripsi ?? 'Paket membership' }}</p>
                                 </div>
                             </div>
 
                             <!-- Price -->
                             <div class="mb-4">
                                 <div class="flex items-baseline gap-2">
-                                    <span class="text-5xl font-bold text-white">Rp{{ number_format($plan->harga, 0, ',', '.') }}</span>
-                                    <span class="text-neutral-400">/{{ $plan->periode_bulan }} bulan</span>
+                                    <span class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white">Rp{{ number_format($plan->harga, 0, ',', '.') }}</span>
+                                    <span class="text-neutral-400 text-sm sm:text-base md:text-lg">/{{ $plan->periode_bulan }} bulan</span>
                                 </div>
                                 <p class="text-sm text-neutral-500 mt-1">
                                     ~Rp{{ number_format($plan->harga / max(1, $plan->periode_bulan), 0, ',', '.') }}/bulan
                                 </p>
                             </div>
 
-                            <!-- CTA Button -->
+                            <!-- CTA Button (placed right after price for visibility) -->
                             @auth
                                 <a href="{{ route('membership.checkout', $plan->plan_id) }}" 
-                                   class="block w-full py-3 text-center {{ $isPopular ? 'bg-[#ADFF2F] text-black hover:bg-[#9DE626]' : 'bg-neutral-800 text-white hover:bg-neutral-700' }} font-semibold rounded-lg transition-all duration-300 hover:scale-105">
+                                   class="inline-block w-full py-3 text-center {{ $isPopular ? 'bg-[#ADFF2F] text-black hover:bg-[#9DE626]' : 'bg-neutral-800 text-white hover:bg-neutral-700' }} font-semibold rounded-lg transition-all duration-300 hover:scale-105 mb-4">
                                     {{ $index === 0 ? 'Mulai Gratis' : 'Mulai Sekarang' }}
                                 </a>
                             @else
                                 <a href="{{ route('register') }}" 
-                                   class="block w-full py-3 text-center {{ $isPopular ? 'bg-[#ADFF2F] text-black hover:bg-[#9DE626]' : 'bg-neutral-800 text-white hover:bg-neutral-700' }} font-semibold rounded-lg transition-all duration-300 hover:scale-105">
+                                   class="inline-block w-full py-3 text-center {{ $isPopular ? 'bg-[#ADFF2F] text-black hover:bg-[#9DE626]' : 'bg-neutral-800 text-white hover:bg-neutral-700' }} font-semibold rounded-lg transition-all duration-300 hover:scale-105 mb-4">
                                     Daftar Sekarang
                                 </a>
                             @endauth
                         </div>
 
                         <!-- Features List -->
-                        <div class="pt-6 border-t border-neutral-800">
+                        <div class="pt-6 border-t border-neutral-800 mt-auto">
                             <p class="text-sm font-semibold text-neutral-400 mb-4">Fitur yang Termasuk:</p>
                             <ul class="space-y-3">
                                 @if(!empty($features) && count($features) > 0)
@@ -142,12 +143,12 @@
         </div>
     </div>
 
-    <!-- Comparison Table Section -->
+    <!-- Comparison Table Section (only show on large screens) -->
     @if($membershipPlans->count() > 0)
-    <div class="relative bg-black py-20">
-        <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-12">
-                <h2 class="text-4xl font-poppins font-bold text-white mb-4">
+    <div class="relative bg-black py-12 sm:py-16 md:py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-8 sm:mb-12">
+                <h2 class="text-2xl sm:text-3xl md:text-4xl font-poppins font-bold text-white mb-3 sm:mb-4">
                     Bandingkan Semua Fitur
                 </h2>
                 <p class="text-neutral-400">
@@ -155,8 +156,8 @@
                 </p>
             </div>
 
-            <!-- Table for larger screens -->
-            <div class="hidden md:block overflow-x-auto">
+            <!-- Table for extra large screens only (lg+) -->
+            <div class="hidden lg:block overflow-x-auto">
                 <table class="w-full border-collapse">
                     <thead>
                         <tr class="border-b border-neutral-800">
@@ -203,8 +204,8 @@
                 </table>
             </div>
 
-            <!-- Mobile friendly version -->
-            <div class="md:hidden space-y-6">
+            <!-- Mobile / md friendly version (cards) -->
+            <div class="lg:hidden space-y-6">
                 @foreach($membershipPlans as $planIndex => $plan)
                     <div class="bg-neutral-900 p-6 rounded-xl border border-neutral-800">
                         <h3 class="text-xl font-bold text-white mb-4">{{ $plan->nama_plan }}</h3>
@@ -235,20 +236,20 @@
     @endif
 
     <!-- CTA Section -->
-    <div class="relative bg-black py-20">
-        <div class="max-w-7xl mx-auto px-6 text-center">
-            <div class="bg-gradient-to-br from-neutral-900 to-neutral-950 border border-neutral-800 rounded-3xl p-12">
-                <h2 class="text-4xl font-poppins font-semibold text-white mb-4">
+    <div class="relative bg-black py-12 sm:py-16 md:py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 text-center">
+            <div class="bg-gradient-to-br from-neutral-900 to-neutral-950 border border-neutral-800 rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-12">
+                <h2 class="text-2xl sm:text-3xl md:text-4xl font-poppins font-semibold text-white mb-3 sm:mb-4">
                     Masih Ragu? Hubungi Kami!
                 </h2>
-                <p class="text-neutral-400 mb-8 max-w-2xl mx-auto">
+                <p class="text-neutral-400 text-sm sm:text-base mb-6 sm:mb-8 max-w-2xl mx-auto">
                     Tim kami siap membantu Anda memilih paket yang tepat sesuai kebutuhan dan tujuan fitness Anda.
                 </p>
-                <div class="flex gap-4 justify-center flex-wrap">
-                    <a href="https://wa.me/+6282325031004" class="bg-[#ADFF2F] text-black px-8 py-3 rounded-full font-medium hover:bg-[#9DE626] transition-all duration-300 hover:scale-105">
+                <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center flex-wrap">
+                    <a href="https://wa.me/+6282325031004" class="bg-[#ADFF2F] text-black px-6 sm:px-8 py-2.5 sm:py-3 rounded-full font-medium hover:bg-[#9DE626] transition-all duration-300 hover:scale-105 text-sm sm:text-base">
                         Hubungi Kami
                     </a>
-                    <a href="{{ route('features') }}" class="bg-neutral-800 text-white px-8 py-3 rounded-full font-medium hover:bg-neutral-700 transition-all duration-300 border border-neutral-700">
+                    <a href="{{ route('features') }}" class="bg-neutral-800 text-white px-6 sm:px-8 py-2.5 sm:py-3 rounded-full font-medium hover:bg-neutral-700 transition-all duration-300 border border-neutral-700 text-sm sm:text-base">
                         Lihat Semua Fitur
                     </a>
                 </div>

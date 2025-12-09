@@ -3,12 +3,12 @@
 @section('title', 'Checkout Membership')
 
 @section('content')
-    <div class="max-w-3xl mx-auto py-16 px-6 text-white">
-        <h2 class="text-3xl font-heading font-bold my-8 text-center">
+    <div class="max-w-3xl mx-auto py-12 sm:py-16 px-4 sm:px-6 text-white">
+        <h2 class="text-2xl sm:text-3xl font-heading font-bold my-6 sm:my-8 text-center">
             Konfirmasi Pembelian Membership
         </h2>
 
-        <div class="bg-neutral-900 border border-neutral-800 shadow-xl p-6 rounded-2xl">
+        <div class="bg-neutral-900 border border-neutral-800 shadow-xl p-4 sm:p-6 rounded-2xl">
             <div class="mb-4">
                 <h3 class="text-2xl font-heading font-semibold text-primary">
                     {{ $plan->nama_plan }}

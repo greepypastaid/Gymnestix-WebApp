@@ -1,4 +1,4 @@
-<nav id="site-navbar" class="fixed w-full top-0 z-50 bg-transparent transition-colors duration-300 ease-in-out">
+<nav id="site-navbar" class="fixed w-full top-0 z-50 px-2 bg-black md:bg-transparent transition-colors duration-300 ease-in-out">
     <div class="max-w-7xl mx-auto">
         <div class="flex justify-between h-16 items-center">
             {{-- Logo --}}
@@ -202,63 +202,97 @@
     </div>
 </nav>
 
-{{-- Script toggle mobile menu (pasti jalan) --}}
+{{-- Script toggle mobile menu + navbar transparency responsive --}}
 @push('scripts')
 <script defer>
-    document.addEventListener('DOMContentLoaded', function() {
-        const profileBtn = document.getElementById('profile-dropdown-btn');
-        const dropdownMenu = document.getElementById('profile-dropdown-menu');
+document.addEventListener('DOMContentLoaded', function () {
+    const profileBtn = document.getElementById('profile-dropdown-btn');
+    const dropdownMenu = document.getElementById('profile-dropdown-menu');
 
-        profileBtn?.addEventListener('click', (e) => {
-            e.stopPropagation();
-            dropdownMenu.classList.toggle('hidden');
-        });
+    profileBtn?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdownMenu.classList.toggle('hidden');
+    });
 
-        // Tutup menu kalau klik di luar
-        document.addEventListener('click', (e) => {
+    // Tutup dropdown kalau klik di luar
+    document.addEventListener('click', (e) => {
+        if (profileBtn && dropdownMenu) {
             if (!profileBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
                 dropdownMenu.classList.add('hidden');
             }
-        });
-
-        const btn = document.getElementById('mobile-menu-button');
-        const menu = document.getElementById('mobile-menu');
-
-        if (btn && menu) {
-            btn.addEventListener('click', () => {
-                menu.classList.toggle('hidden');
-                menu.classList.toggle('max-h-0');
-                menu.classList.toggle('max-h-[500px]');
-            });
         }
-
-
-        // Transparansi -> jadi gelap saat scroll
-        const navbar = document.getElementById('site-navbar');
-        const SCROLL_THRESHOLD = 30; // ubah sesuai kebutuhan
-
-        function updateNavbarOnScroll() {
-            if (!navbar) return;
-            if (window.scrollY > SCROLL_THRESHOLD) {
-                navbar.classList.add('bg-black', 'bg-opacity-100', 'shadow-md');
-                navbar.classList.remove('bg-transparent');
-                // pastikan mobile menu bg solid ketika navbar scrolled
-                menu?.classList.remove('bg-black/0');
-                menu?.classList.add('bg-black', 'bg-opacity-100');
-            } else {
-                navbar.classList.remove('bg-black', 'bg-opacity-100', 'shadow-md');
-                navbar.classList.add('bg-transparent');
-                menu?.classList.remove('bg-black', 'bg-opacity-100');
-                menu?.classList.add('bg-black/0');
-            }
-        }
-
-        // inisialisasi & event
-        updateNavbarOnScroll();
-        window.addEventListener('scroll', updateNavbarOnScroll, {
-            passive: true
-        });
-
     });
+
+    // Mobile menu toggle
+    const btn = document.getElementById('mobile-menu-button');
+    const menu = document.getElementById('mobile-menu');
+
+    if (btn && menu) {
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+            menu.classList.toggle('max-h-0');
+            menu.classList.toggle('max-h-[500px]');
+        });
+    }
+
+    // Navbar transparency logic:
+    const navbar = document.getElementById('site-navbar');
+    const SCROLL_THRESHOLD = 30; // pixel threshold untuk berubah
+    const DESKTOP_BREAKPOINT = 768; // md: 768px
+
+    function isDesktop() {
+        return window.innerWidth >= DESKTOP_BREAKPOINT;
+    }
+
+    function applySolid() {
+        if (!navbar) return;
+        // Solid background (full black) + shadow + blur for readability
+        navbar.classList.add('bg-black', 'bg-opacity-100', 'shadow-md', 'backdrop-blur-sm');
+        // Remove any "transparent" variants
+        navbar.classList.remove('bg-transparent', 'bg-black/10', 'bg-opacity-10');
+        // Mobile menu should be solid on mobile or when navbar is solid
+        if (menu) {
+            menu.classList.add('bg-black', 'bg-opacity-100');
+            menu.classList.remove('bg-black/0');
+        }
+    }
+
+    function applyTransparent() {
+        if (!navbar) return;
+        navbar.classList.remove('bg-black', 'bg-opacity-100', 'shadow-md');
+        navbar.classList.add('bg-black', 'backdrop-blur-lg');
+
+        if (menu) {
+            menu.classList.remove('bg-black', 'bg-opacity-100');
+            menu.classList.add('bg-black/100');
+        }
+    }
+
+    function updateNavbarState() {
+        if (!navbar) return;
+
+        if (!isDesktop()) {
+            applySolid();
+            return;
+        }
+
+        if (window.scrollY > SCROLL_THRESHOLD) {
+            applySolid();
+        } else {
+            applyTransparent();
+        }
+    }
+
+    updateNavbarState();
+    window.addEventListener('scroll', updateNavbarState, { passive: true });
+
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+            updateNavbarState();
+        }, 120);
+    });
+});
 </script>
 @endpush
