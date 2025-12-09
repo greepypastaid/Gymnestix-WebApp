@@ -1,121 +1,105 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-2xl text-white leading-tight">
-            {{ __('Trainer Dashboard') }}
-        </h2>
-    </x-slot>
-    <div class="min-h-screen bg-black py-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <!-- Welcome Card -->
-            <div class="bg-gradient-to-r from-neutral-800 to-neutral-900 rounded-2xl p-8 mb-8 border border-neutral-700 shadow-2xl">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <h1 class="text-3xl font-bold text-white mb-2">Welcome back, {{ auth()->user()->nama }}!</h1>
-                        <p class="text-neutral-400 text-lg">Manage your classes and track member progress</p>
-                    </div>
-                    <div class="hidden md:block">
-                        <div class="w-20 h-20 rounded-full flex items-center justify-center" style="background: linear-gradient(135deg, #ADFF2F 0%, #7CB518 100%);">
-                            <svg class="w-10 h-10 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                            </svg>
-                        </div>
-                    </div>
+@extends('layouts.app')
+
+@section('content')
+    <div class="min-h-screen bg-[#0a0a0a] p-4 md:p-8">
+        <div class="w-full mx-auto space-y-6">
+            <!-- Welcome Header -->
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-white mb-1">Welcome back, {{ auth()->user()->nama }}</h1>
+                    <p class="text-gray-400 text-sm">Manage your classes and track member progress</p>
+                </div>
+                <div class="w-12 h-12 rounded-xl bg-[#ADFF2F]/10 flex items-center justify-center">
+                    <svg class="w-6 h-6 text-[#ADFF2F]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
                 </div>
             </div>
 
-            <!-- Quick Actions Grid -->
-            <div class="mb-8">
+            <!-- Quick Actions -->
+            <div>
                 <h2 class="text-xl font-semibold text-white mb-4">Quick Actions</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     @if(auth()->user()->hasPermission('schedule.view_all') || auth()->user()->isTrainer())
-                        <a href="{{ route('trainer.classes.index') }}" class="group">
-                            <div class="bg-neutral-800 rounded-xl p-6 border border-neutral-700 hover:border-green-500 transition-all duration-300 hover:shadow-xl hover:shadow-green-500/10 h-full">
-                                <div class="flex items-start justify-between mb-4">
-                                    <div class="w-12 h-12 rounded-lg flex items-center justify-center" style="background: rgba(173, 255, 47, 0.1);">
-                                        <svg class="w-6 h-6" style="color:#ADFF2F;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                        </svg>
-                                    </div>
-                                    <svg class="w-5 h-5 text-neutral-500 group-hover:text-green-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        <a href="{{ route('trainer.classes.index') }}" class="group card-dark p-6 hover:shadow-lg hover:shadow-[#ADFF2F]/5 transition-all">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="w-12 h-12 rounded-lg bg-[#ADFF2F]/10 flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-[#ADFF2F]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                     </svg>
                                 </div>
-                                <h3 class="text-white font-semibold text-lg mb-2">Manage Classes</h3>
-                                <p class="text-neutral-400 text-sm">View and manage your gym classes</p>
+                                <svg class="w-5 h-5 text-gray-600 group-hover:text-[#ADFF2F] transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                </svg>
                             </div>
+                            <h3 class="text-lg font-semibold text-white mb-1">Manage Classes</h3>
+                            <p class="text-sm text-gray-400">View and manage your gym classes</p>
                         </a>
                     @endif
 
                     @if(auth()->user()->hasPermission('equipment.view_all') || auth()->user()->isTrainer())
-                        <a href="{{ route('trainer.equipments.index') }}" class="group">
-                            <div class="bg-neutral-800 rounded-xl p-6 border border-neutral-700 hover:border-green-500 transition-all duration-300 hover:shadow-xl hover:shadow-green-500/10 h-full">
-                                <div class="flex items-start justify-between mb-4">
-                                    <div class="w-12 h-12 rounded-lg flex items-center justify-center" style="background: rgba(173, 255, 47, 0.1);">
-                                        <svg class="w-6 h-6" style="color:#ADFF2F;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
-                                        </svg>
-                                    </div>
-                                    <svg class="w-5 h-5 text-neutral-500 group-hover:text-green-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        <a href="{{ route('trainer.equipments.index') }}" class="group card-dark p-6 hover:shadow-lg hover:shadow-[#ADFF2F]/5 transition-all">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="w-12 h-12 rounded-lg bg-[#ADFF2F]/10 flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-[#ADFF2F]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                                     </svg>
                                 </div>
-                                <h3 class="text-white font-semibold text-lg mb-2">Equipment Status</h3>
-                                <p class="text-neutral-400 text-sm">Monitor gym equipment condition</p>
+                                <svg class="w-5 h-5 text-gray-600 group-hover:text-[#ADFF2F] transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                </svg>
                             </div>
+                            <h3 class="text-lg font-semibold text-white mb-1">Equipment Status</h3>
+                            <p class="text-sm text-gray-400">Monitor gym equipment condition</p>
                         </a>
                     @endif
 
                     @if(auth()->user()->hasPermission('attendance.track') || auth()->user()->hasPermission('attendance.view_all') || auth()->user()->isTrainer())
-                        <a href="{{ route('trainer.attendance.select-class') }}" class="group">
-                            <div class="bg-neutral-800 rounded-xl p-6 border border-neutral-700 hover:border-green-500 transition-all duration-300 hover:shadow-xl hover:shadow-green-500/10 h-full">
-                                <div class="flex items-start justify-between mb-4">
-                                    <div class="w-12 h-12 rounded-lg flex items-center justify-center" style="background: rgba(173, 255, 47, 0.1);">
-                                        <svg class="w-6 h-6" style="color:#ADFF2F;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
-                                        </svg>
-                                    </div>
-                                    <svg class="w-5 h-5 text-neutral-500 group-hover:text-green-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        <a href="{{ route('trainer.attendance.select-class') }}" class="group card-dark p-6 hover:shadow-lg hover:shadow-[#ADFF2F]/5 transition-all">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="w-12 h-12 rounded-lg bg-[#ADFF2F]/10 flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-[#ADFF2F]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                                     </svg>
                                 </div>
-                                <h3 class="text-white font-semibold text-lg mb-2">Track Attendance</h3>
-                                <p class="text-neutral-400 text-sm">Mark member attendance</p>
+                                <svg class="w-5 h-5 text-gray-600 group-hover:text-[#ADFF2F] transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                </svg>
                             </div>
+                            <h3 class="text-lg font-semibold text-white mb-1">Track Attendance</h3>
+                            <p class="text-sm text-gray-400">Mark member attendance</p>
                         </a>
-                        <a href="{{ route('trainer.attendance.view_all') }}" class="group">
-                            <div class="bg-neutral-800 rounded-xl p-6 border border-neutral-700 hover:border-green-500 transition-all duration-300 hover:shadow-xl hover:shadow-green-500/10 h-full">
-                                <div class="flex items-start justify-between mb-4">
-                                    <div class="w-12 h-12 rounded-lg flex items-center justify-center" style="background: rgba(173, 255, 47, 0.1);">
-                                        <svg class="w-6 h-6" style="color:#ADFF2F;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                        </svg>
-                                    </div>
-                                    <svg class="w-5 h-5 text-neutral-500 group-hover:text-green-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+
+                        <a href="{{ route('trainer.attendance.view_all') }}" class="group card-dark p-6 hover:shadow-lg hover:shadow-[#ADFF2F]/5 transition-all">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="w-12 h-12 rounded-lg bg-[#ADFF2F]/10 flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-[#ADFF2F]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                     </svg>
                                 </div>
-                                <h3 class="text-white font-semibold text-lg mb-2">View Records</h3>
-                                <p class="text-neutral-400 text-sm">All attendance history</p>
+                                <svg class="w-5 h-5 text-gray-600 group-hover:text-[#ADFF2F] transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                </svg>
                             </div>
+                            <h3 class="text-lg font-semibold text-white mb-1">View Records</h3>
+                            <p class="text-sm text-gray-400">All attendance history</p>
                         </a>
                     @endif
 
                     @if(auth()->user()->hasPermission('workout.view_member') || auth()->user()->isTrainer())
-                        <a href="#" onclick="showMemberSelector()" class="group cursor-pointer">
-                            <div class="bg-neutral-800 rounded-xl p-6 border border-neutral-700 hover:border-green-500 transition-all duration-300 hover:shadow-xl hover:shadow-green-500/10 h-full">
-                                <div class="flex items-start justify-between mb-4">
-                                    <div class="w-12 h-12 rounded-lg flex items-center justify-center" style="background: rgba(173, 255, 47, 0.1);">
-                                        <svg class="w-6 h-6" style="color:#ADFF2F;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                                        </svg>
-                                    </div>
-                                    <svg class="w-5 h-5 text-neutral-500 group-hover:text-green-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        <a href="#" onclick="showMemberSelector()" class="group card-dark p-6 hover:shadow-lg hover:shadow-[#ADFF2F]/5 transition-all cursor-pointer">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="w-12 h-12 rounded-lg bg-[#ADFF2F]/10 flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-[#ADFF2F]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                                     </svg>
                                 </div>
-                                <h3 class="text-white font-semibold text-lg mb-2">Workout Tracker</h3>
-                                <p class="text-neutral-400 text-sm">View member progress</p>
+                                <svg class="w-5 h-5 text-gray-600 group-hover:text-[#ADFF2F] transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                </svg>
                             </div>
+                            <h3 class="text-lg font-semibold text-white mb-1">Workout Tracker</h3>
+                            <p class="text-sm text-gray-400">View member progress</p>
                         </a>
                     @endif
                 </div>
@@ -124,19 +108,21 @@
     </div>
 
     <!-- Member Selector Modal -->
-    <div id="memberModal" style="display: none;" class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 flex items-center justify-center">
-        <div class="bg-neutral-800 rounded-2xl shadow-2xl w-full max-w-md border border-neutral-700 mx-4">
+    <div id="memberModal" style="display: none;" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="card-dark w-full max-w-md">
             <div class="p-6">
                 <div class="flex items-center justify-between mb-6">
                     <h3 class="text-xl font-semibold text-white">Select Member</h3>
-                    <button onclick="closeMemberModal()" class="text-neutral-400 hover:text-white transition duration-200 hover:bg-neutral-700 rounded-lg p-2">
+                    <button onclick="closeMemberModal()" class="text-gray-400 hover:text-white transition p-2 rounded-lg hover:bg-[#1f1f1f]">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                         </svg>
                     </button>
                 </div>
 
-                <div class="space-y-3 max-h-96 overflow-y-auto">
+                {{-- Search input handled in sticky header below - removed duplicate id to avoid conflicts --}}
+
+                <div id="memberList" class="space-y-2 max-h-96 overflow-y-auto"></div>
                     @php
                         $user = auth()->user();
                         $trainer = $user?->trainer;
@@ -307,4 +293,4 @@
             }
         });
     </script>
-</x-app-layout>
+@endsection

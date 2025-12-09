@@ -1,51 +1,49 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-2xl text-white leading-tight">
-            Equipment Management
-        </h2>
-    </x-slot>
+@extends('layouts.app')
 
-    <div class="py-6 sm:py-12 bg-black min-h-screen">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4 sm:space-y-8">
-            <!-- Success Message -->
+@section('content')
+
+    <div class="min-h-screen bg-[#0a0a0a] p-4 md:p-8">
+        <div class="w-full mx-auto space-y-6">
             @if(session('success'))
-                <div class="bg-neutral-800 p-6 border-l-4 border-[#ADFF2F] rounded-2xl text-white shadow-xl">
-                    <div class="flex items-center">
-                        <div class="w-12 h-12 rounded-xl flex items-center justify-center mr-4" style="background: rgba(173,255,47,0.1);">
-                            <svg class="w-6 h-6" style="color:#ADFF2F;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                        </div>
-                        <p class="font-medium">{{ session('success') }}</p>
-                    </div>
+                <div class="card-dark p-4 border-l-4 border-[#ADFF2F]">
+                    <p class="text-white font-medium">{{ session('success') }}</p>
                 </div>
             @endif
 
-            <!-- Header Section -->
-            <div>
-                <h1 class="text-3xl font-bold text-white">Equipment Overview</h1>
-                <p class="mt-1 text-neutral-400">Monitor equipment status and report issues for maintenance</p>
+            <div class="card-header">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: rgba(173,255,47,0.08)">
+                        <svg class="w-5 h-5 text-[#ADFF2F]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V7a1 1 0 00-1-1h-3V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v2H5a1 1 0 00-1 1v6"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="title">Equipment Overview</div>
+                        <div class="subtitle">Monitor equipment status and report issues for maintenance</div>
+                    </div>
+                </div>
+                <div class="ml-auto">
+                    <!-- placeholder for actions if needed -->
+                </div>
             </div>
 
-            <!-- Equipment List -->
-            <div class="bg-neutral-800 rounded-2xl shadow-2xl overflow-hidden border border-neutral-700">
+            <div class="card-dark overflow-hidden">
                 @if($equipments->count())
-                    <!-- Mobile: cards -->
-                    <div class="md:hidden p-4 space-y-4">
+                    <div class="md:hidden p-4 space-y-3">
                         @foreach($equipments as $equipment)
-                            <div class="bg-neutral-900/40 p-4 rounded-lg border border-neutral-700">
+                            <div class="bg-[#1f1f1f] p-4 rounded-lg border border-[#2a2a2a]">
                                 <div class="flex items-center justify-between mb-3">
                                     <div class="text-sm font-semibold text-white">{{ $equipment->nama_alat }}</div>
-                                    <span class="inline-flex px-3 py-1 text-xs font-semibold rounded-full {{ $equipment->kondisi == 'Baik' ? 'bg-[#ADFF2F] text-black' : 'bg-red-600 text-white' }}">{{ $equipment->kondisi }}</span>
+                                    <span class="px-3 py-1 text-xs font-semibold rounded-lg {{ $equipment->kondisi == 'Baik' ? 'bg-[#ADFF2F]/20 text-[#ADFF2F]' : 'bg-red-500/20 text-red-400' }}">{{ $equipment->kondisi }}</span>
                                 </div>
-                                <div class="text-xs text-neutral-400 mb-3">
+                                <div class="text-xs text-gray-400 mb-3 space-y-1">
                                     <div>Purchase: {{ $equipment->tanggal_pembelian->format('d M Y') }}</div>
                                     <div>Maintenance: {{ $equipment->jadwal_perawatan->format('d M Y') }}</div>
                                 </div>
                                 @if($equipment->kondisi == 'Baik')
-                                    <button onclick="reportEquipment('{{ $equipment->equipment_id }}', '{{ $equipment->nama_alat }}')" class="w-full px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white text-sm font-medium rounded-lg">Report Issue</button>
+                                    <button onclick="reportEquipment('{{ $equipment->equipment_id }}', '{{ $equipment->nama_alat }}')" class="w-full px-4 py-2 bg-orange-500/10 hover:bg-orange-500/20 text-orange-400 rounded-lg font-medium transition">Report Issue</button>
                                 @else
-                                    <div class="w-full px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-lg text-center">Already Reported</div>
+                                    <div class="w-full px-4 py-2 bg-red-500/10 text-red-400 rounded-lg text-center font-medium">Already Reported</div>
                                 @endif
                             </div>
                         @endforeach
@@ -53,30 +51,20 @@
 
                     <!-- Desktop: table -->
                     <div class="hidden md:block overflow-x-auto">
-                        <table class="min-w-full divide-y divide-neutral-700">
-                            <thead class="bg-neutral-900/50">
+                        <table class="table-minimal">
+                            <thead>
                                 <tr>
-                                    <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-neutral-300 uppercase tracking-wider">
-                                        Equipment Name
-                                    </th>
-                                    <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-neutral-300 uppercase tracking-wider">
-                                        Condition
-                                    </th>
-                                    <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-neutral-300 uppercase tracking-wider">
-                                        Purchase Date
-                                    </th>
-                                    <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-neutral-300 uppercase tracking-wider">
-                                        Maintenance Date
-                                    </th>
-                                    <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-neutral-300 uppercase tracking-wider">
-                                        Actions
-                                    </th>
+                                    <th>Equipment Name</th>
+                                    <th>Condition</th>
+                                    <th>Purchase Date</th>
+                                    <th>Maintenance Date</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-neutral-800 divide-y divide-neutral-700/50">
+                            <tbody>
                                 @foreach($equipments as $equipment)
-                                    <tr class="hover:bg-neutral-700/30 transition duration-200">
-                                        <td class="px-6 py-4 whitespace-nowrap">
+                                    <tr class="hover:bg-neutral-700/20 transition duration-150">
+                                        <td>
                                             <div class="flex items-center">
                                                 <div class="w-10 h-10 rounded-xl flex items-center justify-center mr-3" style="background: rgba(173,255,47,0.1);">
                                                     <svg class="w-5 h-5" style="color:#ADFF2F;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -88,12 +76,12 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
+                                        <td>
                                             <span class="inline-flex px-3 py-1 text-xs font-semibold rounded-full {{ $equipment->kondisi == 'Baik' ? 'bg-[#ADFF2F] text-black' : 'bg-red-600 text-white' }}">
                                                 {{ $equipment->kondisi }}
                                             </span>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
+                                        <td class="muted">
                                             <div class="flex items-center text-sm text-neutral-400">
                                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
@@ -101,7 +89,7 @@
                                                 {{ $equipment->tanggal_pembelian->format('d M Y') }}
                                             </div>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
+                                        <td class="muted">
                                             <div class="flex items-center text-sm text-neutral-400">
                                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -109,7 +97,7 @@
                                                 {{ $equipment->jadwal_perawatan->format('d M Y') }}
                                             </div>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                        <td>
                                             @if($equipment->kondisi == 'Baik')
                                                 <button
                                                     onclick="reportEquipment('{{ $equipment->equipment_id }}', '{{ $equipment->nama_alat }}')"
@@ -157,7 +145,7 @@
     </div>
 
     <!-- Report Equipment Modal -->
-    <div id="reportModal" class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+    <div id="reportModal" class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 items-center justify-center hidden">
         <div class="bg-neutral-800 rounded-lg shadow-xl w-80 max-w-sm border border-neutral-700 mx-4">
             <div class="p-4">
                 <div class="flex items-center justify-between mb-4">
@@ -224,6 +212,7 @@
             nameEl.textContent = equipmentName;
             form.action = `/trainer/equipments/${equipmentId}/report`;
             modal.classList.remove('hidden');
+            modal.classList.add('flex');
             // fokus ke textarea untuk UX
             if (desc) desc.focus();
         }
@@ -233,6 +222,7 @@
             const form = document.getElementById('reportForm');
             if (!modal) return;
             modal.classList.add('hidden');
+            modal.classList.remove('flex');
             if (form) form.reset();
         }
 
@@ -246,4 +236,4 @@
             });
         }
     </script>
-</x-app-layout>
+@endsection

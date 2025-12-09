@@ -1,29 +1,36 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-2xl text-white leading-tight">
-            Attendance Records
-        </h2>
-    </x-slot>
+@extends('layouts.app')
 
-    <div class="py-6 sm:py-12 bg-black min-h-screen">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4 sm:space-y-8">
+@section('content')
+
+    <div class="min-h-screen bg-[#0a0a0a] p-4 md:p-8">
+        <div class="w-full mx-auto space-y-4">
             {{-- Header --}}
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div class="card-header">
                 <div>
-                    <h1 class="text-2xl sm:text-3xl font-bold text-white">Attendance History</h1>
-                    <p class="mt-1 text-neutral-400">View all attendance records</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background: rgba(173,255,47,0.08)">
+                            <svg class="w-5 h-5 text-[#ADFF2F]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10" />
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="title">Attendance History</div>
+                            <div class="subtitle">View all attendance records</div>
+                        </div>
+                    </div>
                 </div>
-                <a href="{{ route('trainer.attendance.select-class') }}"
-                   class="w-full sm:w-auto px-6 py-3 rounded-lg font-semibold text-black hover:bg-[#9FE529] inline-flex items-center justify-center space-x-2 transition-all duration-200" style="background-color:#ADFF2F;">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                    </svg>
-                    <span>Take New Attendance</span>
-                </a>
+                <div class="ml-auto">
+                    <a href="{{ route('trainer.attendance.select-class') }}" class="btn-primary-custom w-full sm:w-auto inline-flex items-center justify-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                        </svg>
+                        <span>Take New Attendance</span>
+                    </a>
+                </div>
             </div>
 
             {{-- Attendance Table --}}
-            <div class="bg-neutral-800 shadow sm:rounded-lg overflow-hidden border border-white">
+            <div class="card-dark overflow-hidden">
                 <!-- Mobile: cards -->
                 <div class="md:hidden p-4 space-y-4">
                     @forelse($attendances as $attendance)
@@ -49,8 +56,8 @@
 
                 <!-- Desktop: table -->
                 <div class="hidden md:block overflow-x-auto">
-                    <table class="min-w-full divide-y divide-neutral-700">
-                        <thead class="bg-neutral-900/50">
+                    <table class="table-minimal">
+                        <thead>
                             <tr>
                                 <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-neutral-300 uppercase tracking-wider">
                                     Date
@@ -72,9 +79,9 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="bg-neutral-800 divide-y divide-neutral-700/50">
+                        <tbody>
                             @forelse($attendances as $attendance)
-                                <tr class="hover:bg-neutral-700/30 transition duration-200">
+                                <tr class="hover:bg-neutral-700/20 transition duration-150">
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="flex items-center">
                                             <div class="w-10 h-10 rounded-lg flex items-center justify-center mr-3 bg-neutral-700">
@@ -137,4 +144,4 @@
             </div>
         </div>
     </div>
-</x-app-layout>
+@endsection

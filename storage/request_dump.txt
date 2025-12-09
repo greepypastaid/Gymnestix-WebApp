@@ -1,12 +1,13 @@
 ALL REQUEST DATA:
 {
-    "_token": "kgt2nwvNtAadJ2muzwBVWpXUIDHKJBA8sG3Dwv0o",
-    "nama_kelas": "Voclunka",
-    "kapasitas": "10",
-    "waktu_mulai": "10:00",
-    "hari": "Jumat",
-    "waktu_selesai": "12:00",
-    "durasi": "120",
-    "deskripsi": "Es trues dom awes que nope re tranda"
+    "_token": "vumT9KGn9q4VhZ62YKueiesLvHFStxcm2WmAYJdg",
+    "nama_kelas": "Yoga Class",
+    "kapasitas": "20",
+    "waktu_mulai": "12:03",
+    "hari": "Kamis",
+    "waktu_selesai": "13:04",
+    "durasi": "60",
+    "deskripsi": "q2123123",
+    "cover": {}
 }
 

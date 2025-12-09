@@ -71,6 +71,16 @@ class Attendance extends Model
         return $this->belongsTo(GymClass::class, 'class_id', 'class_id');
     }
 
+    /**
+     * Backwards-compatible accessor for legacy code that used `$attendance->class`.
+     * Returns the `gymClass` relation so views/controllers referencing
+     * `class` continue to work.
+     */
+    public function getClassAttribute()
+    {
+        return $this->gymClass;
+    }
+
     public function user(): BelongsTo
     {
         // Primary user relation (admins create records with user_id)

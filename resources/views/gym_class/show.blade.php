@@ -5,59 +5,59 @@
         </h2>
     </x-slot>
 
-    <div class="py-12 bg-black min-h-screen">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+    <div class="min-h-screen bg-[#0a0a0a] p-4 md:p-8">
+        <div class="w-full mx-auto space-y-6">
             {{-- Header --}}
-            <div class="bg-neutral-800 p-6 shadow sm:rounded-lg">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-4">
-                        <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background: rgba(173,255,47,0.1); color:#ADFF2F;">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                            </svg>
-                        </div>
-                        <div>
-                            <h1 class="text-2xl font-bold text-white">{{ $class->nama_kelas }}</h1>
-                            <p class="text-neutral-400">Class member list</p>
-                        </div>
-                    </div>
-                    <a href="{{ route('trainer.classes.index') }}" class="px-4 py-2 bg-neutral-600 text-white rounded-lg hover:bg-neutral-500 font-medium flex items-center space-x-2 transition duration-200">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+            <div class="card-header mb-6">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: rgba(173,255,47,0.08)">
+                        <svg class="w-5 h-5 text-[#ADFF2F]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                         </svg>
-                        <span>Back</span>
+                    </div>
+                    <div>
+                        <div class="title">{{ $class->nama_kelas }}</div>
+                        <div class="subtitle">Class member list</div>
+                    </div>
+                </div>
+                <div class="ml-auto">
+                    <a href="{{ route('trainer.classes.index') }}" class="px-4 py-2 bg-[#1f1f1f] hover:bg-[#2a2a2a] text-white rounded-lg font-medium transition-colors inline-flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                        Back
                     </a>
                 </div>
             </div>
 
             {{-- Class Details --}}
-            <div class="bg-neutral-800 p-6 shadow sm:rounded-lg">
-                <h3 class="text-lg font-semibold text-white mb-4">Class Details</h3>
+            <div class="card-dark p-6">
+                <h3 class="text-lg font-semibold text-white mb-6">Class Details</h3>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
                         @if(!empty($class->cover))
                             <img src="{{ asset('storage/' . $class->cover) }}" alt="Class cover" class="w-full h-48 object-cover rounded-lg mb-4">
                         @endif
                         <div class="flex items-center space-x-3">
-                            <div class="w-10 h-10 rounded-lg flex items-center justify-center bg-neutral-700">
+                            <div class="w-10 h-10 rounded-lg flex items-center justify-center bg-[#1f1f1f]">
                             </div>
                             <div>
                             </div>
                         </div>
                     </div>
                     <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 rounded-lg flex items-center justify-center bg-neutral-700">
+                        <div class="w-10 h-10 rounded-lg flex items-center justify-center bg-[#1f1f1f]">
                             <svg class="w-5 h-5 text-[#ADFF2F]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
                         </div>
                         <div>
-                            <p class="text-sm text-neutral-400">Schedule</p>
+                            <p class="text-sm text-gray-400">Schedule</p>
                             <p class="text-white font-medium">{{ $class->waktu_mulai->format('H:i') }} - {{ $class->waktu_selesai->format('H:i') }}</p>
                         </div>
                     </div>
                     <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 rounded-lg flex items-center justify-center bg-neutral-700">
+                        <div class="w-10 h-10 rounded-lg flex items-center justify-center bg-[#1f1f1f]">
                             <svg class="w-5 h-5 text-[#ADFF2F]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                             </svg>

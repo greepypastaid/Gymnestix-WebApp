@@ -1,27 +1,27 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="py-12 bg-black min-h-screen">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="min-h-screen bg-[#0a0a0a] p-4 md:p-8">
+    <div class="w-full mx-auto">
         {{-- Header --}}
-        <div class="bg-neutral-800 p-4 sm:p-6 shadow sm:rounded-lg mb-6">
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                <div class="flex items-center space-x-3 sm:space-x-4">
-                    <div class="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style="background: rgba(173,255,47,0.1); color:#ADFF2F;">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                        </svg>
-                    </div>
-                    <div>
-                        <h1 class="text-xl sm:text-2xl font-bold text-white">Create New Schedule</h1>
-                        <p class="text-sm text-neutral-400 hidden sm:block">Add a new class schedule</p>
-                    </div>
-                </div>
-                <a href="{{ route('admin.assignments.index') }}" class="w-full sm:w-auto px-4 py-2 bg-neutral-600 text-white rounded-lg hover:bg-neutral-500 font-medium flex items-center justify-center space-x-2 transition duration-200">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+        <div class="card-header mb-6">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: rgba(173,255,47,0.08)">
+                    <svg class="w-5 h-5 text-[#ADFF2F]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                     </svg>
-                    <span>Back</span>
+                </div>
+                <div>
+                    <div class="title">Create New Schedule</div>
+                    <div class="subtitle">Add a new class schedule</div>
+                </div>
+            </div>
+            <div class="ml-auto">
+                <a href="{{ route('admin.assignments.index') }}" class="px-4 py-2 bg-[#1f1f1f] hover:bg-[#2a2a2a] text-white rounded-lg font-medium transition-colors inline-flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                    Back
                 </a>
             </div>
         </div>
@@ -37,29 +37,29 @@
         @endif
 
         {{-- Form --}}
-        <div class="bg-neutral-800 shadow sm:rounded-lg p-6">
+        <div class="card-dark p-6">
             <form method="post" action="{{ route('admin.assignments.store') }}" class="space-y-6">
                 @csrf
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label class="block text-sm font-medium text-white mb-2">Class Name</label>
-                        <input name="class_name" class="block w-full px-3 py-2 border border-neutral-600 rounded-lg shadow-sm bg-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-[#ADFF2F] focus:border-[#ADFF2F]" value="{{ old('class_name') }}" required placeholder="e.g. Morning Yoga">
+                        <label class="block text-gray-400 mb-2">Class Name</label>
+                        <input name="class_name" class="input-dark w-full" value="{{ old('class_name') }}" required placeholder="e.g. Morning Yoga">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-white mb-2">Date</label>
-                        <input type="date" name="class_date" class="block w-full px-3 py-2 border border-neutral-600 rounded-lg shadow-sm bg-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-[#ADFF2F] focus:border-[#ADFF2F]" value="{{ old('class_date') }}" required>
+                        <label class="block text-gray-400 mb-2">Date</label>
+                        <input type="date" name="class_date" class="input-dark w-full" value="{{ old('class_date') }}" required>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-white mb-2">Room</label>
-                        <input name="room" class="block w-full px-3 py-2 border border-neutral-600 rounded-lg shadow-sm bg-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-[#ADFF2F] focus:border-[#ADFF2F]" value="{{ old('room') }}" placeholder="e.g. Studio A">
+                        <label class="block text-gray-400 mb-2">Room</label>
+                        <input name="room" class="input-dark w-full" value="{{ old('room') }}" placeholder="e.g. Studio A">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-white mb-2">Start Time</label>
-                        <input type="time" name="start_time" class="block w-full px-3 py-2 border border-neutral-600 rounded-lg shadow-sm bg-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-[#ADFF2F] focus:border-[#ADFF2F]" value="{{ old('start_time') }}" required>
+                        <label class="block text-gray-400 mb-2">Start Time</label>
+                        <input type="time" name="start_time" class="input-dark w-full" value="{{ old('start_time') }}" required>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-white mb-2">End Time</label>
-                        <input type="time" name="end_time" class="block w-full px-3 py-2 border border-neutral-600 rounded-lg shadow-sm bg-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-[#ADFF2F] focus:border-[#ADFF2F]" value="{{ old('end_time') }}" required>
+                        <input type="time" name="end_time" class="input-dark w-full" value="{{ old('end_time') }}" required>
                     </div>
                 </div>
 

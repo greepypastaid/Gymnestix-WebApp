@@ -21,7 +21,7 @@ class AttendanceController extends Controller
 
         // Admins / roles with 'attendance.view_all' can see everything
         if (Gate::allows('attendance.view_all') || Gate::allows('schedule.view_all')) {
-            $attendances = Attendance::with(['member.user', 'trainer', 'class'])
+            $attendances = Attendance::with(['member.user', 'trainer', 'gymClass'])
                 ->orderByDesc('tanggal')
                 ->paginate(25);
 
@@ -36,7 +36,7 @@ class AttendanceController extends Controller
 
         $classIds = GymClass::where('trainer_id', $trainer->trainer_id)->pluck('class_id');
 
-        $attendances = Attendance::with(['member.user', 'trainer', 'class'])
+        $attendances = Attendance::with(['member.user', 'trainer', 'gymClass'])
             ->whereIn('class_id', $classIds->toArray())
             ->orderByDesc('tanggal')
             ->paginate(25);
@@ -154,7 +154,7 @@ class AttendanceController extends Controller
 
         // Admin/manager can see all attendance records
         if (Gate::allows('attendance.view_all') || Gate::allows('schedule.view_all')) {
-            $attendances = Attendance::with(['member.user', 'trainer', 'class'])
+            $attendances = Attendance::with(['member.user', 'trainer', 'gymClass'])
                 ->orderByDesc('tanggal')
                 ->paginate(25);
         } else {
@@ -166,7 +166,7 @@ class AttendanceController extends Controller
 
             $classIds = GymClass::where('trainer_id', $trainer->trainer_id)->pluck('class_id');
 
-            $attendances = Attendance::with(['member.user', 'trainer', 'class'])
+            $attendances = Attendance::with(['member.user', 'trainer', 'gymClass'])
                 ->whereIn('class_id', $classIds->toArray())
                 ->orderByDesc('tanggal')
                 ->paginate(25);

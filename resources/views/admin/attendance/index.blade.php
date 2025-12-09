@@ -1,120 +1,117 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="py-12 bg-black">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="bg-neutral-800 p-6 shadow sm:rounded-lg text-white">
-
-            {{-- Header --}}
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-                <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center flex-shrink-0" style="color:#ADFF2F;">
-                        <i class="bi bi-clipboard-check"></i>
-                    </div>
-                    <div>
-                        <h2 class="text-lg sm:text-xl font-semibold text-white mb-0">Attendance</h2>
-                        <p class="text-neutral-400 text-xs sm:text-sm hidden sm:block">Track member attendance & manage records</p>
-                    </div>
+<div class="min-h-screen bg-[#0a0a0a] p-4 md:p-8">
+    <div class="w-full mx-auto space-y-6">
+        {{-- Header --}}
+        <div class="card-header">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: rgba(173,255,47,0.08)">
+                    <svg class="w-5 h-5 text-[#ADFF2F]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
                 </div>
-                <a href="{{ route('admin.attendance.create') }}" class="w-full sm:w-auto px-4 py-2 rounded-md text-black font-medium flex items-center justify-center" style="background-color:#ADFF2F;">
-                    <i class="bi bi-plus-lg me-1"></i> Record Attendance
+                <div>
+                    <div class="title">Attendance Management</div>
+                    <div class="subtitle">Track member attendance & manage records</div>
+                </div>
+            </div>
+            <div class="ml-auto">
+                <a href="{{ route('admin.attendance.create') }}" class="btn-primary-custom flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                    Record Attendance
                 </a>
             </div>
+        </div>
 
-            @if(session('ok'))
-                <div class="mb-4 p-3 rounded-md text-black" style="background-color:#ADFF2F;">
-                    {{ session('ok') }}
-                </div>
-            @endif
+        @if(session('ok'))
+        <div class="card-dark p-4 border-l-4 border-[#ADFF2F]">
+            <p class="text-white font-medium">{{ session('ok') }}</p>
+        </div>
+        @endif
 
-            {{-- Filter Section --}}
-            <div class="bg-neutral-700 p-4 rounded-lg mb-6">
-                <div class="flex items-center mb-3">
-                    <i class="bi bi-funnel text-neutral-400 me-2"></i>
-                    <span class="text-neutral-400 font-semibold text-sm">Filter</span>
+        {{-- Filter Section --}}
+        <div class="card-dark p-6">
+            <h3 class="text-sm font-medium text-gray-400 mb-4">Filters</h3>
+            <form class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-400 mb-2">Date</label>
+                    <input type="date" name="date" class="input-dark w-full" value="{{ $date }}">
                 </div>
-                <form class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-white mb-2">Date</label>
-                        <input type="date" name="date" class="w-full px-3 py-2 border border-neutral-600 rounded-md shadow-sm bg-neutral-800 text-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500" value="{{ $date }}">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-white mb-2">Status</label>
-                        <select name="status" class="w-full px-3 py-2 border border-neutral-600 rounded-md shadow-sm bg-neutral-800 text-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500">
-                            <option value="">All Status</option>
-                            @foreach(['present','absent','late'] as $st)
-                                <option value="{{ $st }}" @selected($status===$st)>{{ ucfirst($st) }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-white mb-2">Search</label>
-                        <div class="relative">
-                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-neutral-400">
-                                <i class="bi bi-search"></i>
-                            </span>
-                            <input type="text" name="q" class="w-full pl-10 pr-3 py-2 border border-neutral-600 rounded-md shadow-sm bg-neutral-800 text-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500" placeholder="Member name / email" value="{{ $q }}">
+                <div>
+                    <label class="block text-sm font-medium text-gray-400 mb-2">Status</label>
+                    <select name="status" class="input-dark w-full">
+                        <option value="">All Status</option>
+                        @foreach(['present','absent','late'] as $st)
+                            <option value="{{ $st }}" @selected($status===$st)>{{ ucfirst($st) }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-400 mb-2">Search</label>
+                    <input type="text" name="q" class="input-dark w-full" placeholder="Member name / email" value="{{ $q }}">
+                </div>
+                <div class="flex items-end">
+                    <button type="submit" class="w-full px-4 py-2 bg-[#1f1f1f] hover:bg-[#2a2a2a] text-white rounded-lg font-medium transition">
+                        Apply Filters
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        {{-- Table / Mobile List --}}
+        <div class="card-dark overflow-hidden">
+            <!-- Mobile: cards -->
+            <div class="md:hidden p-4 space-y-3">
+                @forelse($attendances as $a)
+                    <div class="bg-[#1f1f1f] p-4 rounded-lg border border-[#2a2a2a]">
+                        <div class="flex items-center justify-between mb-3">
+                            <div>
+                                <div class="text-sm font-semibold text-white">{{ $a->user?->nama ?? 'User Terhapus' }}</div>
+                                <div class="text-xs text-gray-400">{{ $a->attendance_date?->format('d M Y') ?? '-' }} • {{ $a->schedule?->class_name ?? '—' }}</div>
+                            </div>
+                            <div>
+                                @if($a->status === 'present')
+                                    <span class="px-3 py-1 text-xs font-semibold rounded-lg bg-[#ADFF2F]/20 text-[#ADFF2F]">Present</span>
+                                @elseif($a->status === 'late')
+                                    <span class="px-3 py-1 text-xs font-semibold rounded-lg bg-yellow-500/20 text-yellow-400">Late</span>
+                                @else
+                                    <span class="px-3 py-1 text-xs font-semibold rounded-lg bg-red-500/20 text-red-400">{{ ucfirst($a->status) }}</span>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="flex gap-2">
+                            <a href="{{ route('admin.attendance.edit', $a) }}" class="flex-1 text-center px-3 py-2 btn-primary-custom text-sm">Edit</a>
+                            <form action="{{ route('admin.attendance.destroy', $a) }}" method="post" onsubmit="return confirm('Delete this record?')" class="flex-1">
+                                @csrf @method('DELETE')
+                                <button type="submit" class="w-full px-3 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-lg text-sm font-medium transition">Delete</button>
+                            </form>
                         </div>
                     </div>
-                    <div class="flex items-end">
-                        <button class="w-full px-4 py-2 bg-neutral-600 text-white rounded-md hover:bg-neutral-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
-                            <i class="bi bi-funnel me-1"></i> Filter
-                        </button>
-                    </div>
-                </form>
+                @empty
+                    <div class="p-8 text-center text-gray-400">No attendance records found</div>
+                @endforelse
             </div>
-
-            {{-- Table Section / Mobile List --}}
-            <div class="bg-neutral-800 rounded-2xl shadow-2xl overflow-hidden border border-neutral-700">
-                <!-- Mobile: cards -->
-                <div class="md:hidden p-4 space-y-4">
-                    @forelse($attendances as $a)
-                        <div class="bg-neutral-900/40 p-4 rounded-lg border border-neutral-700">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <div class="text-sm font-semibold text-white">{{ $a->user->nama }}</div>
-                                    <div class="text-xs text-neutral-300">{{ $a->attendance_date->format('d M Y') }} • {{ $a->schedule?->class_name ?? '—' }}</div>
-                                </div>
-                                <div>
-                                    @if($a->status === 'present')
-                                        <span class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full bg-[#ADFF2F] text-black">Present</span>
-                                    @elseif($a->status === 'late')
-                                        <span class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full bg-yellow-600/20 text-yellow-400">Late</span>
-                                    @else
-                                        <span class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full bg-neutral-700 text-neutral-400">{{ ucfirst($a->status) }}</span>
-                                    @endif
-                                </div>
-                            </div>
-                            <div class="mt-3 flex flex-col space-y-2">
-                                <a href="{{ route('admin.attendance.edit', $a) }}" class="w-full text-center px-4 py-2 bg-[#ADFF2F] hover:bg-[#9FE529] text-black text-sm font-semibold rounded-lg">Edit</a>
-                                <form action="{{ route('admin.attendance.destroy', $a) }}" method="post" onsubmit="return confirm('Delete this record?')">
-                                    @csrf @method('DELETE')
-                                    <button type="submit" class="w-full text-center px-4 py-2 bg-red-600/90 hover:bg-red-600 text-white text-sm font-semibold rounded-lg">Delete</button>
-                                </form>
-                            </div>
-                        </div>
-                    @empty
-                        <div class="p-4 text-center text-neutral-400">No attendance records</div>
-                    @endforelse
-                </div>
 
                 <!-- Desktop: table -->
                 <div class="hidden md:block overflow-x-auto">
-                    <table class="min-w-full divide-y divide-neutral-700">
-                        <thead class="bg-neutral-900/50">
+                    <table class="table-minimal">
+                        <thead>
                             <tr>
-                                <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-neutral-300 uppercase tracking-wider">Date</th>
-                                <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-neutral-300 uppercase tracking-wider">Member</th>
-                                <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-neutral-300 uppercase tracking-wider">Class</th>
-                                <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-neutral-300 uppercase tracking-wider">Status</th>
-                                <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-neutral-300 uppercase tracking-wider">Check-in</th>
-                                <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-neutral-300 uppercase tracking-wider">Check-out</th>
-                                <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-neutral-300 uppercase tracking-wider">Actions</th>
+                                <th>Date</th>
+                                <th>Member</th>
+                                <th>Class</th>
+                                <th>Status</th>
+                                <th>Check-in</th>
+                                <th>Check-out</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-neutral-700/50">
+                        <tbody>
                             @forelse($attendances as $a)
-                                <tr class="hover:bg-neutral-700/30 transition duration-200">
+                                <tr class="hover:bg-neutral-700/20 transition duration-150">
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="flex items-center text-sm text-neutral-300">
                                             <svg class="w-4 h-4 mr-2 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

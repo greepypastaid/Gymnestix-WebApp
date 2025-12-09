@@ -1,50 +1,50 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="py-12 bg-black min-h-screen">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="min-h-screen bg-[#0a0a0a] p-4 md:p-8">
+    <div class="w-full mx-auto space-y-6">
         {{-- Header --}}
-        <div class="bg-neutral-800 p-4 sm:p-6 shadow sm:rounded-lg mb-6">
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                <div class="flex items-center space-x-3 sm:space-x-4">
-                    <div class="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style="background: rgba(173,255,47,0.1); color:#ADFF2F;">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                        </svg>
-                    </div>
-                    <div>
-                        <h1 class="text-xl sm:text-2xl font-bold text-white">Edit Attendance</h1>
-                        <p class="text-sm text-neutral-400 hidden sm:block">Update attendance information</p>
-                    </div>
+        <div class="card-header">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: rgba(173,255,47,0.08)">
+                    <svg class="w-5 h-5 text-[#ADFF2F]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
                 </div>
-                <a href="{{ route('admin.attendance.index') }}" class="w-full sm:w-auto px-4 py-2 bg-neutral-600 text-white rounded-lg hover:bg-neutral-500 font-medium flex items-center justify-center space-x-2 transition duration-200">
+                <div>
+                    <div class="title">Edit Attendance</div>
+                    <div class="subtitle">Update attendance information</div>
+                </div>
+            </div>
+            <div class="ml-auto">
+                <a href="{{ route('admin.attendance.index') }}" class="px-4 py-2 bg-[#1f1f1f] hover:bg-[#2a2a2a] text-white rounded-lg font-medium transition flex items-center gap-2">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                     </svg>
-                    <span>Back</span>
+                    Back
                 </a>
             </div>
         </div>
 
         @if($errors->any())
-        <div class="mb-4 p-4 rounded-lg bg-red-500/20 border border-red-500/30">
+        <div class="card-dark p-4 border-l-4 border-red-500">
             <ul class="list-disc list-inside text-red-400 space-y-1">
                 @foreach($errors->all() as $e)
-                    <li>{{ $e }}</li>
+                    <li class="text-sm">{{ $e }}</li>
                 @endforeach
             </ul>
         </div>
         @endif
 
         {{-- Form --}}
-        <div class="bg-neutral-800 shadow sm:rounded-lg p-6">
-            <form method="post" action="{{ route('admin.attendance.update', $attendance) }}" class="space-y-6">
+        <div class="card-dark p-6">
+            <form method="post" action="{{ route('admin.attendance.update', $attendance) }}">
                 @csrf 
                 @method('PUT')
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label class="block text-sm font-medium text-white mb-2">Member</label>
-                        <select name="user_id" class="block w-full px-3 py-2 border border-neutral-600 rounded-lg shadow-sm bg-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-[#ADFF2F] focus:border-[#ADFF2F]" required>
+                        <select name="user_id" class="input-dark w-full" required>
                             @foreach($members as $m)
                                 <option value="{{ $m->user_id }}" @selected(old('user_id', $attendance->user_id ?? '') == $m->user_id)>
                                     {{ $m->nama }} — {{ $m->email }}
@@ -56,13 +56,13 @@
                     <div>
                         <label class="block text-sm font-medium text-white mb-2">Date</label>
                         {{-- REVISI PENTING DI SINI: Pakai tanda tanya (?->) --}}
-                        <input type="date" name="attendance_date" class="block w-full px-3 py-2 border border-neutral-600 rounded-lg shadow-sm bg-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-[#ADFF2F] focus:border-[#ADFF2F]" 
+                           <input type="date" name="attendance_date" class="input-dark w-full" 
                                value="{{ old('attendance_date', $attendance->attendance_date?->format('Y-m-d') ?? '') }}" required>
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-white mb-2">Status</label>
-                        <select name="status" class="block w-full px-3 py-2 border border-neutral-600 rounded-lg shadow-sm bg-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-[#ADFF2F] focus:border-[#ADFF2F]" required>
+                        <select name="status" class="input-dark w-full" required>
                             @foreach(['present','absent','late'] as $st)
                                 <option value="{{ $st }}" @selected(old('status', $attendance->status ?? 'present') === $st)>
                                     {{ ucfirst($st) }}
@@ -74,14 +74,14 @@
                     <div>
                         <label class="block text-sm font-medium text-white mb-2">Check-in</label>
                         {{-- REVISI: Pakai tanda tanya (?->) --}}
-                        <input type="datetime-local" name="check_in_at" class="block w-full px-3 py-2 border border-neutral-600 rounded-lg shadow-sm bg-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-[#ADFF2F] focus:border-[#ADFF2F]" 
+                           <input type="datetime-local" name="check_in_at" class="input-dark w-full" 
                                value="{{ old('check_in_at', $attendance->check_in_at?->format('Y-m-d\TH:i') ?? '') }}">
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-white mb-2">Check-out</label>
                         {{-- REVISI: Pakai tanda tanya (?->) --}}
-                        <input type="datetime-local" name="check_out_at" class="block w-full px-3 py-2 border border-neutral-600 rounded-lg shadow-sm bg-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-[#ADFF2F] focus:border-[#ADFF2F]" 
+                           <input type="datetime-local" name="check_out_at" class="input-dark w-full" 
                                value="{{ old('check_out_at', $attendance->check_out_at?->format('Y-m-d\TH:i') ?? '') }}">
                     </div>
                 </div>
@@ -91,39 +91,39 @@
                     @php
                         $selected = old('class_schedule_id', ($attendance->class_id ? 'class:'.$attendance->class_id : ($attendance->class_schedule_id ? 'schedule:'.$attendance->class_schedule_id : '')));
                     @endphp
-                    <select name="class_schedule_id" class="block w-full px-3 py-2 border border-neutral-600 rounded-lg shadow-sm bg-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-[#ADFF2F] focus:border-[#ADFF2F]">
+                    <select name="class_schedule_id" class="input-dark w-full">
                         <option value="">— None —</option>
 
-                        @if(!empty($classes))
-                            <optgroup label="Classes">
-                                @foreach($classes as $c)
-                                    <option value="class:{{ $c->class_id }}" @selected($selected == 'class:'.$c->class_id)>
-                                        {{ $c->nama_kelas }} — {{ \Illuminate\Support\Carbon::parse($c->waktu_mulai)->format('H:i') }}–{{ \Illuminate\Support\Carbon::parse($c->waktu_selesai)->format('H:i') }}
-                                    </option>
-                                @endforeach
-                            </optgroup>
+                        @if(!empty($classes) && (is_array($classes) || $classes instanceof \Illuminate\Support\Collection))
+                                <optgroup label="Classes">
+                                    @foreach($classes as $c)
+                                        <option value="class:{{ $c->class_id }}" @selected($selected == 'class:'.$c->class_id)>
+                                            {{ $c->nama_kelas }} — {{ \Illuminate\Support\Carbon::parse($c->waktu_mulai)->format('H:i') }}–{{ \Illuminate\Support\Carbon::parse($c->waktu_selesai)->format('H:i') }}
+                                        </option>
+                                    @endforeach
+                                </optgroup>
                         @endif
 
-                        @if(!empty($schedules))
-                            <optgroup label="Schedules">
-                                @foreach($schedules as $s)
-                                    <option value="schedule:{{ $s->id }}" @selected($selected == 'schedule:'.$s->id)>
-                                        {{ $s->class_name }}
-                                        ({{ \Illuminate\Support\Carbon::parse($s->start_time)->format('H:i') }}–{{ \Illuminate\Support\Carbon::parse($s->end_time)->format('H:i') }})
-                                    </option>
-                                @endforeach
-                            </optgroup>
+                        @if(!empty($schedules) && (is_array($schedules) || $schedules instanceof \Illuminate\Support\Collection))
+                                <optgroup label="Schedules">
+                                    @foreach($schedules as $s)
+                                        <option value="schedule:{{ $s->id }}" @selected($selected == 'schedule:'.$s->id)>
+                                            {{ $s->class_name }}
+                                            ({{ \Illuminate\Support\Carbon::parse($s->start_time)->format('H:i') }}–{{ \Illuminate\Support\Carbon::parse($s->end_time)->format('H:i') }})
+                                        </option>
+                                    @endforeach
+                                </optgroup>
                         @endif
                     </select>
                 </div>
 
                 <div>
                     <label class="block text-sm font-medium text-white mb-2">Notes</label>
-                    <input name="notes" class="block w-full px-3 py-2 border border-neutral-600 rounded-lg shadow-sm bg-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-[#ADFF2F] focus:border-[#ADFF2F]" value="{{ old('notes', $attendance->notes ?? '') }}" placeholder="Additional notes">
+                    <input name="notes" class="input-dark w-full" value="{{ old('notes', $attendance->notes ?? '') }}" placeholder="Additional notes">
                 </div>
 
                 <div class="mt-8 flex flex-col sm:flex-row sm:items-center sm:space-x-4 space-y-3 sm:space-y-0">
-                    <button type="submit" class="w-full sm:w-auto px-6 py-2 rounded-lg font-medium flex items-center justify-center sm:justify-start space-x-2 text-black hover:bg-[#9FE529] transition-all duration-200" style="background-color:#ADFF2F;">
+                    <button type="submit" class="btn-primary-custom w-full sm:w-auto flex items-center justify-center space-x-2">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                         </svg>
