@@ -158,13 +158,13 @@ class ClassController extends Controller
 
     foreach ($classes as $class) {
         $dayIndex = [
-            'senin' => 2,
-            'selasa' => 3,
-            'rabu' => 4,
-            'kamis' => 5,
-            'jumat' => 6,
-            'sabtu' => 7,
-            'minggu' => 1,
+            'senin' => 1,
+            'selasa' => 2,
+            'rabu' => 3,
+            'kamis' => 4,
+            'jumat' => 5,
+            'sabtu' => 6,
+            'minggu' => 0,
         ][strtolower($class->hari)] ?? null;
 
         if ($dayIndex === null) continue;

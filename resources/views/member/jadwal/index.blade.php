@@ -11,7 +11,7 @@
 
     {{-- Kalender --}}
     <div class="grid grid-cols-7 gap-2 sm:gap-4 text-center text-xs sm:text-sm font-semibold text-gray-300 mb-4">
-        <div>Min</div><div>Sen</div><div>Sel</div><div>Rab</div><div>Kam</div><div>Jum</div><div>Sab</div>
+        <div>Sen</div><div>Sel</div><div>Rab</div><div>Kam</div><div>Jum</div><div>Sab</div><div>Min</div>
     </div>
 
     @php
