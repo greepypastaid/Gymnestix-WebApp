@@ -73,7 +73,8 @@ class MembershipPaymentController extends Controller
                 'membership_plan_id' => $plan->plan_id
             ]);
 
-              Mail::to($user->email)->send(new MembershipInvoiceMail($payment, 'Pending'));
+              Mail::to($user->email)->queue(new MembershipInvoiceMail($payment, 'Pending'));
+
 
             return view('landing_page.pages.membership.checkout', compact('plan', 'payment'));
         } catch (\Throwable $e) {
