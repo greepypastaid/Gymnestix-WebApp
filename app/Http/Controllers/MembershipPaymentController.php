@@ -10,6 +10,8 @@ use App\Models\MembershipPlan;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\MembershipInvoiceMail;
 
 class MembershipPaymentController extends Controller
 {
@@ -70,6 +72,8 @@ class MembershipPaymentController extends Controller
                 'expired_at' => $expiredAt,
                 'membership_plan_id' => $plan->plan_id
             ]);
+
+              Mail::to($user->email)->send(new MembershipInvoiceMail($payment, 'Pending'));
 
             return view('landing_page.pages.membership.checkout', compact('plan', 'payment'));
         } catch (\Throwable $e) {

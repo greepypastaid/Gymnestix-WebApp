@@ -7,6 +7,8 @@ use App\Models\Member;
 use App\Models\MembershipPlan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\MembershipInvoiceMail;
 
 class WebhookController extends Controller
 {
@@ -78,6 +80,8 @@ class WebhookController extends Controller
             'payment_method' => $data['payment_method'] ?? null,
             'paid_at' => now(),
         ]);
+
+        Mail::to($payment->user->email)->send(new MembershipInvoiceMail($payment, 'Paid'));
 
         // Update atau buat data member
         $member = Member::updateOrCreate(

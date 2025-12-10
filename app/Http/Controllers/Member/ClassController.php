@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\DB;
 use App\Models\GymClass;
 use App\Models\Booking;
 
+
+
 class ClassController extends Controller
 {
     public function index()

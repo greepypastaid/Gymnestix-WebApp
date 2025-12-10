@@ -11,6 +11,8 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\InvoiceMail;
 
 class ProcessBooking implements ShouldQueue
 {
@@ -63,11 +65,14 @@ class ProcessBooking implements ShouldQueue
             }
 
             // Create booking
-            Booking::create([
+           $booking= Booking::create([
                 'member_id' => $this->memberId,
                 'class_id' => $this->classId,
                 'tanggal_booking' => now(),
             ]);
+
+            // Kirim invoice email
+            Mail::to($booking->member->user->email)->send(new InvoiceMail($booking, $class));
 
             Log::info('ProcessBooking: Booking created successfully', [
                 'member_id' => $this->memberId,
