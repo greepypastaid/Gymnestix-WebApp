@@ -1,7 +1,7 @@
 <x-guest-layout>
-    <div class="h-screen flex items-center justify-center bg-neutral-900">
-        <div class="w-full max-w-6xl mx-4 rounded-3xl overflow-hidden shadow-xl grid grid-cols-1 lg:grid-cols-2">
-            <div class="relative h-72 lg:h-auto">
+    <div class="min-h-screen flex items-center justify-center bg-neutral-900 m-4 px-4 sm:px-6">
+        <div class="w-full max-w-5xl mx-auto rounded-3xl overflow-hidden shadow-xl grid grid-cols-1 lg:grid-cols-2">
+            <div class="relative h-48 sm:h-64 lg:h-auto">
                 <img
                     src="{{ asset('images/formRegister.jpg') }}"
                     alt="KEKAR MEMBAHANA"
@@ -12,10 +12,10 @@
             </div>
 
             <!-- Register Form -->
-            <div class="bg-neutral-800 lg:rounded-none rounded-b-3xl lg:rounded-r-3xl p-8 md:p-10">
-                <div class="max-w-md mx-auto">
-                    <h1 class="text-3xl font-semibold text-white mb-2">Buat Akun Baru</h1>
-                    <p class="text-sm text-neutral-200 mb-6">Daftar untuk mengakses jadwal, booking kelas, dan memantau progress Anda.</p>
+            <div class="bg-neutral-800 lg:rounded-none rounded-b-3xl lg:rounded-r-3xl p-6 sm:p-8 md:p-10 flex items-center">
+                <div class="max-w-md w-full mx-auto">
+                    <h1 class="text-2xl sm:text-3xl md:text-3xl font-semibold text-white mb-2">Buat Akun Baru</h1>
+                    <p class="text-sm sm:text-base text-neutral-200 mb-6">Daftar untuk mengakses jadwal, booking kelas, dan memantau progress Anda.</p>
 
                     <x-auth-session-status class="mb-4" :status="session('status')" />
 
@@ -27,7 +27,7 @@
                             <label for="name" class="block text-sm text-neutral-200">Nama</label>
                             <input id="name" name="name" type="text" value="{{ old('name') }}" required autofocus
                                    autocomplete="name"
-                                   class="mt-2 w-full px-4 py-3 rounded-lg border border-neutral-500 bg-neutral-800 text-neutral-200 focus:outline-none focus:ring-2 focus:ring-green-400" />
+                                   class="mt-2 w-full px-4 py-3 rounded-lg border border-neutral-600 bg-neutral-800 text-neutral-200 focus:outline-none focus:ring-2 focus:ring-green-400" />
                             <x-input-error :messages="$errors->get('name')" class="mt-2" />
                         </div>
 
@@ -36,7 +36,7 @@
                             <label for="email" class="block text-sm text-neutral-200">Email</label>
                             <input id="email" name="email" type="email" value="{{ old('email') }}" required
                                    autocomplete="username"
-                                   class="mt-2 w-full px-4 py-3 rounded-lg border border-neutral-500 bg-neutral-800 text-neutral-200 focus:outline-none focus:ring-2 focus:ring-green-400" />
+                                   class="mt-2 w-full px-4 py-3 rounded-lg border border-neutral-600 bg-neutral-800 text-neutral-200 focus:outline-none focus:ring-2 focus:ring-green-400" />
                             <x-input-error :messages="$errors->get('email')" class="mt-2" />
                         </div>
 
@@ -45,7 +45,7 @@
                             <label for="password" class="block text-sm text-neutral-200">Password</label>
                             <input id="password" name="password" type="password" required
                                    autocomplete="new-password"
-                                   class="mt-2 w-full px-4 py-3 rounded-lg border border-neutral-500 bg-neutral-800 text-neutral-200 focus:outline-none focus:ring-2 focus:ring-green-400" />
+                                   class="mt-2 w-full px-4 py-3 rounded-lg border border-neutral-600 bg-neutral-800 text-neutral-200 focus:outline-none focus:ring-2 focus:ring-green-400" />
                             <x-input-error :messages="$errors->get('password')" class="mt-2" />
                         </div>
 
@@ -54,7 +54,7 @@
                             <label for="password_confirmation" class="block text-sm text-neutral-200">Konfirmasi Password</label>
                             <input id="password_confirmation" name="password_confirmation" type="password" required
                                    autocomplete="new-password"
-                                   class="mt-2 w-full px-4 py-3 rounded-lg border border-neutral-500 bg-neutral-800 text-neutral-200 focus:outline-none focus:ring-2 focus:ring-green-400" />
+                                   class="mt-2 w-full px-4 py-3 rounded-lg border border-neutral-600 bg-neutral-800 text-neutral-200 focus:outline-none focus:ring-2 focus:ring-green-400" />
                             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
                         </div>
 

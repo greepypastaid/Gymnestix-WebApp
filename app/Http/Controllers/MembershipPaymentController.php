@@ -160,4 +160,52 @@ class MembershipPaymentController extends Controller
         // jika mau paksa download, pakai:
         // return $pdf->download($invoiceNumber . '.pdf');
     }
+
+    public function cancel($id)
+    {
+        $payment = Payment::findOrFail($id);
+
+        // Hanya pending yang boleh dibatalkan
+        if ($payment->status !== 'pending') {
+            return back()->with('error', 'Pembayaran ini tidak dapat dibatalkan.');
+        }
+
+        $vaNumber = $payment->va_number ?? null;
+
+        // Jika ada VA, cancel ke API Gateway
+        if ($vaNumber) {
+
+            try {
+                $response = Http::post("https://domainmu.com/api/v1/virtual-account/{$vaNumber}/cancel");
+
+                if ($response->successful()) {
+                    // Optionally simpan status dari API
+                    $payment->status = 'cancelled';
+                    $payment->save();
+
+                    return back()->with('success', 'Pembayaran & Virtual Account berhasil dibatalkan.');
+                } else {
+                    // Jika API gagal, tetap batalkan lokal
+                    $payment->status = 'cancelled';
+                    $payment->save();
+
+                    return back()->with('warning', 'Pembayaran dibatalkan, tapi gagal membatalkan Virtual Account di server.');
+                }
+
+            } catch (\Exception $e) {
+                // Jika error jaringan / timeout
+                $payment->status = 'cancelled';
+                $payment->save();
+
+                return back()->with('warning', 'Pembayaran dibatalkan, tetapi tidak dapat menghubungi server VA.');
+            }
+        }
+
+        // Jika tidak ada VA: langsung cancel lokal
+        $payment->status = 'cancelled';
+        $payment->save();
+
+        return back()->with('success', 'Pembayaran berhasil dibatalkan.');
+    }
+
 }

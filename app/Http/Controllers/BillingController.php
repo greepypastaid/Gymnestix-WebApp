@@ -11,9 +11,22 @@ class BillingController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $billings = Billing::with(['member', 'membershipPlan'])->get();
+        $query = Billing::with(['member.user', 'membershipPlan']);
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('jumlah', 'LIKE', "%{$search}%")
+                  ->orWhere('status', 'LIKE', "%{$search}%")
+                  ->orWhereHas('member.user', function($q) use ($search) {
+                      $q->where('nama', 'LIKE', "%{$search}%");
+                  });
+            });
+        }
+
+        $billings = $query->orderBy('created_at', 'desc')->paginate(10)->withQueryString();
         return view('billing.index', compact('billings'));
     }
 

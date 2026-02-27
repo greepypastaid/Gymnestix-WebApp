@@ -3,13 +3,54 @@
 @section('title', 'Riwayat Pembayaran')
 
 @section('content')
-    <div class="max-w-5xl mx-auto px-4 py-10 text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 mt-12 text-white">
 
-        <h1 class="text-3xl font-heading font-semibold my-8">Riwayat Pembayaran</h1>
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-poppins mb-4">Riwayat Pembayaran</h1>
+        <p class="text-left text-gray-400 text-base sm:text-lg max-w-2xl mb-8">Monitoring Pembayaran mu dengan mudah disini!</p>
 
-        <div class="bg-neutral-900/70 border border-neutral-800 backdrop-blur-sm rounded-xl shadow-lg overflow-hidden">
-            <table class="min-w-full text-sm">
-                <thead class="bg-neutral-800/60 text-gray-300">
+        <div class="bg-[#141414] border border-[#2a2a2a] backdrop-blur-sm rounded-xl shadow-lg">
+            <!-- Mobile: cards -->
+            <div class="md:hidden p-4 space-y-4">
+                @forelse ($payments as $payment)
+                    <div class="bg-[#1f1f1f] p-4 rounded-lg border border-[#2a2a2a]">
+                        <div class="flex items-center justify-between mb-3">
+                            <div>
+                                <div class="text-sm font-semibold text-white">{{ $payment->membershipPlan->nama_plan ?? '-' }}</div>
+                                <div class="text-xs text-gray-400">{{ $payment->created_at->format('d M Y H:i') }}</div>
+                            </div>
+                            @php
+                                $statusColors = [
+                                    'paid' => 'bg-emerald-600/20 text-emerald-400 border border-emerald-600/50',
+                                    'pending' => 'bg-yellow-600/20 text-yellow-400 border border-yellow-600/50',
+                                    'expired' => 'bg-red-600/20 text-red-400 border border-red-600/50',
+                                    'cancelled' => 'bg-gray-600/20 text-gray-400 border border-gray-600/50',
+                                ];
+                            @endphp
+                            <span class="px-2 py-1 rounded text-xs font-medium {{ $statusColors[$payment->status] ?? 'bg-gray-600/20' }}">{{ ucfirst($payment->status) }}</span>
+                        </div>
+                        <div class="text-xs text-gray-400 space-y-1 mb-3">
+                            <div>Metode: {{ str_replace('_', ' ', $payment->payment_method ?? '-') }}</div>
+                            <div>Jumlah: Rp {{ number_format($payment->amount, 0, ',', '.') }}</div>
+                            @if($payment->expired_at)
+                                <div>Expired: {{ \Carbon\Carbon::parse($payment->expired_at)->format('d M Y H:i') }}</div>
+                            @endif
+                        </div>
+                        <div class="flex flex-col space-y-2">
+                            <a href="{{ route('payment.view', $payment->id) }}" class="w-full text-center px-4 py-2 bg-[#1f1f1f] hover:bg-[#2a2a2a] text-white text-sm rounded-lg transition-colors">Lihat Invoice</a>
+                            <a href="{{ route('payment.invoice.pdf', $payment->id) }}" target="_blank" class="w-full text-center px-4 py-2 bg-[#1f1f1f] hover:bg-[#2a2a2a] text-white text-sm rounded-lg transition-colors">Cetak PDF</a>
+                            @if ($payment->status === 'pending')
+                                <a href="{{ $payment->payment_url }}" target="_blank" class="w-full text-center px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-sm rounded-lg transition-colors">Bayar Sekarang</a>
+                            @endif
+                        </div>
+                    </div>
+                @empty
+                    <div class="text-center py-6 text-gray-400">Belum ada riwayat pembayaran</div>
+                @endforelse
+            </div>
+
+            <!-- Desktop: table -->
+            <table class="hidden md:table min-w-full text-sm">
+                <thead class="bg-[#1f1f1f] text-gray-300">
                     <tr>
                         <th class="px-4 py-3 text-left">Tanggal</th>
                         <th class="px-4 py-3 text-left">Paket</th>
@@ -52,7 +93,7 @@
                                 {{ $payment->expired_at ? \Carbon\Carbon::parse($payment->expired_at)->format('d M Y H:i') : '-' }}
                             </td>
 
-                            <td class="px-4 py-3 text-center relative">
+                            <td class="px-4 py-3 text-center ">
                                 <div x-data="{ open: false }" class="inline-block text-left">
                                     <button @click="open = !open"
                                         class="px-3 py-1 bg-neutral-800 hover:bg-neutral-700 text-white text-sm rounded-lg">
@@ -80,6 +121,14 @@
                                                 class="block px-4 py-2 text-sm text-emerald-400 hover:bg-neutral-800">
                                                 Bayar Sekarang
                                             </a>
+
+                                            <form action="{{ route('payment.cancel', $payment->id) }}" method="POST">
+                                                @csrf
+                                                <button type="submit"
+                                                    class="w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-neutral-800">
+                                                    Batalkan
+                                                </button>
+                                            </form>
                                         @endif
 
                                     </div>

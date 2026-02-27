@@ -1,41 +1,55 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="py-12 bg-black min-h-screen">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-8">
-        <!-- Success Message -->
+<div class="min-h-screen bg-[#0a0a0a] p-4 md:p-8">
+    <div class="w-full mx-auto space-y-6">
         @if(session('success'))
-        <div class="bg-neutral-800 p-6 border-l-4 border-[#ADFF2F] rounded-2xl text-white shadow-xl">
-            <div class="flex items-center">
-                <div class="w-12 h-12 rounded-xl flex items-center justify-center mr-4" style="background: rgba(173,255,47,0.1);">
-                    <svg class="w-6 h-6" style="color:#ADFF2F;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                </div>
-                <p class="font-medium">{{ session('success') }}</p>
-            </div>
+        <div class="card-dark p-4 border-l-4 border-[#ADFF2F]">
+            <p class="text-white font-medium">{{ session('success') }}</p>
         </div>
         @endif
 
-        <!-- Header with Action -->
-        <div class="flex justify-between items-center">
-            <div>
-                <h1 class="text-3xl font-bold text-white">Class Schedule</h1>
-                <p class="mt-1 text-neutral-400">Manage gym class schedules and sessions</p>
+        <div class="card-header">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: rgba(173,255,47,0.08)">
+                    <svg class="w-5 h-5 text-[#ADFF2F]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                </div>
+                <div>
+                    <div class="title">Class Schedule</div>
+                    <div class="subtitle">Manage gym class schedules and sessions</div>
+                </div>
             </div>
-            <a href="{{ route('gym_class.create') }}"
-                class="inline-flex items-center px-6 py-3 bg-[#ADFF2F] hover:bg-[#9FE529] text-black font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                </svg>
-                Tambah Jadwal Kelas
-            </a>
+            <div class="ml-auto">
+                <a href="{{ route('gym_class.create') }}" class="btn-primary-custom inline-flex items-center justify-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                    Tambah Jadwal Kelas
+                </a>
+            </div>
         </div>
 
-        <!-- Classes Table -->
-        <div class="bg-neutral-800 rounded-2xl shadow-2xl overflow-hidden border border-neutral-700">
+        <!-- Search Bar -->
+        <div class="card-dark p-4">
+            <form method="GET" action="{{ route('gym_class.index') }}" class="flex gap-3">
+                <div class="flex-1 relative">
+                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by class name, trainer, day, or room..." class="input-dark w-full pl-10 pr-4 py-2.5">
+                    <svg class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </div>
+                <button type="submit" class="btn-primary-custom px-6">Search</button>
+                @if(request('search'))
+                    <a href="{{ route('gym_class.index') }}" class="btn-secondary px-6">Clear</a>
+                @endif
+            </form>
+        </div>
+
+        <div class="card-dark overflow-hidden">
             <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-neutral-700">
+                <table class="table-minimal">
                     <thead class="bg-neutral-900/50">
                         <tr>
                             <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-neutral-300 uppercase tracking-wider">
@@ -43,6 +57,9 @@
                             </th>
                             <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-neutral-300 uppercase tracking-wider">
                                 Schedule
+                            </th>
+                            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-neutral-300 uppercase tracking-wider">
+                                Room
                             </th>
                             <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-neutral-300 uppercase tracking-wider">
                                 Duration
@@ -59,8 +76,8 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-neutral-700/50">
-                        @foreach($classes as $class)
-                        <tr class="hover:bg-neutral-700/30 transition duration-200">
+                        @forelse($classes as $class)
+                            <tr class="hover:bg-neutral-700/30 transition duration-200">
                             <td class="px-6 py-4">
                                 <div class="flex items-center">
                                     <div class="w-10 h-10 rounded-xl flex items-center justify-center mr-3" style="background: rgba(173,255,47,0.1);">
@@ -84,6 +101,9 @@
                                         <div class="text-xs text-neutral-500">{{ $class->waktu_selesai }}</div>
                                     </div>
                                 </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-sm text-neutral-300">{{ $class->ruangan ?? '-' }}</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-neutral-700 text-neutral-300">
@@ -141,10 +161,39 @@
                                 </div>
                             </td>
                         </tr>
-                        @endforeach
+                        @empty
+                        <tr>
+                            <td colspan="6" class="px-6 py-12">
+                                <div class="text-center">
+                                    <div class="inline-block p-4 bg-neutral-800 rounded-full mb-4">
+                                        <svg class="w-12 h-12 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                                        </svg>
+                                    </div>
+                                    <h3 class="text-sm font-medium text-white">No classes found</h3>
+                                    <p class="mt-1 text-sm text-neutral-400">Get started by creating your first class.</p>
+                                    <div class="mt-6">
+                                        <a href="{{ route('gym_class.create') }}"
+                                           class="inline-flex items-center px-4 py-2 bg-[#ADFF2F] text-black font-medium rounded-lg shadow-sm transition duration-200">
+                                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                            </svg>
+                                            Create First Class
+                                        </a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
+
+            @if($classes->hasPages())
+            <div class="px-6 py-4 border-t border-neutral-700">
+                {{ $classes->links() }}
+            </div>
+            @endif
         </div>
     </div>
 </div>

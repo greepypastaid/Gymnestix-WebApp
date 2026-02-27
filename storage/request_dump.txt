@@ -1,0 +1,13 @@
+ALL REQUEST DATA:
+{
+    "_token": "vumT9KGn9q4VhZ62YKueiesLvHFStxcm2WmAYJdg",
+    "nama_kelas": "Yoga Class",
+    "kapasitas": "20",
+    "waktu_mulai": "12:03",
+    "hari": "Kamis",
+    "waktu_selesai": "13:04",
+    "durasi": "60",
+    "deskripsi": "q2123123",
+    "cover": {}
+}
+

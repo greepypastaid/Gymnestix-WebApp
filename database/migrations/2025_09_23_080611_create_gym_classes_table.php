@@ -13,6 +13,7 @@ return new class extends Migration
             $table->foreignId('trainer_id')->constrained('trainers', 'trainer_id')->onDelete('cascade');
             $table->string('nama_kelas');
             $table->text('deskripsi');
+            $table->string('cover')->nullable();
             $table->time('waktu_mulai');
             $table->time('waktu_selesai');
             $table->integer('durasi'); // dalam menit COK!
@@ -23,6 +24,8 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('classes');
+         Schema::table('classes', function (Blueprint $table) {
+            $table->dropColumn('cover');
+        });
     }
 };

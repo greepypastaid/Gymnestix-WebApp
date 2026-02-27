@@ -1,108 +1,153 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="py-12 bg-black">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-neutral-800 p-6 shadow sm:rounded-lg text-white">
-
-            {{-- Header --}}
-            <div class="flex items-center justify-between mb-6">
-                <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center" style="color:#ADFF2F;">
-                        <i class="bi bi-clipboard-check"></i>
-                    </div>
-                    <div>
-                        <h2 class="text-xl font-semibold text-white mb-0">Attendance</h2>
-                        <p class="text-neutral-400 text-sm">Track member attendance & manage records</p>
-                    </div>
+<div class="min-h-screen bg-[#0a0a0a] p-4 md:p-8">
+    <div class="w-full mx-auto space-y-6">
+        {{-- Header --}}
+        <div class="card-header">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: rgba(173,255,47,0.08)">
+                    <svg class="w-5 h-5 text-[#ADFF2F]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
                 </div>
-                <a href="{{ route('admin.attendance.create') }}" class="px-4 py-2 rounded-md text-black font-medium" style="background-color:#ADFF2F;">
-                    <i class="bi bi-plus-lg me-1"></i> Record Attendance
+                <div>
+                    <div class="title">Attendance Management</div>
+                    <div class="subtitle">Track member attendance & manage records</div>
+                </div>
+            </div>
+            <div class="ml-auto">
+                <a href="{{ route('admin.attendance.create') }}" class="btn-primary-custom flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                    Record Attendance
                 </a>
             </div>
+        </div>
 
-            @if(session('ok'))
-                <div class="mb-4 p-3 rounded-md text-black" style="background-color:#ADFF2F;">
-                    {{ session('ok') }}
-                </div>
-            @endif
+        @if(session('ok'))
+        <div class="card-dark p-4 border-l-4 border-[#ADFF2F]">
+            <p class="text-white font-medium">{{ session('ok') }}</p>
+        </div>
+        @endif
 
-            {{-- Filter Section --}}
-            <div class="bg-neutral-700 p-4 rounded-lg mb-6">
-                <div class="flex items-center mb-3">
-                    <i class="bi bi-funnel text-neutral-400 me-2"></i>
-                    <span class="text-neutral-400 font-semibold text-sm">Filter</span>
+        {{-- Filter Section --}}
+        <div class="card-dark p-6">
+            <h3 class="text-sm font-medium text-gray-400 mb-4">Filters</h3>
+            <form class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-400 mb-2">Date</label>
+                    <input type="date" name="date" class="input-dark w-full" value="{{ $date }}">
                 </div>
-                <form class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-white mb-2">Date</label>
-                        <input type="date" name="date" class="w-full px-3 py-2 border border-neutral-600 rounded-md shadow-sm bg-neutral-800 text-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500" value="{{ $date }}">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-white mb-2">Status</label>
-                        <select name="status" class="w-full px-3 py-2 border border-neutral-600 rounded-md shadow-sm bg-neutral-800 text-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500">
-                            <option value="">All Status</option>
-                            @foreach(['present','absent','late'] as $st)
-                                <option value="{{ $st }}" @selected($status===$st)>{{ ucfirst($st) }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-white mb-2">Search</label>
-                        <div class="relative">
-                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-neutral-400">
-                                <i class="bi bi-search"></i>
-                            </span>
-                            <input type="text" name="q" class="w-full pl-10 pr-3 py-2 border border-neutral-600 rounded-md shadow-sm bg-neutral-800 text-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500" placeholder="Member name / email" value="{{ $q }}">
+                <div>
+                    <label class="block text-sm font-medium text-gray-400 mb-2">Status</label>
+                    <select name="status" class="input-dark w-full">
+                        <option value="">All Status</option>
+                        @foreach(['present','absent','late'] as $st)
+                            <option value="{{ $st }}" @selected($status===$st)>{{ ucfirst($st) }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-400 mb-2">Search</label>
+                    <input type="text" name="q" class="input-dark w-full" placeholder="Member name / email" value="{{ $q }}">
+                </div>
+                <button type="submit" class="btn-primary-custom inline-flex items-center justify-center gap-2 self-center">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L15 13.414V20a1 1 0 01-1 1h-4a1 1 0 01-1-1v-6.586L3.293 6.707A1 1 0 013 6V4z"></path>
+                    </svg>
+                    <span>Filter Attendance</span>
+                </button>
+            </form>
+        </div>
+
+        {{-- Table / Mobile List --}}
+        <div class="card-dark overflow-hidden">
+            <!-- Mobile: cards -->
+            <div class="md:hidden p-4 space-y-3">
+                @forelse($attendances as $a)
+                    <div class="bg-[#1f1f1f] p-4 rounded-lg border border-[#2a2a2a]">
+                        <div class="flex items-center justify-between mb-3">
+                            <div>
+                                <div class="text-sm font-semibold text-white">{{ $a->member?->user?->nama ?? 'User Terhapus' }}</div>
+                                <div class="text-xs text-gray-400">{{ $a->attendance_date?->format('d M Y') ?? '-' }} • {{ $a->schedule?->class_name ?? '—' }}</div>
+                            </div>
+                            <div>
+                                @if($a->status === 'present')
+                                    <span class="px-3 py-1 text-xs font-semibold rounded-lg bg-[#ADFF2F]/20 text-[#ADFF2F]">Present</span>
+                                @elseif($a->status === 'late')
+                                    <span class="px-3 py-1 text-xs font-semibold rounded-lg bg-yellow-500/20 text-yellow-400">Late</span>
+                                @else
+                                    <span class="px-3 py-1 text-xs font-semibold rounded-lg bg-red-500/20 text-red-400">{{ ucfirst($a->status) }}</span>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="flex gap-2">
+                            <a href="{{ route('admin.attendance.edit', $a) }}" class="flex-1 text-center px-3 py-2 btn-primary-custom text-sm">Edit</a>
+                            <form action="{{ route('admin.attendance.destroy', $a) }}" method="post" onsubmit="return confirm('Delete this record?')" class="flex-1">
+                                @csrf @method('DELETE')
+                                <button type="submit" class="w-full px-3 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-lg text-sm font-medium transition">Delete</button>
+                            </form>
                         </div>
                     </div>
-                    <div class="flex items-end">
-                        <button class="w-full px-4 py-2 bg-neutral-600 text-white rounded-md hover:bg-neutral-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
-                            <i class="bi bi-funnel me-1"></i> Filter
-                        </button>
-                    </div>
-                </form>
+                @empty
+                    <div class="p-8 text-center text-gray-400">No attendance records found</div>
+                @endforelse
             </div>
 
-            {{-- Table Section --}}
-            <div class="bg-neutral-800 rounded-2xl shadow-2xl overflow-hidden border border-neutral-700">
-                <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-neutral-700">
-                        <thead class="bg-neutral-900/50">
+                <!-- Desktop: table -->
+                <div class="hidden md:block overflow-x-auto">
+                    <table class="table-minimal">
+                        <thead>
                             <tr>
-                                <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-neutral-300 uppercase tracking-wider">Date</th>
-                                <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-neutral-300 uppercase tracking-wider">Member</th>
-                                <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-neutral-300 uppercase tracking-wider">Class</th>
-                                <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-neutral-300 uppercase tracking-wider">Status</th>
-                                <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-neutral-300 uppercase tracking-wider">Check-in</th>
-                                <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-neutral-300 uppercase tracking-wider">Check-out</th>
-                                <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-neutral-300 uppercase tracking-wider">Actions</th>
+                                <th>Date</th>
+                                <th>Member</th>
+                                <th>Class</th>
+                                <th>Status</th>
+                                <th>Check-in</th>
+                                <th>Check-out</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-neutral-700/50">
+                        <tbody>
                             @forelse($attendances as $a)
-                                <tr class="hover:bg-neutral-700/30 transition duration-200">
+                                <tr class="hover:bg-neutral-700/20 transition duration-150">
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="flex items-center text-sm text-neutral-300">
                                             <svg class="w-4 h-4 mr-2 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                                             </svg>
-                                            {{ $a->attendance_date->format('d M Y') }}
+                                            {{ $a->attendance_date?->format('d M Y') ?? '-' }}
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="flex items-center">
                                             <div class="w-10 h-10 rounded-full flex items-center justify-center mr-3" style="background: linear-gradient(135deg, #ADFF2F 0%, #7CB518 100%);">
-                                                <span class="text-black font-bold text-sm">{{ substr($a->user->nama, 0, 1) }}</span>
+                                                <span class="text-black font-bold text-sm">{{ substr($a->member?->user?->nama ?? '?', 0, 1) }}</span>
                                             </div>
                                             <div>
-                                                <div class="text-sm font-semibold text-white">{{ $a->user->nama }}</div>
-                                                <div class="text-xs text-neutral-400 mt-0.5">{{ $a->user->email }}</div>
+                                                <div class="text-sm font-semibold text-white">{{ $a->member?->user?->nama ?? 'User Terhapus' }}</div>
+                                                <div class="text-xs text-neutral-400 mt-0.5">{{ $a->member?->user?->email ?? '-' }}</div>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="px-6 py-4">
-                                        @if($a->schedule)
+                                        @if($a->gymClass)
+                                            <div class="flex items-center">
+                                                <div class="w-8 h-8 rounded-lg flex items-center justify-center mr-2" style="background: rgba(173,255,47,0.1);">
+                                                    <svg class="w-4 h-4" style="color:#ADFF2F;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                                                    </svg>
+                                                </div>
+                                                <div>
+                                                    <div class="text-sm font-semibold text-white">{{ $a->gymClass->nama_kelas }}</div>
+                                                    <div class="text-xs text-neutral-400 mt-0.5">
+                                                        {{ \Illuminate\Support\Carbon::parse($a->gymClass->waktu_mulai)->format('H:i') }}–{{ \Illuminate\Support\Carbon::parse($a->gymClass->waktu_selesai)->format('H:i') }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @elseif($a->schedule)
                                             <div class="flex items-center">
                                                 <div class="w-8 h-8 rounded-lg flex items-center justify-center mr-2" style="background: rgba(173,255,47,0.1);">
                                                     <svg class="w-4 h-4" style="color:#ADFF2F;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -112,7 +157,6 @@
                                                 <div>
                                                     <div class="text-sm font-semibold text-white">{{ $a->schedule->class_name }}</div>
                                                     <div class="text-xs text-neutral-400 mt-0.5">
-                                                        {{ $a->schedule->class_date->format('d M') }},
                                                         {{ \Illuminate\Support\Carbon::parse($a->schedule->start_time)->format('H:i') }}–{{ \Illuminate\Support\Carbon::parse($a->schedule->end_time)->format('H:i') }}
                                                     </div>
                                                 </div>

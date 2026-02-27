@@ -10,9 +10,20 @@ class MembershipPlanController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
         {
-            $plans = MembershipPlan::all();
+            $query = MembershipPlan::query();
+
+            if ($request->filled('search')) {
+                $search = $request->search;
+                $query->where(function($q) use ($search) {
+                    $q->where('nama_plan', 'LIKE', "%{$search}%")
+                      ->orWhere('deskripsi', 'LIKE', "%{$search}%")
+                      ->orWhere('harga', 'LIKE', "%{$search}%");
+                });
+            }
+
+            $plans = $query->paginate(10)->withQueryString();
             return view('membership_plan.index', compact('plans'));
         }
 

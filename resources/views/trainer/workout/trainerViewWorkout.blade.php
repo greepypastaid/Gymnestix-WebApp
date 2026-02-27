@@ -1,12 +1,9 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-white leading-tight">
-            Workout Progress - {{ $member->user->nama ?? 'Member' }}
-        </h2>
-    </x-slot>
+@extends('layouts.app')
 
-    <div class="py-12 bg-black">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+@section('content')
+
+    <div class="py-6 sm:py-12 bg-black min-h-screen p-4 md:p-8">
+        <div class="w-full mx-auto px-4 sm:px-6 lg:px-8 space-y-4 sm:space-y-8">
             <!-- Member Info Card -->
             <div class="bg-neutral-800 overflow-hidden shadow-xl sm:rounded-lg border border-neutral-700">
                 <div class="p-6">
@@ -31,34 +28,40 @@
                 </div>
             </div>
 
+            <!-- Search Bar -->
+            <div class="bg-neutral-800 overflow-hidden shadow-xl sm:rounded-lg border border-neutral-700 p-4">
+                <form method="GET" action="{{ route('trainer.members.workouts.index', $member) }}" class="flex gap-3">
+                    <div class="flex-1 relative">
+                        <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by exercise type, notes, or date..." class="input-dark w-full pl-10 pr-4 py-2.5">
+                        <svg class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                    </div>
+                    <button type="submit" class="btn-primary-custom px-6">Search</button>
+                    @if(request('search'))
+                        <a href="{{ route('trainer.members.workouts.index', $member) }}" class="btn-secondary px-6">Clear</a>
+                    @endif
+                </form>
+            </div>
+
             <!-- Workout Progress List -->
             <div class="bg-neutral-800 overflow-hidden shadow-xl sm:rounded-lg border border-neutral-700">
                 @if($progresses->count())
                     <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-neutral-700">
-                            <thead class="bg-neutral-900">
+                        <table class="table-minimal">
+                            <thead>
                                 <tr>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-neutral-300 uppercase tracking-wider">
-                                        Date
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-neutral-300 uppercase tracking-wider">
-                                        Exercise Type
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-neutral-300 uppercase tracking-wider">
-                                        Reps
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-neutral-300 uppercase tracking-wider">
-                                        Duration
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-neutral-300 uppercase tracking-wider">
-                                        Weight (kg)
-                                    </th>
+                                    <th>Date</th>
+                                    <th>Exercise Type</th>
+                                    <th>Reps</th>
+                                    <th>Duration</th>
+                                    <th>Weight (kg)</th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-neutral-800 divide-y divide-neutral-700">
+                            <tbody>
                                 @foreach($progresses as $progress)
-                                    <tr class="hover:bg-neutral-700">
-                                        <td class="px-6 py-4 whitespace-nowrap">
+                                    <tr class="hover:bg-neutral-700/20">
+                                        <td>
                                             <div class="text-sm font-medium text-white">
                                                 {{ $progress->tanggal->format('d M Y') }}
                                             </div>
@@ -111,6 +114,13 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Pagination -->
+                    @if($progresses->hasPages())
+                        <div class="px-6 py-4 border-t border-neutral-700">
+                            <x-pagination :paginator="$progresses" />
+                        </div>
+                    @endif
                 @else
                     <div class="p-12 text-center">
                         <svg class="mx-auto h-12 w-12 text-neutral-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -120,7 +130,7 @@
                         <p class="mt-1 text-sm text-neutral-400">This member hasn't logged any workouts yet.</p>
                         <div class="mt-6">
                             <a href="{{ route('trainer.members.index') }}"
-                               class="inline-flex items-center px-4 py-2 bg-[#ADFF2F] hover:bg-[#9FE529] text-black font-medium rounded-lg shadow-sm transition duration-200">
+                               class="inline-flex items-center px-4 py-2 bg-[#ADFF2F] text-black font-medium rounded-lg shadow-sm transition duration-200">
                                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                                 </svg>
@@ -132,4 +142,4 @@
             </div>
         </div>
     </div>
-</x-app-layout>
+@endsection

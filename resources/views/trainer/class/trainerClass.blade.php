@@ -1,76 +1,99 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-2xl text-white leading-tight">
-            Class Management
-        </h2>
-    </x-slot>
+@extends('layouts.app')
 
-    <div class="py-12 bg-black min-h-screen">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-8">
-            <!-- Success Message -->
+@section('content')
+
+    <div class="min-h-screen bg-[#0a0a0a] p-4 md:p-8">
+        <div class="w-full mx-auto space-y-6">
             @if(session('success'))
-                <div class="bg-neutral-800 p-6 border-l-4 border-[#ADFF2F] rounded-2xl text-white shadow-xl">
-                    <div class="flex items-center">
-                        <div class="w-12 h-12 rounded-xl flex items-center justify-center mr-4" style="background: rgba(173,255,47,0.1);">
-                            <svg class="w-6 h-6" style="color:#ADFF2F;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                        </div>
-                        <p class="font-medium">{{ session('success') }}</p>
-                    </div>
+                <div class="card-dark p-4 border-l-4 border-[#ADFF2F]">
+                    <p class="text-white font-medium">{{ session('success') }}</p>
                 </div>
             @endif
 
-            <!-- Header with Action -->
-            <div class="flex justify-between items-center">
+            <div class="card-header">
                 <div>
-                    <h1 class="text-3xl font-bold text-white">Your Classes</h1>
-                    <p class="mt-1 text-neutral-400">Manage your training sessions and members</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: rgba(173,255,47,0.08)">
+                            <svg class="w-5 h-5 text-[#ADFF2F]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="title">Your Classes</div>
+                            <div class="subtitle">Manage your training sessions and members</div>
+                        </div>
+                    </div>
                 </div>
-                <a href="{{ route('trainer.classes.create') }}"
-                   class="inline-flex items-center px-6 py-3 bg-[#ADFF2F] hover:bg-[#9FE529] text-black font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="ml-auto">
+                    <a href="{{ route('trainer.classes.create') }}" class="btn-primary-custom inline-flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                     </svg>
                     Create Class
                 </a>
+                </div>
             </div>
 
-            <!-- Classes List -->
-            <div class="bg-neutral-800 rounded-2xl shadow-2xl overflow-hidden border border-neutral-700">
-                @if($classes->count())
+            <!-- Search Bar -->
+            <div class="card-dark p-4">
+                <form method="GET" action="{{ route('trainer.classes.index') }}" class="flex gap-3">
+                    <div class="flex-1 relative">
+                        <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by class name, day, or room..." class="input-dark w-full pl-10 pr-4 py-2.5">
+                        <svg class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                    </div>
+                    <button type="submit" class="btn-primary-custom px-6">Search</button>
+                    @if(request('search'))
+                        <a href="{{ route('trainer.classes.index') }}" class="btn-secondary px-6">Clear</a>
+                    @endif
+                </form>
+            </div>
+
+            <div class="card-dark overflow-hidden">
+                @if($classes->count() > 0)
                     @php
                         $currentTrainerId = auth()->user()?->trainer?->trainer_id ?? null;
                         $canViewAll = auth()->user()?->hasPermission('schedule.view_all');
                     @endphp
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-neutral-700">
-                            <thead class="bg-neutral-900/50">
+                    <div class="md:hidden p-4 space-y-3">
+                        @foreach($classes as $class)
+                            <div class="bg-[#1f1f1f] p-4 rounded-lg border border-[#2a2a2a]">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div>
+                                        <div class="text-sm font-semibold text-white">{{ $class->nama_kelas }}</div>
+                                        <div class="text-xs text-gray-400">{{ $class->hari ?? '' }} • {{ \Carbon\Carbon::parse($class->waktu_mulai)->format('H:i') }}</div>
+                                    </div>
+                                    <span class="px-3 py-1 rounded-lg text-xs font-medium bg-[#1f1f1f] border border-[#2a2a2a] text-gray-300">{{ $class->bookings_count ?? $class->bookings->count() }}/{{ $class->kapasitas }}</span>
+                                </div>
+                                @if($canViewAll || ($currentTrainerId && $class->trainer_id === $currentTrainerId))
+                                    <div class="flex gap-2">
+                                        <a href="{{ route('trainer.classes.members', $class) }}" class="flex-1 text-center px-3 py-2 bg-[#1f1f1f] hover:bg-[#2a2a2a] border border-[#2a2a2a] text-white text-sm font-medium rounded-lg transition">Members</a>
+                                        <a href="{{ route('trainer.classes.edit', $class) }}" class="flex-1 text-center px-3 py-2 btn-primary-custom text-sm">Edit</a>
+                                    </div>
+                                @endif
+                            </div>
+                        @endforeach
+                    </div>
+
+                    <!-- Desktop: table -->
+                    <div class="hidden md:block overflow-x-auto">
+                        <table class="table-minimal">
+                            <thead>
                                 <tr>
-                                    <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-neutral-300 uppercase tracking-wider">
-                                        Class Name
-                                    </th>
-                                    <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-neutral-300 uppercase tracking-wider">
-                                        Trainer
-                                    </th>
-                                    <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-neutral-300 uppercase tracking-wider">
-                                        Schedule
-                                    </th>
-                                    <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-neutral-300 uppercase tracking-wider">
-                                        Duration
-                                    </th>
-                                    <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-neutral-300 uppercase tracking-wider">
-                                        Capacity
-                                    </th>
-                                    <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-neutral-300 uppercase tracking-wider">
-                                        Actions
-                                    </th>
+                                    <th>Class Name</th>
+                                    <th>Trainer</th>
+                                    <th>Schedule</th>
+                                    <th>Room</th>
+                                    <th>Duration</th>
+                                    <th>Capacity</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-neutral-800 divide-y divide-neutral-700/50">
+                            <tbody>
                                 @foreach($classes as $class)
-                                    <tr class="hover:bg-neutral-700/30 transition duration-200">
-                                        <td class="px-6 py-4 whitespace-nowrap">
+                                    <tr class="hover:bg-neutral-700/20 transition duration-150">
+                                        <td>
                                             <div class="flex items-center">
                                                 <div class="w-10 h-10 rounded-xl flex items-center justify-center mr-3" style="background: rgba(173,255,47,0.1);">
                                                     <svg class="w-5 h-5" style="color:#ADFF2F;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -87,7 +110,7 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
+                                        <td>
                                             <div class="flex items-center">
                                                 <div class="w-8 h-8 rounded-full flex items-center justify-center mr-2" style="background: linear-gradient(135deg, #ADFF2F 0%, #7CB518 100%);">
                                                     <span class="text-black font-bold text-xs">{{ substr($class->trainer->user->nama ?? 'T', 0, 1) }}</span>
@@ -95,20 +118,25 @@
                                                 <span class="text-sm text-white">{{ $class->trainer->user->nama ?? '-' }}</span>
                                             </div>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
+                                        <td class="muted">
                                             <div class="flex items-center text-sm text-neutral-300">
                                                 <svg class="w-4 h-4 mr-2 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                                 </svg>
-                                                {{ $class->waktu_mulai }} - {{ $class->waktu_selesai }}
+                                                {{ $class->hari ?? '' }} - {{ \Carbon\Carbon::parse($class->waktu_mulai)->format('H:i') }} - {{ \Carbon\Carbon::parse($class->waktu_selesai)->format('H:i') }}
                                             </div>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
+                                        <td class="muted">
+                                            <span class="text-sm text-neutral-300">
+                                                {{ $class->ruangan ?? '-' }}
+                                            </span>
+                                        </td>
+                                        <td class="muted">
                                             <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-neutral-700 text-neutral-300">
                                                 {{ $class->durasi }} min
                                             </span>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
+                                        <td>
                                             <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-neutral-700 text-neutral-300">
                                                 <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
@@ -116,7 +144,7 @@
                                                 <p class="text-white font-medium">{{ $class->bookings_count ?? $class->bookings->count() }} / {{ $class->kapasitas }}</p>
                                             </span>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                        <td>
                                             @if($canViewAll || ($currentTrainerId && $class->trainer_id === $currentTrainerId))
                                                 <div class="flex space-x-2">
                                                     <a href="{{ route('trainer.classes.members', $class) }}"
@@ -152,37 +180,38 @@
                                                 <span class="inline-flex items-center px-3 py-1 rounded-lg text-xs font-medium bg-neutral-700 text-neutral-400">
                                                     No actions
                                                 </span>
-                                            @endif
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <!-- Pagination -->
-                    <div class="px-6 py-5 border-t border-neutral-700 bg-neutral-900/30">
-                        {{ $classes->links() }}
-                    </div>
-                @else
-                    <div class="p-16 text-center">
-                        <div class="w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6" style="background: rgba(173,255,47,0.1);">
-                            <svg class="w-10 h-10" style="color:#ADFF2F;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                            </svg>
-                        </div>
-                        <h3 class="text-xl font-bold text-white mb-2">No classes found</h3>
-                        <p class="text-neutral-400 mb-6">Get started by creating your first class.</p>
-                        <a href="{{ route('trainer.classes.create') }}"
-                           class="inline-flex items-center px-6 py-3 bg-[#ADFF2F] hover:bg-[#9FE529] text-black font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                            </svg>
-                            Create Your First Class
-                        </a>
-                    </div>
-                @endif
+                                @endif
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
+
+            <div class="px-6 py-4 border-t border-neutral-700">
+                {{ $classes->links() }}
+            </div>
+            @else
+            <div class="p-12 text-center">
+                <div class="inline-block p-4 bg-neutral-800 rounded-full mb-4">
+                    <svg class="w-12 h-12 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                    </svg>
+                </div>
+                <h3 class="mt-2 text-sm font-medium text-white">No classes found</h3>
+                <p class="mt-1 text-sm text-neutral-400">Get started by creating your first class.</p>
+                <div class="mt-6">
+                    <a href="{{ route('trainer.classes.create') }}"
+                       class="inline-flex items-center px-4 py-2 bg-[#ADFF2F] text-black font-medium rounded-lg shadow-sm transition duration-200">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                        </svg>
+                        Create Your First Class
+                    </a>
+                </div>
+            </div>
+            @endif
         </div>
     </div>
-</x-app-layout>
+</div>
+@endsection

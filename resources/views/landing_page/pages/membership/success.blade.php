@@ -3,8 +3,8 @@
 @section('title', 'Pembayaran Berhasil')
 
 @section('content')
-    <div class="min-h-[70vh] flex items-center justify-center text-white px-6 py-20">
-        <div class="bg-neutral-900 border border-neutral-800 shadow-xl p-8 rounded-2xl max-w-lg w-full text-center">
+    <div class="min-h-[70vh] flex items-center justify-center text-white px-4 sm:px-6 py-12 sm:py-20">
+        <div class="bg-neutral-900 border border-neutral-800 shadow-xl p-4 sm:p-6 md:p-8 rounded-2xl max-w-lg w-full text-center">
 
             {{-- Icon Success --}}
             <div class="flex justify-center mb-5">
@@ -13,7 +13,7 @@
                 </div>
             </div>
 
-            <h1 class="text-3xl font-heading font-bold text-green-400 mb-3">
+            <h1 class="text-2xl sm:text-3xl font-heading font-bold text-green-400 mb-3">
                 Pembayaran Berhasil!
             </h1>
 

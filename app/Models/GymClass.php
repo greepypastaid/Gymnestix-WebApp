@@ -17,6 +17,9 @@ class GymClass extends Model
         'trainer_id',
         'nama_kelas',
         'deskripsi',
+        'ruangan',
+        'hari',
+        'cover',
         'waktu_mulai',
         'waktu_selesai',
         'durasi',
@@ -27,6 +30,14 @@ class GymClass extends Model
         'waktu_mulai' => 'datetime:H:i',
         'waktu_selesai' => 'datetime:H:i',
     ];
+
+    /**
+     * Get the route key for the model.
+     */
+    public function getRouteKeyName()
+    {
+        return 'class_id';
+    }
 
     public function trainer()
     {
